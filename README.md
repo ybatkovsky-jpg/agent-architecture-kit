@@ -20,7 +20,7 @@ This repository now includes both architecture docs and a minimal Python referen
 
 ### Core architecture contours
 
-A deeper second-wave export now also lives under `docs/architecture/`.
+A deeper export now also lives under `docs/architecture/`, `docs/memory/`, and `docs/evaluation/`.
 
 1. **Memory Contour**
    - retrieval
@@ -71,7 +71,18 @@ agent-architecture-kit/
 │   │   ├── retry-escalation-budget-policy-v1.md
 │   │   ├── memory-distillation-cadence-v1.md
 │   │   ├── control-plane-spec-v0-1.md
+│   │   ├── truth-boundary-contract.md
+│   │   ├── implementation-mapping.md
 │   │   └── current-state-and-next-steps.md
+│   ├── memory/
+│   │   ├── README.md
+│   │   ├── memory-stack-v2.md
+│   │   ├── memory-core-v1.md
+│   │   ├── retrieval-policy-matrix.md
+│   │   └── authority-priority.md
+│   ├── evaluation/
+│   │   ├── README.md
+│   │   └── evaluation-harness-v0-1.md
 │   ├── architecture-overview.md
 │   ├── memory-contour.md
 │   ├── task-manager-integration.md
