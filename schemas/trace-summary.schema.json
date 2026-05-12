@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/schemas/trace-summary.schema.json",
+  "title": "TraceSummary",
+  "type": "object",
+  "required": ["status", "modules_used", "tool_calls"],
+  "properties": {
+    "status": { "type": "string", "enum": ["success", "partial", "blocked", "failed"] },
+    "modules_used": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "tool_calls": { "type": "integer", "minimum": 0 },
+    "policy_events": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "protected_case_tags": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": true
+}

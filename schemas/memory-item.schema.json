@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/schemas/memory-item.schema.json",
+  "title": "MemoryItem",
+  "type": "object",
+  "required": ["id", "kind", "body", "source", "updated_at"],
+  "properties": {
+    "id": { "type": "string" },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "preference",
+        "decision",
+        "pattern",
+        "anti_pattern",
+        "blocker",
+        "reference",
+        "mapping",
+        "invariant",
+        "lesson"
+      ]
+    },
+    "subject": { "type": "string" },
+    "body": { "type": "string" },
+    "source": { "type": "string" },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "protected": { "type": "boolean", "default": false },
+    "canonical": { "type": "boolean", "default": false },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "superseded_by": { "type": ["string", "null"] }
+  },
+  "additionalProperties": true
+}

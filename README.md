@@ -1,0 +1,186 @@
+# Agent Architecture Kit
+
+A GitHub-ready product repository for reusable agent-system architecture patterns.
+
+This repository packages a set of architectural contours that emerged from real operator use and iterative refinement:
+
+- memory as selective continuity rather than transcript storage;
+- task state as operational source of truth;
+- truth resolution across memory, tasks, and artifacts;
+- thin-main / bounded isolated execution;
+- regression and promotion-gate discipline for architecture changes.
+
+The goal is not to ship one monolithic framework, but a clear architecture kit that others can read, adapt, and implement in their own agent systems.
+
+---
+
+## What is inside
+
+### Core architecture contours
+
+1. **Memory Contour**
+   - retrieval
+   - distillation
+   - protected memory
+   - truth hierarchy
+   - memory write discipline
+
+2. **Task State Contour**
+   - task manager as operational source of truth
+   - task / artifact / memory separation
+   - lifecycle discipline
+   - status and dependency semantics
+
+3. **Execution Contour**
+   - thin main orchestrator
+   - bounded isolated execution
+   - explicit ownership
+   - ACK / DONE / BLOCKED handoff contract
+   - retry and escalation budgets
+
+4. **Evaluation Contour**
+   - regression harnesses
+   - protected cases
+   - comparable coverage
+   - dataset delta checks
+   - promotion gate realism
+
+5. **Truth Resolution Contour**
+   - domain-specific source of truth
+   - canonical-over-raw resolution
+   - freshness and supersession handling
+   - conflict-aware retrieval/application
+
+---
+
+## Repository structure
+
+```text
+agent-architecture-kit/
+├── README.md
+├── docs/
+│   ├── architecture-overview.md
+│   ├── memory-contour.md
+│   ├── task-manager-integration.md
+│   ├── isolated-execution.md
+│   ├── eval-regression.md
+│   └── github-primer-ru.md
+├── schemas/
+│   ├── memory-item.schema.json
+│   ├── task-summary.schema.json
+│   └── trace-summary.schema.json
+├── examples/
+│   ├── truth-hierarchy-example.md
+│   ├── memory-distillation-example.md
+│   └── task-memory-artifact-example.md
+└── notes/
+    └── export-boundary.md
+```
+
+---
+
+## Who this is for
+
+This repo is useful if you are building:
+
+- an assistant that works across many sessions;
+- a tool-using agent that needs durable state;
+- a task-driven operator assistant;
+- an architecture/eval loop for agent improvement;
+- a system where chat history alone is not a sufficient memory model.
+
+---
+
+## Core ideas in one page
+
+### 1. Memory is not full transcript retention
+Useful memory is selective.
+It should preserve decisions, patterns, anti-patterns, blockers with reuse value, and canonical references.
+
+### 2. Tasks are not the same as memory
+A task registry remembers work state.
+Memory remembers meaning.
+Artifacts remember detail.
+
+### 3. Truth is domain-specific
+For task status, the task registry should win.
+For long-term user preferences, curated memory should win.
+For deep implementation context, linked artifacts often win.
+
+### 4. Main should stay thin
+The conversational surface should remain an orchestration and decision surface, not the default sink for heavy execution.
+
+### 5. Every architecture claim should be testable
+If a contour matters, it should be evaluable, regression-protected, and measurable.
+
+---
+
+## Suggested public/private split
+
+### Public-safe by default
+- architecture principles
+- neutral schemas
+- examples with redacted specifics
+- evaluation methodology
+- generic handoff contracts
+- generic memory/task patterns
+
+### Keep private or sanitize first
+- real chat ids
+- user-specific memory
+- private artifacts and operational logs
+- secrets, tokens, infrastructure details
+- environment-specific paths unless intentionally documented
+
+---
+
+## How to use this repo
+
+### Option A — Read-only architecture reference
+Use the docs as a design guide while implementing in your own stack.
+
+### Option B — Starter kit
+Adopt the schemas, examples, and policy ideas as a scaffold for your own architecture.
+
+### Option C — Evolving architecture repository
+Treat this repo as a living product surface:
+- document contours;
+- add examples;
+- add evaluation cases;
+- version changes explicitly.
+
+---
+
+## Initial roadmap
+
+- [ ] refine architecture overview into v1 public form
+- [ ] convert internal patterns into sanitized public docs
+- [ ] add machine-readable policy/eval examples
+- [ ] add regression case examples
+- [ ] add reference implementation notes
+
+---
+
+## License
+
+TBD by repository owner.
+
+A practical choice is usually one of:
+- MIT — most permissive;
+- Apache-2.0 — permissive with patent language;
+- AGPL-3.0 — forces networked derivatives to stay open.
+
+---
+
+## Short glossary
+
+- **Repository / repo** — a project folder tracked by Git.
+- **Git** — version-control system.
+- **GitHub** — hosting platform for Git repositories.
+- **Commit** — saved change snapshot.
+- **Branch** — parallel line of work.
+- **Pull Request (PR)** — proposed changes to merge into a branch.
+- **Issue** — tracked problem, task, or idea.
+- **Release** — named published version of the repo.
+
+For a fuller Russian explanation, see `docs/github-primer-ru.md`.
