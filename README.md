@@ -12,6 +12,8 @@ This repository packages a set of architectural contours that emerged from real 
 
 The goal is not to ship one monolithic framework, but a clear architecture kit that others can read, adapt, and implement in their own agent systems.
 
+This repository now includes both architecture docs and a minimal Python reference implementation.
+
 ---
 
 ## What is inside
@@ -73,6 +75,16 @@ agent-architecture-kit/
 │   ├── truth-hierarchy-example.md
 │   ├── memory-distillation-example.md
 │   └── task-memory-artifact-example.md
+├── src/
+│   └── agent_architecture_kit/
+│       ├── __init__.py
+│       ├── memory.py
+│       ├── models.py
+│       ├── tasks.py
+│       ├── trace.py
+│       └── truth.py
+├── tests/
+│   └── test_core.py
 └── notes/
     └── export-boundary.md
 ```
@@ -140,7 +152,7 @@ If a contour matters, it should be evaluable, regression-protected, and measurab
 Use the docs as a design guide while implementing in your own stack.
 
 ### Option B — Starter kit
-Adopt the schemas, examples, and policy ideas as a scaffold for your own architecture.
+Adopt the schemas, examples, policy ideas, and minimal Python modules as a scaffold for your own architecture.
 
 ### Option C — Evolving architecture repository
 Treat this repo as a living product surface:
@@ -157,6 +169,7 @@ Treat this repo as a living product surface:
 - [ ] convert internal patterns into sanitized public docs
 - [ ] add machine-readable policy/eval examples
 - [ ] add regression case examples
+- [x] add minimal Python reference implementation
 - [ ] add reference implementation notes
 
 ---
