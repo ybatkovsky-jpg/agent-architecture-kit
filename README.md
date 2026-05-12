@@ -75,9 +75,11 @@ agent-architecture-kit/
 │   │   ├── implementation-mapping.md
 │   │   ├── current-state-and-next-steps.md
 │   │   ├── promotion-gates/
-│   │   │   └── openclaw-frame-continuation-contract-v1.md
+│   │   │   ├── openclaw-frame-continuation-contract-v1.md
+│   │   │   └── markdown-promotion-gate-spec-v0-1.md
 │   │   ├── policies/
-│   │   │   └── openclaw-frame-canonical-anchor-and-storage-policy-v1.md
+│   │   │   ├── openclaw-frame-canonical-anchor-and-storage-policy-v1.md
+│   │   │   └── openclaw-frame-context-serving-policy-v1.md
 │   │   └── schemas/
 │   │       └── promotion-gate-verdict-schema-v1.md
 │   ├── memory/

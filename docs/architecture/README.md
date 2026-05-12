@@ -9,6 +9,7 @@ Included here:
 - retry and escalation budget policy;
 - memory distillation cadence;
 - control-plane spec;
+- implementation mapping;
 - current-state and next-steps summary;
 - continuation contract and promotion-gate supporting docs under `promotion-gates/`, `policies/`, and `schemas/`.
 
@@ -16,5 +17,5 @@ These docs are curated exports from a larger internal architecture corpus. They 
 
 Notable subfolders:
 - `promotion-gates/` — continuation and promotion-gate architecture notes;
-- `policies/` — focused operational policies promoted into product-facing form;
+- `policies/` — focused operational policies promoted into product-facing form, including anchor/storage and context-serving guidance;
 - `schemas/` — prose references for machine-readable schemas that also live under the repo-level `schemas/` directory.
