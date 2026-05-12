@@ -82,7 +82,11 @@ agent-architecture-kit/
 │   │   └── authority-priority.md
 │   ├── evaluation/
 │   │   ├── README.md
-│   │   └── evaluation-harness-v0-1.md
+│   │   ├── evaluation-harness-v0-1.md
+│   │   ├── protected-regression-layer-v0-1.md
+│   │   ├── acceptance-scenarios.md
+│   │   ├── failure-modes-and-hardening.md
+│   │   └── release-recommendation-contours.md
 │   ├── architecture-overview.md
 │   ├── memory-contour.md
 │   ├── task-manager-integration.md
@@ -104,9 +108,11 @@ agent-architecture-kit/
 │       ├── models.py
 │       ├── tasks.py
 │       ├── trace.py
-│       └── truth.py
+│       ├── truth.py
+│       └── evaluation.py
 ├── tests/
-│   └── test_core.py
+│   ├── test_core.py
+│   └── test_evaluation.py
 └── notes/
     └── export-boundary.md
 ```
@@ -190,9 +196,9 @@ Treat this repo as a living product surface:
 - [ ] refine architecture overview into v1 public form
 - [ ] convert internal patterns into sanitized public docs
 - [ ] add machine-readable policy/eval examples
-- [ ] add regression case examples
+- [x] add regression case examples
 - [x] add minimal Python reference implementation
-- [ ] add reference implementation notes
+- [x] add reference implementation notes for evaluation/release gates
 
 ---
 
