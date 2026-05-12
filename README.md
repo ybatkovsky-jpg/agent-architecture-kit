@@ -20,6 +20,8 @@ This repository now includes both architecture docs and a minimal Python referen
 
 ### Core architecture contours
 
+A deeper second-wave export now also lives under `docs/architecture/`.
+
 1. **Memory Contour**
    - retrieval
    - distillation
@@ -61,6 +63,15 @@ This repository now includes both architecture docs and a minimal Python referen
 agent-architecture-kit/
 ├── README.md
 ├── docs/
+│   ├── architecture/
+│   │   ├── README.md
+│   │   ├── frame-baseline-v1.md
+│   │   ├── handoff-contract-v1.md
+│   │   ├── routing-ownership-map-v1.md
+│   │   ├── retry-escalation-budget-policy-v1.md
+│   │   ├── memory-distillation-cadence-v1.md
+│   │   ├── control-plane-spec-v0-1.md
+│   │   └── current-state-and-next-steps.md
 │   ├── architecture-overview.md
 │   ├── memory-contour.md
 │   ├── task-manager-integration.md
