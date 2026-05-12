@@ -1,0 +1,380 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/ybatkovsky-jpg/agent-architecture-kit/main/schemas/promotion-gate-verdict-v1.schema.json",
+  "title": "Promotion Gate Verdict v1",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema_version",
+    "candidate",
+    "verdict",
+    "score",
+    "reasons",
+    "warnings",
+    "blockers",
+    "suggested_destination",
+    "next_action",
+    "confidence"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "promotion_gate_verdict/v1"
+    },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "path",
+        "artifact_type"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string"
+        },
+        "content_hash": {
+          "type": "string"
+        },
+        "size_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "created_at": {
+          "type": "string"
+        },
+        "modified_at": {
+          "type": "string"
+        }
+      }
+    },
+    "verdict": {
+      "type": "string",
+      "enum": [
+        "promote",
+        "hold_internal",
+        "sanitize_then_promote",
+        "needs_review"
+      ]
+    },
+    "score": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "aggregate",
+        "dimensions"
+      ],
+      "properties": {
+        "aggregate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "dimensions": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": [
+            "reusable",
+            "public_safe",
+            "generic_enough",
+            "stable_enough",
+            "repo_fit"
+          ],
+          "properties": {
+            "reusable": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "public_safe": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "generic_enough": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "stable_enough": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "repo_fit": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          }
+        },
+        "weights": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "reusable": {
+              "type": "number"
+            },
+            "public_safe": {
+              "type": "number"
+            },
+            "generic_enough": {
+              "type": "number"
+            },
+            "stable_enough": {
+              "type": "number"
+            },
+            "repo_fit": {
+              "type": "number"
+            }
+          }
+        },
+        "hard_block_present": {
+          "type": "boolean"
+        },
+        "threshold_profile": {
+          "type": "string"
+        }
+      }
+    },
+    "reasons": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/messageItem"
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/messageItem"
+      }
+    },
+    "blockers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/messageItem"
+      }
+    },
+    "suggested_destination": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "repo",
+        "bucket",
+        "path",
+        "rationale"
+      ],
+      "properties": {
+        "repo": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "bucket": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "path": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "rationale": {
+          "type": "string"
+        }
+      }
+    },
+    "next_action": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "code",
+        "summary"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "enum": [
+            "copy_or_rewrite_for_product_repo",
+            "sanitize_then_rerun_gate",
+            "retain_internal_reference",
+            "request_architecture_review",
+            "collect_stronger_evidence"
+          ]
+        },
+        "summary": {
+          "type": "string"
+        },
+        "owner_hint": {
+          "type": "string"
+        },
+        "prerequisites": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "suggested_artifacts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "confidence": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "level",
+        "value",
+        "ambiguity_flags"
+      ],
+      "properties": {
+        "level": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "value": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "ambiguity_flags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "notes": {
+          "type": "string"
+        },
+        "conflicting_signals": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "needed": {
+          "type": "boolean"
+        },
+        "reason_codes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "questions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "evaluated_at": {
+          "type": "string"
+        },
+        "tool_name": {
+          "type": "string"
+        },
+        "tool_version": {
+          "type": "string"
+        },
+        "policy_version": {
+          "type": "string"
+        }
+      }
+    },
+    "source_signals": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "detected_topics": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "normalization_notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "sanitization_hints": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "internal_only_notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "$defs": {
+    "messageItem": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "code",
+        "message"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "field": {
+          "type": "string"
+        },
+        "severity": {
+          "type": "string"
+        },
+        "suggested_fix": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

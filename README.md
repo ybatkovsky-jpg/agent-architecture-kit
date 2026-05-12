@@ -73,7 +73,13 @@ agent-architecture-kit/
 │   │   ├── control-plane-spec-v0-1.md
 │   │   ├── truth-boundary-contract.md
 │   │   ├── implementation-mapping.md
-│   │   └── current-state-and-next-steps.md
+│   │   ├── current-state-and-next-steps.md
+│   │   ├── promotion-gates/
+│   │   │   └── openclaw-frame-continuation-contract-v1.md
+│   │   ├── policies/
+│   │   │   └── openclaw-frame-canonical-anchor-and-storage-policy-v1.md
+│   │   └── schemas/
+│   │       └── promotion-gate-verdict-schema-v1.md
 │   ├── memory/
 │   │   ├── README.md
 │   │   ├── memory-stack-v2.md
@@ -96,11 +102,18 @@ agent-architecture-kit/
 ├── schemas/
 │   ├── memory-item.schema.json
 │   ├── task-summary.schema.json
-│   └── trace-summary.schema.json
+│   ├── trace-summary.schema.json
+│   └── promotion-gate-verdict-v1.schema.json
 ├── examples/
 │   ├── truth-hierarchy-example.md
 │   ├── memory-distillation-example.md
-│   └── task-memory-artifact-example.md
+│   ├── task-memory-artifact-example.md
+│   └── promotion-gate/
+│       └── fixtures/
+│           ├── known-pass-schema.md
+│           ├── known-hold-internal.md
+│           ├── known-sanitize-architecture.md
+│           └── known-review-competing-buckets.md
 ├── src/
 │   └── agent_architecture_kit/
 │       ├── __init__.py
@@ -113,6 +126,9 @@ agent-architecture-kit/
 ├── tests/
 │   ├── test_core.py
 │   └── test_evaluation.py
+├── scripts/
+│   ├── promotion_gate.py
+│   └── verify_promotion_gate_cases.py
 └── notes/
     └── export-boundary.md
 ```
