@@ -74,12 +74,15 @@ agent-architecture-kit/
 │   │   ├── truth-boundary-contract.md
 │   │   ├── implementation-mapping.md
 │   │   ├── current-state-and-next-steps.md
+│   │   ├── structured-compression-contract-v1.md
+│   │   ├── session-lifecycle-prevention-spec.md
 │   │   ├── promotion-gates/
 │   │   │   ├── openclaw-frame-continuation-contract-v1.md
 │   │   │   └── markdown-promotion-gate-spec-v0-1.md
 │   │   ├── policies/
 │   │   │   ├── openclaw-frame-canonical-anchor-and-storage-policy-v1.md
-│   │   │   └── openclaw-frame-context-serving-policy-v1.md
+│   │   │   ├── openclaw-frame-context-serving-policy-v1.md
+│   │   │   └── openclaw-frame-serving-class-matrix-v1.md
 │   │   └── schemas/
 │   │       └── promotion-gate-verdict-schema-v1.md
 │   ├── memory/
@@ -170,6 +173,12 @@ The conversational surface should remain an orchestration and decision surface, 
 
 ### 5. Every architecture claim should be testable
 If a contour matters, it should be evaluable, regression-protected, and measurable.
+
+### 6. Execution state needs lifecycle discipline
+Bounded execution sessions should not linger indefinitely after delivery. Session pressure, checkpoint growth, and stale hot state are architecture problems, not just operational annoyances.
+
+### 7. Compression should preserve anchors, not replace them
+A compressed context window can carry structured continuity aids, but canonical task, artifact, memory, and handoff references must remain authoritative.
 
 ---
 
