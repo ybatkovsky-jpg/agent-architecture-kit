@@ -1,0 +1,53 @@
+{
+  "fixture_id": "known-pass-done",
+  "expected": {
+    "verdict": "pass",
+    "terminal_state": "DONE"
+  },
+  "trace": ["PREPARED", "ACK", "RUNNING", "DONE"],
+  "handoff": {
+    "handoff_id": "h-416-01",
+    "parent_task_id": 416,
+    "continuation_scope": "verify compact continuation completion path",
+    "execution_owner_target": "subagent:ziribt-416",
+    "decision_owner": "main",
+    "resume_basis": "mapping artifact exists and bounded verifier may run now",
+    "expected_next_step": "run verifier and emit verdict",
+    "return_target": "parent task #416 summary",
+    "created_at": "2026-05-12T12:00:00Z",
+    "created_by": "main"
+  },
+  "resume_trigger": {
+    "resume_trigger_id": "rt-416-01",
+    "handoff_id": "h-416-01",
+    "trigger_type": "prerequisite-met",
+    "trigger_summary": "contract and fixtures are available",
+    "basis_anchor": "task-manager/artifacts/openclaw-frame-continuation-contract-v1-2026-05-12.md",
+    "authorized_by": "main",
+    "triggered_at": "2026-05-12T12:01:00Z"
+  },
+  "continuation": {
+    "continuation_id": "c-416-01",
+    "handoff_id": "h-416-01",
+    "resume_trigger_id": "rt-416-01",
+    "status": "DONE",
+    "execution_owner": "subagent:ziribt-416",
+    "decision_owner": "main",
+    "scope": "verify compact continuation completion path",
+    "resume_basis_snapshot": "consumed continuation contract artifact as bounded basis",
+    "started_at": "2026-05-12T12:02:00Z"
+  },
+  "return_package": {
+    "return_id": "ret-416-01",
+    "continuation_id": "c-416-01",
+    "handoff_id": "h-416-01",
+    "status": "DONE",
+    "execution_owner": "subagent:ziribt-416",
+    "decision_owner": "main",
+    "summary": "continuation verifier report produced",
+    "next_action": "review bounded output",
+    "returned_at": "2026-05-12T12:03:00Z",
+    "durable_result_anchor": "scripts/architecture/verify_continuation_cases.py",
+    "result_kind": "verification-report"
+  }
+}

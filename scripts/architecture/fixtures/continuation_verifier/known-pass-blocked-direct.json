@@ -1,0 +1,45 @@
+{
+  "fixture_id": "known-pass-blocked-direct",
+  "expected": {
+    "verdict": "pass",
+    "terminal_state": "BLOCKED"
+  },
+  "trace": ["PREPARED", "BLOCKED"],
+  "handoff": {
+    "handoff_id": "h-416-02",
+    "parent_task_id": 416,
+    "continuation_scope": "attempt resume from missing artifact",
+    "execution_owner_target": "subagent:ziribt-416",
+    "decision_owner": "main",
+    "resume_basis": "referenced artifact is missing, so basis is invalid at intake",
+    "expected_next_step": "reject invalid basis",
+    "return_target": "parent task #416 summary",
+    "created_at": "2026-05-12T12:10:00Z",
+    "created_by": "main"
+  },
+  "continuation": {
+    "continuation_id": "c-416-02",
+    "handoff_id": "h-416-02",
+    "resume_trigger_id": "rt-416-02-missing",
+    "status": "BLOCKED",
+    "execution_owner": "subagent:ziribt-416",
+    "decision_owner": "main",
+    "scope": "attempt resume from missing artifact",
+    "resume_basis_snapshot": "intake verified that cited basis anchor does not exist",
+    "started_at": "2026-05-12T12:11:00Z"
+  },
+  "return_package": {
+    "return_id": "ret-416-02",
+    "continuation_id": "c-416-02",
+    "handoff_id": "h-416-02",
+    "status": "BLOCKED",
+    "execution_owner": "subagent:ziribt-416",
+    "decision_owner": "main",
+    "summary": "continuation blocked before ownership acceptance",
+    "next_action": "wait for valid basis anchor",
+    "returned_at": "2026-05-12T12:12:00Z",
+    "blocked_reason": "missing prerequisite artifact",
+    "owner_for_decision": "main",
+    "recovery_suggestion": "record a valid basis anchor and start a new continuation attempt"
+  }
+}

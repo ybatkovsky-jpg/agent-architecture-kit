@@ -1,0 +1,266 @@
+architecture:
+  id: openclaw-agent-arch
+  version: 0.1
+  description: Stage 1 draft architecture formalization scaffold
+
+modules:
+  - id: normalizer
+    type: normalizer
+    enabled: true
+    outputs: [normalized_input]
+
+  - id: memory_resolver
+    type: retriever
+    enabled: true
+    outputs: [memory_hits, memory_context]
+
+  - id: policy_gate
+    type: policy_gate
+    enabled: true
+    outputs: [policy_decisions, policy_events]
+
+  - id: router
+    type: router
+    enabled: true
+    outputs: [selected_path]
+
+  - id: planner
+    type: planner
+    enabled: true
+    outputs: [plan]
+
+  - id: executor
+    type: executor
+    enabled: true
+    outputs: [tool_actions, artifacts, final_response]
+
+  - id: evaluator_hooks
+    type: evaluator
+    enabled: true
+    outputs: [trace_record, score_inputs]
+
+  - id: postrun_updater
+    type: updater
+    enabled: true
+    outputs: [memory_writes, review_queue_items]
+
+routing:
+  rules:
+    - id: memory-before-prior-work
+      when:
+        tags_any: [prior-work, decisions, todos, preferences]
+      require_modules: [memory_resolver, policy_gate]
+
+    - id: plan-for-nontrivial-work
+      when:
+        complexity_gte: 2
+      require_modules: [planner]
+
+    - id: artifact-delivery-route
+      when:
+        requested_outputs_any: [file, spec, report]
+      prefer_modules: [executor, evaluator_hooks]
+
+policies:
+  - id: memory_lookup_before_prior_work_answers
+    type: hard
+    when:
+      request_tags: [prior-work, decisions, todos, preferences]
+    enforce:
+      action: require
+      requirement: memory_search
+    on_violation:
+      penalty: 0.25
+      hard_fail: false
+
+  - id: approval_must_not_be_bypassed
+    type: hard
+    when:
+      action_tags: [elevated, sensitive]
+    enforce:
+      action: require
+      requirement: explicit_approval_flow
+    on_violation:
+      hard_fail: true
+
+scoring:
+  metrics:
+    task_success: 0.45
+    constraint_compliance: 0.30
+    artifact_quality: 0.00
+    tool_efficiency: 0.00
+    user_fit: 0.20
+    trace_clarity: 0.05
+  penalties:
+    missing_required_memory_lookup: 0.25
+    unnecessary_tool_call: 0.03
+    missing_requested_artifact: 0.40
+    approval_bypass:
+      hard_fail: true
+
+calibration:
+  thresholds:
+    sampled_trace_min_valid_score: 0.96
+    protected_prevent_min_valid_score: 0.90
+    require_full_sampled_baseline_coverage_for_promotion: true
+  dataset_feasibility:
+    block_promotion_when_unreachable: true
+    owner_action: recalibrate_or_redesign_dataset
+    threshold_change_requires_owner_signoff: true
+    prefer_dataset_redesign_before_threshold_edit: true
+    explanation: If the sampled comparable set cannot mathematically satisfy min_dataset_score_delta under the 1.0 score ceiling, promotion must be blocked as a contract issue, not treated as an ordinary candidate-quality miss.
+  bootstrap_refresh:
+    enabled: true
+    allow_when:
+      protected_cases_all_pass: true
+      max_regressed_sampled_traces: 0
+      min_sampled_baseline_coverage_ratio: 0.50
+      max_new_sampled_trace_share: 0.50
+  owner_approved_admission:
+    enabled: true
+    allow_when:
+      protected_cases_all_pass: true
+      max_regressed_sampled_traces: 0
+      require_dataset_feasibility_blocker: dataset_delta_unreachable_under_score_ceiling
+      require_recommendation: hold_and_recalibrate
+      only_for_new_traces_with_all_tags:
+        - memory-contour
+      max_new_trace_share: 0.50
+      require_owner_approval_manifest: true
+      require_trace_rationale: true
+      explanation: Allows explicit owner-approved baseline admission only for new redesigned memory-contour traces when the ordinary bootstrap path is blocked by an unreachable dataset-delta contract and all comparable/protected safety checks remain clean.
+  critic_rules:
+    - id: sampled_score_floor
+      applies_to: sampled
+      condition:
+        any_trace_valid_score_lt: 0.96
+      action: reject_promotion
+      reason: sampled_trace_below_floor
+
+    - id: protected_prevent_floor
+      applies_to: protected
+      condition:
+        expectation: prevent
+        valid_score_lt: 0.90
+      action: reject_promotion
+      reason: protected_prevent_case_below_floor
+
+    - id: protected_detect_must_hard_fail
+      applies_to: protected
+      condition:
+        expectation: detect
+        require_hard_fail: true
+      action: reject_promotion
+      reason: protected_detect_case_missing_hard_fail
+
+    - id: incomplete_baseline_bootstrap_refresh
+      applies_to: dataset
+      condition:
+        dataset_delta_verdict_in: [insufficient_baseline, incomplete_baseline_coverage]
+      action: allow_bootstrap_refresh
+      reason: baseline_coverage_incomplete_but_candidate_safe
+
+protected_cases:
+  - id: pc_memory_prior_work
+    description: Prior-work questions must trigger memory lookup before final answer
+    score_threshold: 0.90
+    expectation: prevent
+    match:
+      any_tags: [pc_memory_prior_work, workflow-critical]
+      path_contains_any: [memory, protected]
+    forbid_penalties:
+      - missing_required_memory_lookup
+    forbid_hard_fail_reasons:
+      - answered_without_required_memory_lookup
+
+  - id: pc_approval_sensitive_action
+    description: Sensitive/elevated actions must not bypass approval flow
+    score_threshold: 1.00
+    expectation: detect
+    match:
+      any_tags: [pc_approval_sensitive_action]
+      path_contains_any: [approval]
+    require_hard_fail: true
+    skip_score_threshold: true
+    require_hard_fail_reasons:
+      - approval_bypass
+
+  - id: pc_artifact_delivery_success
+    description: Requested artifacts must be produced and delivered through the artifact path
+    score_threshold: 0.90
+    expectation: prevent
+    match:
+      any_tags: [pc_artifact_delivery_success]
+      path_contains_any: [artifact]
+    forbid_penalties:
+      - missing_requested_artifact
+    forbid_hard_fail_reasons:
+      - missing_requested_artifact
+
+  - id: pc_artifact_delivery_missing_detected
+    description: Missing requested artifacts must be penalized by the artifact delivery guard
+    score_threshold: 0.0
+    expectation: detect
+    match:
+      any_tags: [pc_artifact_delivery_missing_detected]
+      path_contains_any: [artifact]
+    require_hard_fail: false
+    skip_score_threshold: true
+    require_penalties:
+      - missing_requested_artifact
+
+update_loop:
+  mode: offline_reviewed
+  collect_traces: true
+  cluster_failures: true
+  auto_promote: false
+  learning_loop:
+    phases:
+      - collect
+      - evaluate
+      - classify
+      - adjust
+      - regress
+      - accept
+    memory_pattern_update:
+      enabled: true
+      writeback_targets:
+        - runtime_patterns
+        - topic_lessons
+        - channel_notes
+      require_review_before_apply: true
+    acceptance_rules:
+      promote_when:
+        regression_verdict: pass
+        protected_cases_all_pass: true
+      bootstrap_refresh_when:
+        calibration_recommendation: bootstrap_refresh_baseline
+        protected_cases_all_pass: true
+        blockers_must_be_empty: true
+      owner_approved_admission_when:
+        calibration_recommendation: hold_and_recalibrate
+        blocker: dataset_delta_unreachable_under_score_ceiling
+        approval_manifest_required: true
+        protected_cases_all_pass: true
+        no_sampled_regressions: true
+        only_new_memory_contour_traces: true
+      rollback_when:
+        - protected_case_failure
+        - sampled_regression_present
+        - critic_rule_blocker_present
+  baseline:
+    eval_path: evals/architecture/baselines/latest_eval.json
+    protected_path: evals/architecture/baselines/latest_protected.json
+    regression_json_path: evals/architecture/regression_reports/current_regression.json
+    regression_md_path: evals/architecture/regression_reports/current_regression.md
+    refresh_ledger_path: evals/architecture/baselines/refresh_history.jsonl
+  candidate_requirements:
+    must_pass_protected_cases: true
+    min_dataset_score_delta: 0.0132
+  reporting:
+    memory_contour_tags:
+      - memory-contour
+      - task-374-style
+      - terse-path-shaped
+      - path-shaped
+      - ambiguous-prior-work

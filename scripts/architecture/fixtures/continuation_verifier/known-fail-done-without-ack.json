@@ -1,0 +1,53 @@
+{
+  "fixture_id": "known-fail-done-without-ack",
+  "expected": {
+    "verdict": "fail",
+    "terminal_state": "DONE"
+  },
+  "trace": ["PREPARED", "RUNNING", "DONE"],
+  "handoff": {
+    "handoff_id": "h-416-03",
+    "parent_task_id": 416,
+    "continuation_scope": "invalid completion path missing ACK",
+    "execution_owner_target": "subagent:ziribt-416",
+    "decision_owner": "main",
+    "resume_basis": "transcript only: continue from the last chat message",
+    "expected_next_step": "finish directly",
+    "return_target": "parent task #416 summary",
+    "created_at": "2026-05-12T12:20:00Z",
+    "created_by": "main"
+  },
+  "resume_trigger": {
+    "resume_trigger_id": "rt-416-03",
+    "handoff_id": "h-416-03",
+    "trigger_type": "manual-resume",
+    "trigger_summary": "operator said continue in chat",
+    "basis_anchor": "",
+    "authorized_by": "main",
+    "triggered_at": "2026-05-12T12:21:00Z"
+  },
+  "continuation": {
+    "continuation_id": "c-416-03",
+    "handoff_id": "h-416-03",
+    "resume_trigger_id": "rt-416-03",
+    "status": "DONE",
+    "execution_owner": "subagent:ziribt-416",
+    "decision_owner": "main",
+    "scope": "invalid completion path missing ACK",
+    "resume_basis_snapshot": "continued only from chat residue",
+    "started_at": "2026-05-12T12:22:00Z"
+  },
+  "return_package": {
+    "return_id": "ret-416-03",
+    "continuation_id": "c-416-03",
+    "handoff_id": "h-416-03",
+    "status": "DONE",
+    "execution_owner": "subagent:ziribt-416",
+    "decision_owner": "main",
+    "summary": "returned done without accepted ownership",
+    "next_action": "none",
+    "returned_at": "2026-05-12T12:23:00Z",
+    "durable_result_anchor": "chat-only",
+    "result_kind": "summary-only"
+  }
+}

@@ -63,6 +63,8 @@ A deeper export now also lives under `docs/architecture/`, `docs/memory/`, and `
 agent-architecture-kit/
 ├── README.md
 ├── docs/
+│   ├── learning/
+│   │   └── architecture-config.v0_1.example.yaml
 │   ├── architecture/
 │   │   ├── README.md
 │   │   ├── frame-baseline-v1.md
@@ -133,7 +135,23 @@ agent-architecture-kit/
 │   └── test_evaluation.py
 ├── scripts/
 │   ├── promotion_gate.py
-│   └── verify_promotion_gate_cases.py
+│   ├── verify_promotion_gate_cases.py
+│   └── architecture/
+│       ├── load_arch_config.py
+│       ├── emit_trace.py
+│       ├── score_trace.py
+│       ├── eval_policy.py
+│       ├── run_protected_cases.py
+│       ├── regression_report.py
+│       ├── run_regression_suite.py
+│       ├── controlled_baseline_refresh.py
+│       ├── verify_continuation_cases.py
+│       ├── run_stage2_demo.py
+│       └── fixtures/
+│           └── continuation_verifier/
+│               ├── known-pass-done.json
+│               ├── known-pass-blocked-direct.json
+│               └── known-fail-done-without-ack.json
 └── notes/
     └── export-boundary.md
 ```
