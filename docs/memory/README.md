@@ -1,6 +1,7 @@
 # Memory Docs
 
 This folder contains the deeper memory export layer:
+- runtime improvement overview;
 - memory stack v2;
 - memory core v1;
 - retrieval policy matrix;
