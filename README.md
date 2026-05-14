@@ -115,6 +115,8 @@ agent-architecture-kit/
 │   ├── truth-hierarchy-example.md
 │   ├── memory-distillation-example.md
 │   ├── task-memory-artifact-example.md
+│   ├── serving-policy/
+│   │   └── openclaw-frame-serving-class-matrix-v1.json
 │   └── promotion-gate/
 │       └── fixtures/
 │           ├── known-pass-schema.md
@@ -146,12 +148,21 @@ agent-architecture-kit/
 │       ├── run_regression_suite.py
 │       ├── controlled_baseline_refresh.py
 │       ├── verify_continuation_cases.py
+│       ├── context_serving_evaluator.py
 │       ├── run_stage2_demo.py
 │       └── fixtures/
 │           └── continuation_verifier/
 │               ├── known-pass-done.json
 │               ├── known-pass-blocked-direct.json
 │               └── known-fail-done-without-ack.json
+├── evals/
+│   └── architecture/
+│       ├── sampled_cases/
+│       │   └── trace-demo-001.json
+│       ├── score_reports/
+│       │   └── demo_score_report.json
+│       └── fixtures/
+│           └── context-serving-fixtures.json
 └── notes/
     └── export-boundary.md
 ```

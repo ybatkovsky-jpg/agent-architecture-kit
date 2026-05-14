@@ -1,0 +1,183 @@
+{
+  "artifact": "openclaw-frame-serving-class-matrix-v1",
+  "date": "2026-05-12",
+  "task_id": 420,
+  "status": "bounded_completion_artifact",
+  "scope": "machine-checkable request-class x object-class context-serving matrix derived conservatively from task-396 policy and adjacent Frame artifacts",
+  "source_artifacts": [
+    "docs/architecture/policies/openclaw-frame-context-serving-policy-v1.md"
+  ],
+  "serving_classes": [
+    "always_on",
+    "on_demand",
+    "forbidden"
+  ],
+  "request_classes": [
+    "current_task_execution",
+    "resume_reopen_continuation",
+    "policy_decision_lookup",
+    "artifact_source_trace_request",
+    "preference_operating_style_recall",
+    "general_topic_lookup"
+  ],
+  "object_classes": [
+    "task_state_current",
+    "canonical_handoff_current_branch",
+    "state_summary_current_contour",
+    "decision_memory_note",
+    "pattern_blocker_durable_ref_memory_note",
+    "preference_memory_note",
+    "wiki_page",
+    "evidence_record",
+    "source_record",
+    "retrieval_document",
+    "raw_transcript_tail",
+    "operator_summary_unanchored",
+    "historical_retrieval_bundle_unscoped",
+    "task_state_historical",
+    "canonical_handoff_historical_branch",
+    "meta_artifact_projection"
+  ],
+  "global_rules": {
+    "default_flow": [
+      "load_smallest_sufficient_always_on_pack",
+      "classify_request",
+      "admit_only_allowed_object_classes_for_request",
+      "reorder_by_authority",
+      "surface_uncertainty_when_evidence_is_weak_stale_or_conflicting",
+      "never_silently_widen_to_transcript_first_mixed_context"
+    ],
+    "authority_order_default": [
+      "task_state_current",
+      "canonical_handoff_current_branch",
+      "decision_memory_note",
+      "pattern_blocker_durable_ref_memory_note",
+      "preference_memory_note",
+      "wiki_page",
+      "evidence_record",
+      "source_record",
+      "retrieval_document"
+    ],
+    "hard_forbidden_ambient": [
+      "raw_transcript_tail",
+      "operator_summary_unanchored",
+      "historical_retrieval_bundle_unscoped"
+    ],
+    "notes": [
+      "Only current task state and current-branch continuation anchors can be always_on.",
+      "Historical canonical objects remain authoritative when retrieved but are not ambiently always_on.",
+      "retrieval_document is a retrieval aid and must not outrank stronger canonical objects for the same request.",
+      "meta_artifact_projection may be consulted only as bounded support and must not replace underlying proof objects in audit or execution status serving."
+    ]
+  },
+  "matrix": {
+    "current_task_execution": {
+      "task_state_current": {"serving": "always_on", "authority_rank": 1, "note": "top operational truth for active status, next owner, lifecycle and next bounded step"},
+      "canonical_handoff_current_branch": {"serving": "always_on", "authority_rank": 2, "note": "current-branch continuity truth for resume basis and latest terminal package"},
+      "state_summary_current_contour": {"serving": "always_on", "authority_rank": 3, "note": "allowed only when compact, canonical, and current; do not duplicate large history"},
+      "decision_memory_note": {"serving": "on_demand", "authority_rank": 4, "note": "retrieve only if status answer needs rationale or policy context"},
+      "pattern_blocker_durable_ref_memory_note": {"serving": "on_demand", "authority_rank": 5, "note": "retrieve when blocker interpretation or reusable pattern is directly relevant"},
+      "preference_memory_note": {"serving": "on_demand", "authority_rank": 6, "note": "normally not needed for pure status"},
+      "wiki_page": {"serving": "on_demand", "authority_rank": 7, "note": "retrieve only if status depends on a governing spec or stable synthesis"},
+      "evidence_record": {"serving": "on_demand", "authority_rank": 8, "note": "retrieve when proving completion/blocking or inspecting artifact basis"},
+      "source_record": {"serving": "on_demand", "authority_rank": 9, "note": "provenance only when needed"},
+      "retrieval_document": {"serving": "on_demand", "authority_rank": 10, "note": "lowest ranked allowed aid; cannot override current task or handoff truth"},
+      "raw_transcript_tail": {"serving": "forbidden", "authority_rank": null, "note": "no transcript-first status reconstruction"},
+      "operator_summary_unanchored": {"serving": "forbidden", "authority_rank": null, "note": "projection is not authority"},
+      "historical_retrieval_bundle_unscoped": {"serving": "forbidden", "authority_rank": null, "note": "mixed historical bundle is high-noise for status"},
+      "task_state_historical": {"serving": "on_demand", "authority_rank": 11, "note": "retrieve only for comparison or lineage, never as default status source"},
+      "canonical_handoff_historical_branch": {"serving": "on_demand", "authority_rank": 12, "note": "retrieve only to inspect older branch lineage or ambiguity"},
+      "meta_artifact_projection": {"serving": "on_demand", "authority_rank": 13, "note": "support only; cannot replace task/handoff/evidence truth"}
+    },
+    "resume_reopen_continuation": {
+      "task_state_current": {"serving": "always_on", "authority_rank": 1, "note": "active task lifecycle still frames the reopen decision"},
+      "canonical_handoff_current_branch": {"serving": "always_on", "authority_rank": 2, "note": "primary resume basis; includes latest relevant continuation and terminal package"},
+      "state_summary_current_contour": {"serving": "on_demand", "authority_rank": 3, "note": "use only if compact summary helps orientation and is canonical"},
+      "decision_memory_note": {"serving": "on_demand", "authority_rank": 4, "note": "retrieve if resume choice depends on prior explicit decision"},
+      "pattern_blocker_durable_ref_memory_note": {"serving": "on_demand", "authority_rank": 5, "note": "retrieve when blocker handling or durable refs matter"},
+      "preference_memory_note": {"serving": "on_demand", "authority_rank": 6, "note": "only if operator style preference changes continuation handling"},
+      "wiki_page": {"serving": "on_demand", "authority_rank": 7, "note": "retrieve only when reopen path depends on stable procedure/spec"},
+      "evidence_record": {"serving": "on_demand", "authority_rank": 8, "note": "use to verify last completed step or blocked proof"},
+      "source_record": {"serving": "on_demand", "authority_rank": 9, "note": "provenance if exact basis needs inspection"},
+      "retrieval_document": {"serving": "on_demand", "authority_rank": 10, "note": "helper only; resume must not be reconstructed from broad search"},
+      "raw_transcript_tail": {"serving": "forbidden", "authority_rank": null, "note": "policy explicitly forbids transcript-based resume reconstruction by default"},
+      "operator_summary_unanchored": {"serving": "forbidden", "authority_rank": null, "note": "chat summary cannot be sole reopen anchor"},
+      "historical_retrieval_bundle_unscoped": {"serving": "forbidden", "authority_rank": null, "note": "mixed historical bundles distort bounded continuation"},
+      "task_state_historical": {"serving": "on_demand", "authority_rank": 11, "note": "retrieve only when comparing older lifecycle branches"},
+      "canonical_handoff_historical_branch": {"serving": "on_demand", "authority_rank": 12, "note": "older branch retrieval allowed for lineage and ambiguity inspection"},
+      "meta_artifact_projection": {"serving": "forbidden", "authority_rank": null, "note": "meta projections must not replace direct continuation basis for resume"}
+    },
+    "policy_decision_lookup": {
+      "task_state_current": {"serving": "on_demand", "authority_rank": 4, "note": "bring in only if the policy answer depends on active operational framing"},
+      "canonical_handoff_current_branch": {"serving": "on_demand", "authority_rank": 5, "note": "continuation context may support but should not dominate policy rationale"},
+      "state_summary_current_contour": {"serving": "suppressed", "authority_rank": null, "note": "summary projection is not the governing rationale source"},
+      "decision_memory_note": {"serving": "always_on", "authority_rank": 1, "note": "primary rationale source for explicit why/policy questions"},
+      "pattern_blocker_durable_ref_memory_note": {"serving": "always_on", "authority_rank": 2, "note": "reusable rule/pattern layer belongs in default policy lookup pack"},
+      "preference_memory_note": {"serving": "on_demand", "authority_rank": 6, "note": "personal style matters only when policy intersects operator preference"},
+      "wiki_page": {"serving": "always_on", "authority_rank": 3, "note": "stable synthesis/spec layer allowed by default for policy lookup"},
+      "evidence_record": {"serving": "on_demand", "authority_rank": 7, "note": "supporting proof, not primary rationale layer"},
+      "source_record": {"serving": "on_demand", "authority_rank": 8, "note": "retrieve only for provenance-sensitive questions"},
+      "retrieval_document": {"serving": "on_demand", "authority_rank": 9, "note": "auxiliary search surface only"},
+      "raw_transcript_tail": {"serving": "forbidden", "authority_rank": null, "note": "avoid transcript-led rationale synthesis"},
+      "operator_summary_unanchored": {"serving": "forbidden", "authority_rank": null, "note": "unanchored summaries do not govern policy"},
+      "historical_retrieval_bundle_unscoped": {"serving": "forbidden", "authority_rank": null, "note": "mixed history adds noise to why-questions"},
+      "task_state_historical": {"serving": "on_demand", "authority_rank": 10, "note": "historical status only if policy question is branch-specific"},
+      "canonical_handoff_historical_branch": {"serving": "on_demand", "authority_rank": 11, "note": "retrieve for lineage-sensitive rationale only"},
+      "meta_artifact_projection": {"serving": "on_demand", "authority_rank": 12, "note": "support only; underlying policy objects outrank projections"}
+    },
+    "artifact_source_trace_request": {
+      "task_state_current": {"serving": "on_demand", "authority_rank": 3, "note": "task scope may frame the audit request but is not direct proof"},
+      "canonical_handoff_current_branch": {"serving": "on_demand", "authority_rank": 4, "note": "continuation anchor may narrow audit scope"},
+      "state_summary_current_contour": {"serving": "forbidden", "authority_rank": null, "note": "summary projection must not stand in for audit evidence"},
+      "decision_memory_note": {"serving": "on_demand", "authority_rank": 5, "note": "retrieve only when audit asks why an artifact path was chosen"},
+      "pattern_blocker_durable_ref_memory_note": {"serving": "on_demand", "authority_rank": 6, "note": "supporting only if reusable blocker/pattern is explicitly relevant"},
+      "preference_memory_note": {"serving": "forbidden", "authority_rank": null, "note": "preference memory is not part of direct source trace by default"},
+      "wiki_page": {"serving": "on_demand", "authority_rank": 7, "note": "spec context may help but is not primary proof"},
+      "evidence_record": {"serving": "always_on", "authority_rank": 1, "note": "direct proof object should lead audit serving"},
+      "source_record": {"serving": "always_on", "authority_rank": 2, "note": "source/provenance object is first-class for source trace requests"},
+      "retrieval_document": {"serving": "on_demand", "authority_rank": 8, "note": "supporting lookup aid only"},
+      "raw_transcript_tail": {"serving": "forbidden", "authority_rank": null, "note": "chat residue is not audit proof"},
+      "operator_summary_unanchored": {"serving": "forbidden", "authority_rank": null, "note": "projection does not prove artifact provenance"},
+      "historical_retrieval_bundle_unscoped": {"serving": "forbidden", "authority_rank": null, "note": "mixed historical bundles pollute source-trace answers"},
+      "task_state_historical": {"serving": "on_demand", "authority_rank": 9, "note": "retrieve only if historical task lineage is requested"},
+      "canonical_handoff_historical_branch": {"serving": "on_demand", "authority_rank": 10, "note": "older branch continuity may help trace provenance lineage"},
+      "meta_artifact_projection": {"serving": "forbidden", "authority_rank": null, "note": "meta projections cannot replace proof objects in audit mode"}
+    },
+    "preference_operating_style_recall": {
+      "task_state_current": {"serving": "on_demand", "authority_rank": 2, "note": "active task context may matter secondarily"},
+      "canonical_handoff_current_branch": {"serving": "forbidden", "authority_rank": null, "note": "continuation state should not leak into pure preference recall by default"},
+      "state_summary_current_contour": {"serving": "forbidden", "authority_rank": null, "note": "summary projection is not durable preference memory"},
+      "decision_memory_note": {"serving": "on_demand", "authority_rank": 3, "note": "retrieve only if preference is encoded via explicit decision"},
+      "pattern_blocker_durable_ref_memory_note": {"serving": "forbidden", "authority_rank": null, "note": "generic patterns should not masquerade as user preference"},
+      "preference_memory_note": {"serving": "always_on", "authority_rank": 1, "note": "durable preference note is primary operating-style truth"},
+      "wiki_page": {"serving": "forbidden", "authority_rank": null, "note": "wiki is too broad for default preference serving"},
+      "evidence_record": {"serving": "forbidden", "authority_rank": null, "note": "evidence/proof objects are not default preference context"},
+      "source_record": {"serving": "forbidden", "authority_rank": null, "note": "provenance objects are irrelevant to default preference recall"},
+      "retrieval_document": {"serving": "forbidden", "authority_rank": null, "note": "weak retrieval hints must not become fake preference truth"},
+      "raw_transcript_tail": {"serving": "forbidden", "authority_rank": null, "note": "do not infer preference from chat residue by default"},
+      "operator_summary_unanchored": {"serving": "forbidden", "authority_rank": null, "note": "operator summary is not durable preference truth"},
+      "historical_retrieval_bundle_unscoped": {"serving": "forbidden", "authority_rank": null, "note": "historical mixed bundle is high-risk for false preference recall"},
+      "task_state_historical": {"serving": "forbidden", "authority_rank": null, "note": "old task states are not preference memory"},
+      "canonical_handoff_historical_branch": {"serving": "forbidden", "authority_rank": null, "note": "old continuation branches are not preference memory"},
+      "meta_artifact_projection": {"serving": "forbidden", "authority_rank": null, "note": "meta projections must not replace durable preference evidence"}
+    },
+    "general_topic_lookup": {
+      "task_state_current": {"serving": "forbidden", "authority_rank": null, "note": "general lookup should avoid active-contour leakage by default"},
+      "canonical_handoff_current_branch": {"serving": "forbidden", "authority_rank": null, "note": "general topic answers should not inherit current continuation state"},
+      "state_summary_current_contour": {"serving": "forbidden", "authority_rank": null, "note": "current contour summary is not general topic context"},
+      "decision_memory_note": {"serving": "always_on", "authority_rank": 1, "note": "mature decision memory can help stable topic recall"},
+      "pattern_blocker_durable_ref_memory_note": {"serving": "always_on", "authority_rank": 2, "note": "reusable pattern layer is appropriate for general lookup"},
+      "preference_memory_note": {"serving": "forbidden", "authority_rank": null, "note": "general topic recall should not inject user preference by default"},
+      "wiki_page": {"serving": "always_on", "authority_rank": 3, "note": "stable synthesis layer is default for general topic lookup"},
+      "evidence_record": {"serving": "on_demand", "authority_rank": 4, "note": "retrieve proof objects when topic answer needs grounding"},
+      "source_record": {"serving": "on_demand", "authority_rank": 5, "note": "provenance support if exact sourcing matters"},
+      "retrieval_document": {"serving": "on_demand", "authority_rank": 6, "note": "helper layer allowed but remains low authority"},
+      "raw_transcript_tail": {"serving": "forbidden", "authority_rank": null, "note": "no transcript-first topic reconstruction"},
+      "operator_summary_unanchored": {"serving": "forbidden", "authority_rank": null, "note": "summary projection is not general topic truth"},
+      "historical_retrieval_bundle_unscoped": {"serving": "forbidden", "authority_rank": null, "note": "mixed broad history should not ambiently drive topic answers"},
+      "task_state_historical": {"serving": "forbidden", "authority_rank": null, "note": "historical task state is not default general-topic context"},
+      "canonical_handoff_historical_branch": {"serving": "forbidden", "authority_rank": null, "note": "historical continuation branches are not default general-topic context"},
+      "meta_artifact_projection": {"serving": "on_demand", "authority_rank": 7, "note": "consult only as support when underlying objects are also available"}
+    }
+  }
+}

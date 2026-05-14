@@ -1,0 +1,160 @@
+{
+  "artifact": "task-421-context-serving-evaluator-fixtures",
+  "date": "2026-05-12",
+  "task_id": 421,
+  "derived_from": "examples/serving-policy/openclaw-frame-serving-class-matrix-v1.json",
+  "fixtures": [
+    {
+      "name": "status_request_mixes_current_and_forbidden_history",
+      "request_class": "current_task_execution",
+      "candidates": [
+        "task_state_current",
+        "canonical_handoff_current_branch",
+        "decision_memory_note",
+        "raw_transcript_tail",
+        "operator_summary_unanchored",
+        "evidence_record"
+      ],
+      "expected": {
+        "always_on": [
+          "task_state_current",
+          "canonical_handoff_current_branch"
+        ],
+        "on_demand": [
+          "decision_memory_note",
+          "evidence_record"
+        ],
+        "suppressed": [
+          "raw_transcript_tail",
+          "operator_summary_unanchored"
+        ]
+      }
+    },
+    {
+      "name": "continue_request_keeps_resume_basis_and_suppresses_meta_projection",
+      "request_class": "resume_reopen_continuation",
+      "candidates": [
+        "task_state_current",
+        "canonical_handoff_current_branch",
+        "state_summary_current_contour",
+        "meta_artifact_projection",
+        "canonical_handoff_historical_branch",
+        "raw_transcript_tail"
+      ],
+      "expected": {
+        "always_on": [
+          "task_state_current",
+          "canonical_handoff_current_branch"
+        ],
+        "on_demand": [
+          "state_summary_current_contour",
+          "canonical_handoff_historical_branch"
+        ],
+        "suppressed": [
+          "raw_transcript_tail",
+          "meta_artifact_projection"
+        ]
+      }
+    },
+    {
+      "name": "why_request_promotes_decision_pattern_and_wiki",
+      "request_class": "policy_decision_lookup",
+      "candidates": [
+        "decision_memory_note",
+        "pattern_blocker_durable_ref_memory_note",
+        "wiki_page",
+        "evidence_record",
+        "raw_transcript_tail"
+      ],
+      "expected": {
+        "always_on": [
+          "decision_memory_note",
+          "pattern_blocker_durable_ref_memory_note",
+          "wiki_page"
+        ],
+        "on_demand": [
+          "evidence_record"
+        ],
+        "suppressed": [
+          "raw_transcript_tail"
+        ]
+      }
+    },
+    {
+      "name": "audit_request_defaults_to_direct_proof_objects",
+      "request_class": "artifact_source_trace_request",
+      "candidates": [
+        "evidence_record",
+        "source_record",
+        "task_state_current",
+        "state_summary_current_contour",
+        "meta_artifact_projection",
+        "retrieval_document"
+      ],
+      "expected": {
+        "always_on": [
+          "evidence_record",
+          "source_record"
+        ],
+        "on_demand": [
+          "task_state_current",
+          "retrieval_document"
+        ],
+        "suppressed": [
+          "state_summary_current_contour",
+          "meta_artifact_projection"
+        ]
+      }
+    },
+    {
+      "name": "preference_request_uses_only_durable_preference_as_default",
+      "request_class": "preference_operating_style_recall",
+      "candidates": [
+        "preference_memory_note",
+        "decision_memory_note",
+        "task_state_current",
+        "retrieval_document",
+        "raw_transcript_tail"
+      ],
+      "expected": {
+        "always_on": [
+          "preference_memory_note"
+        ],
+        "on_demand": [
+          "task_state_current",
+          "decision_memory_note"
+        ],
+        "suppressed": [
+          "retrieval_document",
+          "raw_transcript_tail"
+        ]
+      }
+    },
+    {
+      "name": "general_topic_lookup_avoids_active_contour_leakage",
+      "request_class": "general_topic_lookup",
+      "candidates": [
+        "decision_memory_note",
+        "pattern_blocker_durable_ref_memory_note",
+        "wiki_page",
+        "retrieval_document",
+        "task_state_current",
+        "canonical_handoff_current_branch"
+      ],
+      "expected": {
+        "always_on": [
+          "decision_memory_note",
+          "pattern_blocker_durable_ref_memory_note",
+          "wiki_page"
+        ],
+        "on_demand": [
+          "retrieval_document"
+        ],
+        "suppressed": [
+          "task_state_current",
+          "canonical_handoff_current_branch"
+        ]
+      }
+    }
+  ]
+}
