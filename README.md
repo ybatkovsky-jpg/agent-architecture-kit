@@ -17,6 +17,21 @@ The goal is not to ship one monolithic framework, but a clear architecture kit t
 
 This repository now includes both architecture docs and a minimal Python reference implementation.
 
+## Start here
+
+If you want the fastest way to navigate the current exported corpus, read:
+
+- [`EXPORT_INDEX.md`](./EXPORT_INDEX.md) — canonical map of the repository
+- [`docs/architecture/README.md`](./docs/architecture/README.md)
+- [`docs/memory/README.md`](./docs/memory/README.md)
+- [`docs/evaluation/README.md`](./docs/evaluation/README.md)
+
+If you specifically want the sanitized live-system exports, go to:
+
+- [`exports/memory-core/`](./exports/memory-core/)
+- [`exports/task-manager-core/`](./exports/task-manager-core/)
+- [`exports/architecture-support-pack/`](./exports/architecture-support-pack/)
+
 ---
 
 ## What is inside
