@@ -22,6 +22,7 @@ This repository now includes both architecture docs and a minimal Python referen
 If you want the fastest way to navigate the current exported corpus, read:
 
 - [`EXPORT_INDEX.md`](./EXPORT_INDEX.md) — canonical map of the repository
+- [`REPO_STATUS.md`](./REPO_STATUS.md) — what is already exported, what is excluded, and what still remains outside the repo
 - [`docs/architecture/README.md`](./docs/architecture/README.md)
 - [`docs/memory/README.md`](./docs/memory/README.md)
 - [`docs/evaluation/README.md`](./docs/evaluation/README.md)
@@ -31,6 +32,13 @@ If you specifically want the sanitized live-system exports, go to:
 - [`exports/memory-core/`](./exports/memory-core/)
 - [`exports/task-manager-core/`](./exports/task-manager-core/)
 - [`exports/architecture-support-pack/`](./exports/architecture-support-pack/)
+
+### Current repository status
+
+This repository now functions as the **single canonical public-safe architecture repository** for the current OpenClaw contour across AIK, Memory, and Task Manager.
+
+For the short status snapshot, see [`REPO_STATUS.md`](./REPO_STATUS.md).
+For the reading map, see [`EXPORT_INDEX.md`](./EXPORT_INDEX.md).
 
 ---
 
