@@ -1,0 +1,64 @@
+bootstrap:
+  version: 1
+  mode: thin
+
+  static:
+    include:
+      - AGENT_IDENTITY
+      - BEHAVIOR_RULES
+      - PRIVACY_SCOPE_RULES
+      - MEMORY_POLICY
+      - WORKSPACE_CONVENTIONS
+
+  dynamic:
+    policy: selective
+    deep_fetch: on_demand
+
+context_domains:
+  active_projects:
+    source: runtime/bootstrap/active-projects.yaml
+    load: conditional
+    triggers: [project, strategy, architecture]
+    scope: safe
+    freshness: generated
+
+  active_tasks:
+    source: runtime/bootstrap/active-tasks.yaml
+    load: conditional
+    triggers: [task, execution, implementation]
+    scope: safe
+    freshness: generated
+
+  memory_architecture:
+    source: runtime/bootstrap/memory-architecture.yaml
+    load: conditional
+    triggers: [memory, retrieval, architecture]
+    scope: safe
+    freshness: generated
+
+  execution_map:
+    source: runtime/bootstrap/execution-map.yaml
+    load: conditional
+    triggers: [workflow, execution, coordination]
+    scope: workspace_specific
+    freshness: generated
+
+  curated_memory_excerpt:
+    source: MEMORY.md
+    load: conditional
+    triggers: [preference, prior decision, long-term memory]
+    scope: private
+    mode: excerpt
+    max_chars: 3000
+
+on_demand_sources:
+  artifacts:
+    source: task-manager/artifacts/
+  handoffs:
+    source: task-manager/handoffs/
+  docs:
+    source: docs/
+  daily_memory:
+    source: memory/
+  transcripts:
+    source: session_history

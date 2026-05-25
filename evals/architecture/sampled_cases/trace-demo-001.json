@@ -1,0 +1,103 @@
+{
+  "trace_id": "trace-demo-001",
+  "request_id": "req-demo-001",
+  "architecture": {
+    "id": "openclaw-agent-arch",
+    "version": "0.1"
+  },
+  "started_at_utc": "2026-05-13T11:29:58Z",
+  "status": "success",
+  "events": [
+    {
+      "step": 1,
+      "event_type": "module_enter",
+      "module": "normalizer",
+      "payload": {
+        "request_tags": [
+          "artifact-task"
+        ],
+        "complexity": 2
+      },
+      "timestamp_utc": "2026-05-13T11:29:58Z"
+    },
+    {
+      "step": 2,
+      "event_type": "policy_check",
+      "module": "policy_gate",
+      "payload": {
+        "policy_id": "artifact-delivery",
+        "result": "allow"
+      },
+      "timestamp_utc": "2026-05-13T11:29:58Z"
+    },
+    {
+      "step": 3,
+      "event_type": "module_enter",
+      "module": "planner",
+      "payload": {
+        "plan_created": true
+      },
+      "timestamp_utc": "2026-05-13T11:29:58Z"
+    },
+    {
+      "step": 4,
+      "event_type": "tool_call",
+      "module": "executor",
+      "payload": {
+        "tool": "write",
+        "artifact_path": "docs/demo-output.txt"
+      },
+      "timestamp_utc": "2026-05-13T11:29:58Z"
+    },
+    {
+      "step": 5,
+      "event_type": "module_exit",
+      "module": "executor",
+      "payload": {
+        "artifacts": [
+          "docs/demo-output.txt"
+        ]
+      },
+      "timestamp_utc": "2026-05-13T11:29:58Z"
+    }
+  ],
+  "result": {
+    "status": "success",
+    "user_visible_output": "Created requested demo artifact.",
+    "artifacts": [
+      "docs/demo-output.txt"
+    ],
+    "side_effects": []
+  },
+  "trace_summary": {
+    "modules_used": [
+      "executor",
+      "normalizer",
+      "planner",
+      "policy_gate"
+    ],
+    "tool_calls": 1,
+    "policy_events": [
+      {
+        "policy_id": "artifact-delivery",
+        "result": "allow"
+      }
+    ],
+    "warnings": [],
+    "event_count": 5
+  },
+  "evaluation_hooks": {
+    "trace_id": "trace-demo-001",
+    "protected_case_tags": [
+      "workflow-critical"
+    ],
+    "score_inputs": {
+      "task_success": 1.0,
+      "constraint_compliance": 1.0,
+      "artifact_quality": 0.9,
+      "tool_efficiency": 0.9,
+      "user_fit": 0.95,
+      "trace_clarity": 0.95
+    }
+  }
+}

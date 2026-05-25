@@ -8,6 +8,9 @@ This repository packages a set of architectural contours that emerged from real 
 - task state as operational source of truth;
 - truth resolution across memory, tasks, and artifacts;
 - thin-main / bounded isolated execution;
+- approval-ready media and publish seam design for review-gated content workflows;
+- publish runtime state-machine design for schedule/retry/lock-aware delivery;
+- plan / task / queue sync design for linked publishing workflows;
 - regression and promotion-gate discipline for architecture changes.
 
 The goal is not to ship one monolithic framework, but a clear architecture kit that others can read, adapt, and implement in their own agent systems.
@@ -55,6 +58,24 @@ A deeper export now also lives under `docs/architecture/`, `docs/memory/`, and `
    - freshness and supersession handling
    - conflict-aware retrieval/application
 
+6. **Approval/Publish Seam Contour**
+   - approval-card vs approval-media contract split
+   - placeholder-vs-real-asset handling
+   - pre-approval media materialization
+   - publish consuming the same resolved media payload
+
+7. **Publish Runtime Contour**
+   - approval/schedule/retry/lock gating
+   - classified failures and retry budgets
+   - task-level publish aggregation
+   - terminal delivery state semantics
+
+8. **Plan / Task / Queue Sync Contour**
+   - linked identities across planning, execution, and delivery
+   - directional synchronization instead of whole-object overwrite
+   - queue generation via plan or task bridge
+   - rework/schedule propagation across layers
+
 ---
 
 ## Repository structure
@@ -78,6 +99,9 @@ agent-architecture-kit/
 │   │   ├── current-state-and-next-steps.md
 │   │   ├── structured-compression-contract-v1.md
 │   │   ├── session-lifecycle-prevention-spec.md
+│   │   ├── media-approval-and-publish-seam.md
+│   │   ├── publish-runtime-state-machine.md
+│   │   ├── plan-task-queue-sync-contour.md
 │   │   ├── promotion-gates/
 │   │   │   ├── openclaw-frame-continuation-contract-v1.md
 │   │   │   └── markdown-promotion-gate-spec-v0-1.md

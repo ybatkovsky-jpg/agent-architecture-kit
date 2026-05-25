@@ -1,0 +1,26 @@
+{
+  "trace_id": "trace-demo-001",
+  "metric_scores": {
+    "task_success": 1.0,
+    "constraint_compliance": 1.0,
+    "artifact_quality": 0.9,
+    "tool_efficiency": 0.9,
+    "user_fit": 0.95,
+    "trace_clarity": 0.95
+  },
+  "metric_weights": {
+    "task_success": 0.45,
+    "constraint_compliance": 0.3,
+    "artifact_quality": 0.0,
+    "tool_efficiency": 0.0,
+    "user_fit": 0.2,
+    "trace_clarity": 0.05
+  },
+  "weighted_metric_total": 0.9875,
+  "penalties_applied": [],
+  "penalty_total": 0.0,
+  "hard_fail": false,
+  "hard_fail_reasons": [],
+  "final_score": 0.9875,
+  "valid_score": 0.9875
+}

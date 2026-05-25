@@ -13,11 +13,16 @@ Included here:
 - current-state and next-steps summary;
 - structured compression contract;
 - session lifecycle prevention guidance;
+- media approval and publish seam guidance;
+- publish runtime state machine guidance;
+- plan / task / queue sync contour guidance;
 - continuation contract and promotion-gate supporting docs under `promotion-gates/`, `policies/`, and `schemas/`.
 
 These docs are curated exports from a larger internal architecture corpus. They are intentionally rewritten into a public-safe, repo-friendly shape rather than copied as raw internal working notes.
 
-Notable subfolders:
+Notable docs and subfolders:
+- `media-approval-and-publish-seam.md` — approval-ready media contract, placeholder detection, and publish seam guidance for review-gated content systems;
+- `publish-runtime-state-machine.md` — approval/schedule/retry/lock/runtime-state model for deterministic delivery workers;
+- `plan-task-queue-sync-contour.md` — linked-identity and directional-sync pattern across planning, execution, and delivery layers;
 - `promotion-gates/` — continuation and promotion-gate architecture notes;
-- `policies/` — focused operational policies promoted into product-facing form, including anchor/storage, context-serving, and serving-class guidance;
-- `schemas/` — prose references for machine-readable schemas that also live under the repo-level `schemas/` directory.
+- `policies/` — focused operational policies promoted into product-facing
