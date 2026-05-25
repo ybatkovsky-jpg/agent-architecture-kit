@@ -1,0 +1,633 @@
+{
+  "fixture": "/home/openclaw/.openclaw/workspace/pkm-memory/fixtures/meta-lane-regression-mini-pack-2026-05-07/cases.json",
+  "fixture_pack": "meta-lane-regression-mini-pack",
+  "version": "2026-05-07",
+  "contract_version": "2026-05-07.meta-lane-mini-lock.v1",
+  "cases": [
+    {
+      "id": "evaluation-summary-explicit-meta",
+      "query": "Show evaluation summary for Memory Core Stage 5",
+      "raw_output": "pkm-memory/outputs/meta-lane-regression-mini-pack-2026-05-07/evaluation-summary-explicit-meta.raw.json",
+      "pass": true,
+      "checks": [
+        {
+          "field": "request_class",
+          "expected": "meta_evaluation_recall",
+          "actual": "meta_evaluation_recall",
+          "pass": true
+        },
+        {
+          "field": "meta_subfamily",
+          "expected": "evaluation_summary",
+          "actual": "evaluation_summary",
+          "pass": true
+        },
+        {
+          "field": "top_path_contains",
+          "expected": "task-367-memory-core-v1-stage-5-4-evaluation-summary-and-release-recommendation-2026-05-07.md",
+          "actual": "task-manager/artifacts/task-367-memory-core-v1-stage-5-4-evaluation-summary-and-release-recommendation-2026-05-07.md",
+          "pass": true
+        },
+        {
+          "field": "top_authority",
+          "expected": "evidence_record",
+          "actual": "evidence_record",
+          "pass": true
+        }
+      ],
+      "request_classification": {
+        "request_class": "meta_evaluation_recall",
+        "confidence": "high",
+        "reasons": [
+          "matched explicit meta/evaluation cues before continuation lane"
+        ],
+        "serve_class": "on_demand",
+        "budget": "small",
+        "primary_domains": [
+          "evidence_record"
+        ],
+        "fallback_domains": [
+          "memory_note",
+          "wiki_page",
+          "retrieval_document"
+        ],
+        "forbidden_default_domains": [
+          "continuation handoff substitution",
+          "transcript-only recall",
+          "memory-only answer with no cited artifact basis"
+        ],
+        "authority_priority_focus": "evidence_record > canonical_handoff > memory_note > wiki_page > retrieval_document",
+        "expected_citation": "explicit artifact path(s), evidence-bearing file refs, fail/pass summary sources",
+        "meta_subfamily": "evaluation_summary"
+      },
+      "top_item": {
+        "workspace_path": "task-manager/artifacts/task-367-memory-core-v1-stage-5-4-evaluation-summary-and-release-recommendation-2026-05-07.md",
+        "authority": "evidence_record"
+      },
+      "payload_output": "pkm-memory/outputs/meta-lane-regression-mini-pack-2026-05-07/evaluation-summary-explicit-meta.result.json"
+    },
+    {
+      "id": "hardening-slice-explicit-meta",
+      "query": "Show hardening slice for continuation/meta alignment",
+      "raw_output": "pkm-memory/outputs/meta-lane-regression-mini-pack-2026-05-07/hardening-slice-explicit-meta.raw.json",
+      "pass": true,
+      "checks": [
+        {
+          "field": "request_class",
+          "expected": "meta_evaluation_recall",
+          "actual": "meta_evaluation_recall",
+          "pass": true
+        },
+        {
+          "field": "meta_subfamily",
+          "expected": "hardening_slice",
+          "actual": "hardening_slice",
+          "pass": true
+        },
+        {
+          "field": "top_path_contains_any",
+          "expected": [
+            "task-369-memory-core-v1-stage-5-6-continuation-freshness-hardening-slice-2026-05-07.md",
+            "task-370-memory-core-v1-continuation-meta-alignment-hardening-slice-2026-05-07.md"
+          ],
+          "actual": "task-manager/artifacts/task-370-memory-core-v1-continuation-meta-alignment-hardening-slice-2026-05-07.md",
+          "pass": true
+        },
+        {
+          "field": "top_authority",
+          "expected": "evidence_record",
+          "actual": "evidence_record",
+          "pass": true
+        }
+      ],
+      "request_classification": {
+        "request_class": "meta_evaluation_recall",
+        "confidence": "high",
+        "reasons": [
+          "matched explicit meta/evaluation cues before continuation lane"
+        ],
+        "serve_class": "on_demand",
+        "budget": "small",
+        "primary_domains": [
+          "evidence_record"
+        ],
+        "fallback_domains": [
+          "memory_note",
+          "wiki_page",
+          "retrieval_document"
+        ],
+        "forbidden_default_domains": [
+          "continuation handoff substitution",
+          "transcript-only recall",
+          "memory-only answer with no cited artifact basis"
+        ],
+        "authority_priority_focus": "evidence_record > canonical_handoff > memory_note > wiki_page > retrieval_document",
+        "expected_citation": "explicit artifact path(s), evidence-bearing file refs, fail/pass summary sources",
+        "meta_subfamily": "hardening_slice"
+      },
+      "top_item": {
+        "workspace_path": "task-manager/artifacts/task-370-memory-core-v1-continuation-meta-alignment-hardening-slice-2026-05-07.md",
+        "authority": "evidence_record"
+      },
+      "payload_output": "pkm-memory/outputs/meta-lane-regression-mini-pack-2026-05-07/hardening-slice-explicit-meta.result.json"
+    },
+    {
+      "id": "release-recommendation-explicit-meta",
+      "query": "Memory Core release recommendation",
+      "raw_output": "pkm-memory/outputs/meta-lane-regression-mini-pack-2026-05-07/release-recommendation-explicit-meta.raw.json",
+      "pass": true,
+      "checks": [
+        {
+          "field": "request_class",
+          "expected": "meta_evaluation_recall",
+          "actual": "meta_evaluation_recall",
+          "pass": true
+        },
+        {
+          "field": "meta_subfamily",
+          "expected": "release_recommendation",
+          "actual": "release_recommendation",
+          "pass": true
+        },
+        {
+          "field": "top_path_contains",
+          "expected": "task-367-memory-core-v1-stage-5-4-evaluation-summary-and-release-recommendation-2026-05-07.md",
+          "actual": "task-manager/artifacts/task-367-memory-core-v1-stage-5-4-evaluation-summary-and-release-recommendation-2026-05-07.md",
+          "pass": true
+        },
+        {
+          "field": "top_authority",
+          "expected": "evidence_record",
+          "actual": "evidence_record",
+          "pass": true
+        }
+      ],
+      "request_classification": {
+        "request_class": "meta_evaluation_recall",
+        "confidence": "high",
+        "reasons": [
+          "matched explicit meta/evaluation cues before continuation lane"
+        ],
+        "serve_class": "on_demand",
+        "budget": "small",
+        "primary_domains": [
+          "evidence_record"
+        ],
+        "fallback_domains": [
+          "memory_note",
+          "wiki_page",
+          "retrieval_document"
+        ],
+        "forbidden_default_domains": [
+          "continuation handoff substitution",
+          "transcript-only recall",
+          "memory-only answer with no cited artifact basis"
+        ],
+        "authority_priority_focus": "evidence_record > canonical_handoff > memory_note > wiki_page > retrieval_document",
+        "expected_citation": "explicit artifact path(s), evidence-bearing file refs, fail/pass summary sources",
+        "meta_subfamily": "release_recommendation"
+      },
+      "top_item": {
+        "workspace_path": "task-manager/artifacts/task-367-memory-core-v1-stage-5-4-evaluation-summary-and-release-recommendation-2026-05-07.md",
+        "authority": "evidence_record"
+      },
+      "payload_output": "pkm-memory/outputs/meta-lane-regression-mini-pack-2026-05-07/release-recommendation-explicit-meta.result.json"
+    },
+    {
+      "id": "short-meta-verdict-anti-fallthrough",
+      "query": "memory core verdict",
+      "raw_output": "pkm-memory/outputs/meta-lane-regression-mini-pack-2026-05-07/short-meta-verdict-anti-fallthrough.raw.json",
+      "pass": true,
+      "checks": [
+        {
+          "field": "request_class",
+          "expected": "meta_evaluation_recall",
+          "actual": "meta_evaluation_recall",
+          "pass": true
+        },
+        {
+          "field": "meta_subfamily",
+          "expected": "release_recommendation",
+          "actual": "release_recommendation",
+          "pass": true
+        },
+        {
+          "field": "top_path_contains",
+          "expected": "task-367-memory-core-v1-stage-5-4-evaluation-summary-and-release-recommendation-2026-05-07.md",
+          "actual": "task-manager/artifacts/task-367-memory-core-v1-stage-5-4-evaluation-summary-and-release-recommendation-2026-05-07.md",
+          "pass": true
+        },
+        {
+          "field": "top_authority",
+          "expected": "evidence_record",
+          "actual": "evidence_record",
+          "pass": true
+        }
+      ],
+      "request_classification": {
+        "request_class": "meta_evaluation_recall",
+        "confidence": "high",
+        "reasons": [
+          "matched explicit meta/evaluation cues before continuation lane",
+          "short meta/evaluation anti-fallthrough override"
+        ],
+        "serve_class": "on_demand",
+        "budget": "small",
+        "primary_domains": [
+          "evidence_record"
+        ],
+        "fallback_domains": [
+          "memory_note",
+          "wiki_page",
+          "retrieval_document"
+        ],
+        "forbidden_default_domains": [
+          "continuation handoff substitution",
+          "transcript-only recall",
+          "memory-only answer with no cited artifact basis"
+        ],
+        "authority_priority_focus": "evidence_record > canonical_handoff > memory_note > wiki_page > retrieval_document",
+        "expected_citation": "explicit artifact path(s), evidence-bearing file refs, fail/pass summary sources",
+        "meta_subfamily": "release_recommendation"
+      },
+      "top_item": {
+        "workspace_path": "task-manager/artifacts/task-367-memory-core-v1-stage-5-4-evaluation-summary-and-release-recommendation-2026-05-07.md",
+        "authority": "evidence_record"
+      },
+      "payload_output": "pkm-memory/outputs/meta-lane-regression-mini-pack-2026-05-07/short-meta-verdict-anti-fallthrough.result.json"
+    },
+    {
+      "id": "short-meta-release-rec-alias",
+      "query": "release rec",
+      "raw_output": "pkm-memory/outputs/meta-lane-regression-mini-pack-2026-05-07/short-meta-release-rec-alias.raw.json",
+      "pass": true,
+      "checks": [
+        {
+          "field": "request_class",
+          "expected": "meta_evaluation_recall",
+          "actual": "meta_evaluation_recall",
+          "pass": true
+        },
+        {
+          "field": "meta_subfamily",
+          "expected": "release_recommendation",
+          "actual": "release_recommendation",
+          "pass": true
+        },
+        {
+          "field": "top_path_contains",
+          "expected": "task-367-memory-core-v1-stage-5-4-evaluation-summary-and-release-recommendation-2026-05-07.md",
+          "actual": "task-manager/artifacts/task-367-memory-core-v1-stage-5-4-evaluation-summary-and-release-recommendation-2026-05-07.md",
+          "pass": true
+        },
+        {
+          "field": "top_authority",
+          "expected": "evidence_record",
+          "actual": "evidence_record",
+          "pass": true
+        }
+      ],
+      "request_classification": {
+        "request_class": "meta_evaluation_recall",
+        "confidence": "high",
+        "reasons": [
+          "matched explicit meta/evaluation cues before continuation lane",
+          "short meta/evaluation anti-fallthrough override"
+        ],
+        "serve_class": "on_demand",
+        "budget": "small",
+        "primary_domains": [
+          "evidence_record"
+        ],
+        "fallback_domains": [
+          "memory_note",
+          "wiki_page",
+          "retrieval_document"
+        ],
+        "forbidden_default_domains": [
+          "continuation handoff substitution",
+          "transcript-only recall",
+          "memory-only answer with no cited artifact basis"
+        ],
+        "authority_priority_focus": "evidence_record > canonical_handoff > memory_note > wiki_page > retrieval_document",
+        "expected_citation": "explicit artifact path(s), evidence-bearing file refs, fail/pass summary sources",
+        "meta_subfamily": "release_recommendation"
+      },
+      "top_item": {
+        "workspace_path": "task-manager/artifacts/task-367-memory-core-v1-stage-5-4-evaluation-summary-and-release-recommendation-2026-05-07.md",
+        "authority": "evidence_record"
+      },
+      "payload_output": "pkm-memory/outputs/meta-lane-regression-mini-pack-2026-05-07/short-meta-release-rec-alias.result.json"
+    },
+    {
+      "id": "short-meta-exec-verdict-alias",
+      "query": "exec verdict",
+      "raw_output": "pkm-memory/outputs/meta-lane-regression-mini-pack-2026-05-07/short-meta-exec-verdict-alias.raw.json",
+      "pass": true,
+      "checks": [
+        {
+          "field": "request_class",
+          "expected": "meta_evaluation_recall",
+          "actual": "meta_evaluation_recall",
+          "pass": true
+        },
+        {
+          "field": "meta_subfamily",
+          "expected": "release_recommendation",
+          "actual": "release_recommendation",
+          "pass": true
+        },
+        {
+          "field": "top_path_contains",
+          "expected": "task-367-memory-core-v1-stage-5-4-evaluation-summary-and-release-recommendation-2026-05-07.md",
+          "actual": "task-manager/artifacts/task-367-memory-core-v1-stage-5-4-evaluation-summary-and-release-recommendation-2026-05-07.md",
+          "pass": true
+        },
+        {
+          "field": "top_authority",
+          "expected": "evidence_record",
+          "actual": "evidence_record",
+          "pass": true
+        }
+      ],
+      "request_classification": {
+        "request_class": "meta_evaluation_recall",
+        "confidence": "high",
+        "reasons": [
+          "matched explicit meta/evaluation cues before continuation lane",
+          "short meta/evaluation anti-fallthrough override"
+        ],
+        "serve_class": "on_demand",
+        "budget": "small",
+        "primary_domains": [
+          "evidence_record"
+        ],
+        "fallback_domains": [
+          "memory_note",
+          "wiki_page",
+          "retrieval_document"
+        ],
+        "forbidden_default_domains": [
+          "continuation handoff substitution",
+          "transcript-only recall",
+          "memory-only answer with no cited artifact basis"
+        ],
+        "authority_priority_focus": "evidence_record > canonical_handoff > memory_note > wiki_page > retrieval_document",
+        "expected_citation": "explicit artifact path(s), evidence-bearing file refs, fail/pass summary sources",
+        "meta_subfamily": "release_recommendation"
+      },
+      "top_item": {
+        "workspace_path": "task-manager/artifacts/task-367-memory-core-v1-stage-5-4-evaluation-summary-and-release-recommendation-2026-05-07.md",
+        "authority": "evidence_record"
+      },
+      "payload_output": "pkm-memory/outputs/meta-lane-regression-mini-pack-2026-05-07/short-meta-exec-verdict-alias.result.json"
+    },
+    {
+      "id": "short-meta-stage-5-summary-alias",
+      "query": "stage 5 summary",
+      "raw_output": "pkm-memory/outputs/meta-lane-regression-mini-pack-2026-05-07/short-meta-stage-5-summary-alias.raw.json",
+      "pass": true,
+      "checks": [
+        {
+          "field": "request_class",
+          "expected": "meta_evaluation_recall",
+          "actual": "meta_evaluation_recall",
+          "pass": true
+        },
+        {
+          "field": "meta_subfamily",
+          "expected": "evaluation_summary",
+          "actual": "evaluation_summary",
+          "pass": true
+        },
+        {
+          "field": "top_path_contains",
+          "expected": "task-367-memory-core-v1-stage-5-4-evaluation-summary-and-release-recommendation-2026-05-07.md",
+          "actual": "task-manager/artifacts/task-367-memory-core-v1-stage-5-4-evaluation-summary-and-release-recommendation-2026-05-07.md",
+          "pass": true
+        },
+        {
+          "field": "top_authority",
+          "expected": "evidence_record",
+          "actual": "evidence_record",
+          "pass": true
+        }
+      ],
+      "request_classification": {
+        "request_class": "meta_evaluation_recall",
+        "confidence": "high",
+        "reasons": [
+          "matched explicit meta/evaluation cues before continuation lane"
+        ],
+        "serve_class": "on_demand",
+        "budget": "small",
+        "primary_domains": [
+          "evidence_record"
+        ],
+        "fallback_domains": [
+          "memory_note",
+          "wiki_page",
+          "retrieval_document"
+        ],
+        "forbidden_default_domains": [
+          "continuation handoff substitution",
+          "transcript-only recall",
+          "memory-only answer with no cited artifact basis"
+        ],
+        "authority_priority_focus": "evidence_record > canonical_handoff > memory_note > wiki_page > retrieval_document",
+        "expected_citation": "explicit artifact path(s), evidence-bearing file refs, fail/pass summary sources",
+        "meta_subfamily": "evaluation_summary"
+      },
+      "top_item": {
+        "workspace_path": "task-manager/artifacts/task-367-memory-core-v1-stage-5-4-evaluation-summary-and-release-recommendation-2026-05-07.md",
+        "authority": "evidence_record"
+      },
+      "payload_output": "pkm-memory/outputs/meta-lane-regression-mini-pack-2026-05-07/short-meta-stage-5-summary-alias.result.json"
+    },
+    {
+      "id": "short-meta-hardening-log-alias",
+      "query": "hardening log",
+      "raw_output": "pkm-memory/outputs/meta-lane-regression-mini-pack-2026-05-07/short-meta-hardening-log-alias.raw.json",
+      "pass": true,
+      "checks": [
+        {
+          "field": "request_class",
+          "expected": "meta_evaluation_recall",
+          "actual": "meta_evaluation_recall",
+          "pass": true
+        },
+        {
+          "field": "meta_subfamily",
+          "expected": "hardening_slice",
+          "actual": "hardening_slice",
+          "pass": true
+        },
+        {
+          "field": "top_path_contains",
+          "expected": "task-366-memory-core-v1-stage-5-3-failure-modes-and-hardening-log-2026-05-07.md",
+          "actual": "task-manager/artifacts/task-366-memory-core-v1-stage-5-3-failure-modes-and-hardening-log-2026-05-07.md",
+          "pass": true
+        },
+        {
+          "field": "top_authority",
+          "expected": "evidence_record",
+          "actual": "evidence_record",
+          "pass": true
+        }
+      ],
+      "request_classification": {
+        "request_class": "meta_evaluation_recall",
+        "confidence": "high",
+        "reasons": [
+          "matched explicit meta/evaluation cues before continuation lane"
+        ],
+        "serve_class": "on_demand",
+        "budget": "small",
+        "primary_domains": [
+          "evidence_record"
+        ],
+        "fallback_domains": [
+          "memory_note",
+          "wiki_page",
+          "retrieval_document"
+        ],
+        "forbidden_default_domains": [
+          "continuation handoff substitution",
+          "transcript-only recall",
+          "memory-only answer with no cited artifact basis"
+        ],
+        "authority_priority_focus": "evidence_record > canonical_handoff > memory_note > wiki_page > retrieval_document",
+        "expected_citation": "explicit artifact path(s), evidence-bearing file refs, fail/pass summary sources",
+        "meta_subfamily": "hardening_slice"
+      },
+      "top_item": {
+        "workspace_path": "task-manager/artifacts/task-366-memory-core-v1-stage-5-3-failure-modes-and-hardening-log-2026-05-07.md",
+        "authority": "evidence_record"
+      },
+      "payload_output": "pkm-memory/outputs/meta-lane-regression-mini-pack-2026-05-07/short-meta-hardening-log-alias.result.json"
+    },
+    {
+      "id": "short-meta-go-no-go-alias",
+      "query": "go/no-go",
+      "raw_output": "pkm-memory/outputs/meta-lane-regression-mini-pack-2026-05-07/short-meta-go-no-go-alias.raw.json",
+      "pass": true,
+      "checks": [
+        {
+          "field": "request_class",
+          "expected": "meta_evaluation_recall",
+          "actual": "meta_evaluation_recall",
+          "pass": true
+        },
+        {
+          "field": "meta_subfamily",
+          "expected": "release_recommendation",
+          "actual": "release_recommendation",
+          "pass": true
+        },
+        {
+          "field": "top_path_contains",
+          "expected": "task-367-memory-core-v1-stage-5-4-evaluation-summary-and-release-recommendation-2026-05-07.md",
+          "actual": "task-manager/artifacts/task-367-memory-core-v1-stage-5-4-evaluation-summary-and-release-recommendation-2026-05-07.md",
+          "pass": true
+        },
+        {
+          "field": "top_authority",
+          "expected": "evidence_record",
+          "actual": "evidence_record",
+          "pass": true
+        }
+      ],
+      "request_classification": {
+        "request_class": "meta_evaluation_recall",
+        "confidence": "high",
+        "reasons": [
+          "matched explicit meta/evaluation cues before continuation lane",
+          "short meta/evaluation anti-fallthrough override"
+        ],
+        "serve_class": "on_demand",
+        "budget": "small",
+        "primary_domains": [
+          "evidence_record"
+        ],
+        "fallback_domains": [
+          "memory_note",
+          "wiki_page",
+          "retrieval_document"
+        ],
+        "forbidden_default_domains": [
+          "continuation handoff substitution",
+          "transcript-only recall",
+          "memory-only answer with no cited artifact basis"
+        ],
+        "authority_priority_focus": "evidence_record > canonical_handoff > memory_note > wiki_page > retrieval_document",
+        "expected_citation": "explicit artifact path(s), evidence-bearing file refs, fail/pass summary sources",
+        "meta_subfamily": "release_recommendation"
+      },
+      "top_item": {
+        "workspace_path": "task-manager/artifacts/task-367-memory-core-v1-stage-5-4-evaluation-summary-and-release-recommendation-2026-05-07.md",
+        "authority": "evidence_record"
+      },
+      "payload_output": "pkm-memory/outputs/meta-lane-regression-mini-pack-2026-05-07/short-meta-go-no-go-alias.result.json"
+    },
+    {
+      "id": "negative-control-factual-task-id-stays-factual",
+      "query": "task-107-postgres-activation-and-first-live-ingest",
+      "raw_output": "pkm-memory/outputs/meta-lane-regression-mini-pack-2026-05-07/negative-control-factual-task-id-stays-factual.raw.json",
+      "pass": true,
+      "checks": [
+        {
+          "field": "request_class",
+          "expected": "factual_lookup",
+          "actual": "factual_lookup",
+          "pass": true
+        },
+        {
+          "field": "top_path_contains",
+          "expected": "task-107-postgres-activation-and-first-live-ingest-2026-04-26.md",
+          "actual": "task-manager/artifacts/task-107-postgres-activation-and-first-live-ingest-2026-04-26.md",
+          "pass": true
+        },
+        {
+          "field": "top_authority",
+          "expected": "evidence_record",
+          "actual": "evidence_record",
+          "pass": true
+        }
+      ],
+      "request_classification": {
+        "request_class": "factual_lookup",
+        "confidence": "low",
+        "reasons": [
+          "fell back to factual lookup as safest default"
+        ],
+        "serve_class": "on_demand",
+        "budget": "medium",
+        "primary_domains": [
+          "evidence_record"
+        ],
+        "fallback_domains": [
+          "retrieval_document",
+          "wiki_page for orientation only"
+        ],
+        "forbidden_default_domains": [
+          "session_capsule",
+          "unsupported summaries",
+          "transcript recollection"
+        ],
+        "authority_priority_focus": "evidence_record > retrieval_document > wiki_page",
+        "expected_citation": "direct source path/section refs"
+      },
+      "top_item": {
+        "workspace_path": "task-manager/artifacts/task-107-postgres-activation-and-first-live-ingest-2026-04-26.md",
+        "authority": "evidence_record"
+      },
+      "payload_output": "pkm-memory/outputs/meta-lane-regression-mini-pack-2026-05-07/negative-control-factual-task-id-stays-factual.result.json"
+    }
+  ],
+  "summary": {
+    "total_cases": 10,
+    "passed_cases": 10,
+    "failed_cases": [],
+    "all_pass": true
+  }
+}

@@ -1,0 +1,250 @@
+{
+  "fixture": "/home/openclaw/.openclaw/workspace/pkm-memory/fixtures/meta-evaluation-routing-regression-2026-05-12/cases.json",
+  "fixture_pack": "meta-evaluation-routing-regression",
+  "version": "2026-05-12",
+  "contract_version": "2026-05-07.lane-contracts-v1",
+  "contract_path": "pkm-memory/RETRIEVAL_POLICY_MATRIX_V1.md",
+  "cases": [
+    {
+      "id": "explicit-meta-evaluation-query",
+      "query": "Покажи evaluation artifacts Stage 5 и из каких файлов видно baseline fail/pass summary.",
+      "raw_output": "pkm-memory/outputs/meta-evaluation-routing-regression-2026-05-12/explicit-meta-evaluation-query.raw.json",
+      "pass": true,
+      "checks": [
+        {
+          "field": "request_class",
+          "expected": "meta_evaluation_recall",
+          "actual": "meta_evaluation_recall",
+          "pass": true
+        },
+        {
+          "field": "top_path_contains_any",
+          "expected": [
+            "task-368-memory-core-v1-stage-5-5-meta-artifact-suppression-hardening-slice-2026-05-07.md",
+            "task-365-memory-core-v1-stage-5-2-end-to-end-scenario-evaluation-2026-05-07.md",
+            "task-367-memory-core-v1-stage-5-4-evaluation-summary-and-release-recommendation-2026-05-07.md"
+          ],
+          "actual": "task-manager/artifacts/task-367-memory-core-v1-stage-5-4-evaluation-summary-and-release-recommendation-2026-05-07.md",
+          "pass": true
+        },
+        {
+          "field": "top_authority",
+          "expected": "evidence_record",
+          "actual": "evidence_record",
+          "pass": true
+        },
+        {
+          "field": "top_match_reason_not_contains:meta_artifact_strong_suppression",
+          "expected": "not meta_artifact_strong_suppression",
+          "actual": "partial_lexical_overlap, titleish_match, path_match, section_match, chunk_text_match, meta_eval_direct_artifact_boost, meta_eval_title_path_alignment, meta_eval_evidence_boost, meta_eval_expected_evidence_family_boost",
+          "pass": true
+        },
+        {
+          "field": "top_match_reason_not_contains:continuation_meta_artifact_demoted",
+          "expected": "not continuation_meta_artifact_demoted",
+          "actual": "partial_lexical_overlap, titleish_match, path_match, section_match, chunk_text_match, meta_eval_direct_artifact_boost, meta_eval_title_path_alignment, meta_eval_evidence_boost, meta_eval_expected_evidence_family_boost",
+          "pass": true
+        }
+      ],
+      "request_classification": {
+        "request_class": "meta_evaluation_recall",
+        "confidence": "high",
+        "reasons": [
+          "matched explicit meta/evaluation cues before continuation lane"
+        ],
+        "serve_class": "on_demand",
+        "budget": "small",
+        "primary_domains": [
+          "evidence_record"
+        ],
+        "fallback_domains": [
+          "memory_note",
+          "wiki_page",
+          "retrieval_document"
+        ],
+        "forbidden_default_domains": [
+          "continuation handoff substitution",
+          "transcript-only recall",
+          "memory-only answer with no cited artifact basis"
+        ],
+        "authority_priority_focus": "evidence_record > canonical_handoff > memory_note > wiki_page > retrieval_document",
+        "expected_citation": "explicit artifact path(s), evidence-bearing file refs, fail/pass summary sources",
+        "meta_subfamily": "evaluation_summary"
+      },
+      "top_item": {
+        "workspace_path": "task-manager/artifacts/task-367-memory-core-v1-stage-5-4-evaluation-summary-and-release-recommendation-2026-05-07.md",
+        "authority": "evidence_record",
+        "match_reason": "partial_lexical_overlap, titleish_match, path_match, section_match, chunk_text_match, meta_eval_direct_artifact_boost, meta_eval_title_path_alignment, meta_eval_evidence_boost, meta_eval_expected_evidence_family_boost"
+      },
+      "top5_paths": [
+        "task-manager/artifacts/task-367-memory-core-v1-stage-5-4-evaluation-summary-and-release-recommendation-2026-05-07.md",
+        "task-manager/artifacts/task-368-memory-core-v1-stage-5-5-meta-artifact-suppression-hardening-slice-2026-05-07.md",
+        "task-manager/artifacts/task-364-memory-core-v1-stage-5-1-acceptance-scenarios-2026-05-07.md",
+        "task-manager/artifacts/task-366-memory-core-v1-stage-5-3-failure-modes-and-hardening-log-2026-05-07.md",
+        "task-manager/artifacts/task-376-memory-core-v1-stage-5-bounded-reeval-summary-and-release-recommendation-2026-05-10.md"
+      ],
+      "payload_output": "pkm-memory/outputs/meta-evaluation-routing-regression-2026-05-12/explicit-meta-evaluation-query.result.json"
+    },
+    {
+      "id": "evaluation-summary-explicit-meta",
+      "query": "Show evaluation summary and release recommendation for Memory Core Stage 5.",
+      "raw_output": "pkm-memory/outputs/meta-evaluation-routing-regression-2026-05-12/evaluation-summary-explicit-meta.raw.json",
+      "pass": true,
+      "checks": [
+        {
+          "field": "request_class",
+          "expected": "meta_evaluation_recall",
+          "actual": "meta_evaluation_recall",
+          "pass": true
+        },
+        {
+          "field": "top_path_contains",
+          "expected": "task-367-memory-core-v1-stage-5-4-evaluation-summary-and-release-recommendation-2026-05-07.md",
+          "actual": "task-manager/artifacts/task-367-memory-core-v1-stage-5-4-evaluation-summary-and-release-recommendation-2026-05-07.md",
+          "pass": true
+        },
+        {
+          "field": "top_authority",
+          "expected": "evidence_record",
+          "actual": "evidence_record",
+          "pass": true
+        },
+        {
+          "field": "top_match_reason_not_contains:meta_artifact_strong_suppression",
+          "expected": "not meta_artifact_strong_suppression",
+          "actual": "strong_token_overlap, titleish_match, path_match, section_match, chunk_text_match, meta_eval_direct_artifact_boost, meta_eval_title_path_alignment, meta_eval_evidence_boost, meta_eval_expected_evidence_family_boost",
+          "pass": true
+        },
+        {
+          "field": "top_match_reason_not_contains:continuation_meta_artifact_demoted",
+          "expected": "not continuation_meta_artifact_demoted",
+          "actual": "strong_token_overlap, titleish_match, path_match, section_match, chunk_text_match, meta_eval_direct_artifact_boost, meta_eval_title_path_alignment, meta_eval_evidence_boost, meta_eval_expected_evidence_family_boost",
+          "pass": true
+        }
+      ],
+      "request_classification": {
+        "request_class": "meta_evaluation_recall",
+        "confidence": "high",
+        "reasons": [
+          "matched explicit meta/evaluation cues before continuation lane"
+        ],
+        "serve_class": "on_demand",
+        "budget": "small",
+        "primary_domains": [
+          "evidence_record"
+        ],
+        "fallback_domains": [
+          "memory_note",
+          "wiki_page",
+          "retrieval_document"
+        ],
+        "forbidden_default_domains": [
+          "continuation handoff substitution",
+          "transcript-only recall",
+          "memory-only answer with no cited artifact basis"
+        ],
+        "authority_priority_focus": "evidence_record > canonical_handoff > memory_note > wiki_page > retrieval_document",
+        "expected_citation": "explicit artifact path(s), evidence-bearing file refs, fail/pass summary sources",
+        "meta_subfamily": "release_recommendation"
+      },
+      "top_item": {
+        "workspace_path": "task-manager/artifacts/task-367-memory-core-v1-stage-5-4-evaluation-summary-and-release-recommendation-2026-05-07.md",
+        "authority": "evidence_record",
+        "match_reason": "strong_token_overlap, titleish_match, path_match, section_match, chunk_text_match, meta_eval_direct_artifact_boost, meta_eval_title_path_alignment, meta_eval_evidence_boost, meta_eval_expected_evidence_family_boost"
+      },
+      "top5_paths": [
+        "task-manager/artifacts/task-367-memory-core-v1-stage-5-4-evaluation-summary-and-release-recommendation-2026-05-07.md",
+        "task-manager/artifacts/task-376-memory-core-v1-stage-5-bounded-reeval-summary-and-release-recommendation-2026-05-10.md",
+        "task-manager/artifacts/task-368-memory-core-v1-stage-5-5-meta-artifact-suppression-hardening-slice-2026-05-07.md",
+        "task-manager/artifacts/task-368-memory-core-v1-meta-artifact-suppression-hardening-slice-2026-05-10.md",
+        "task-manager/artifacts/task-367-ziribt-reconciliation-note-2026-05-17.md"
+      ],
+      "payload_output": "pkm-memory/outputs/meta-evaluation-routing-regression-2026-05-12/evaluation-summary-explicit-meta.result.json"
+    },
+    {
+      "id": "hardening-slice-explicit-meta",
+      "query": "Show hardening slice for continuation/meta alignment.",
+      "raw_output": "pkm-memory/outputs/meta-evaluation-routing-regression-2026-05-12/hardening-slice-explicit-meta.raw.json",
+      "pass": true,
+      "checks": [
+        {
+          "field": "request_class",
+          "expected": "meta_evaluation_recall",
+          "actual": "meta_evaluation_recall",
+          "pass": true
+        },
+        {
+          "field": "top_path_contains_any",
+          "expected": [
+            "task-369-memory-core-v1-stage-5-6-continuation-freshness-hardening-slice-2026-05-07.md",
+            "task-370-memory-core-v1-continuation-meta-alignment-hardening-slice-2026-05-07.md"
+          ],
+          "actual": "task-manager/artifacts/task-370-memory-core-v1-continuation-meta-alignment-hardening-slice-2026-05-07.md",
+          "pass": true
+        },
+        {
+          "field": "top_authority",
+          "expected": "evidence_record",
+          "actual": "evidence_record",
+          "pass": true
+        },
+        {
+          "field": "top_match_reason_not_contains:meta_artifact_strong_suppression",
+          "expected": "not meta_artifact_strong_suppression",
+          "actual": "partial_lexical_overlap, titleish_match, path_match, section_match, chunk_text_match, meta_eval_direct_artifact_boost, meta_eval_title_path_alignment, meta_eval_evidence_boost, meta_eval_expected_evidence_family_boost",
+          "pass": true
+        },
+        {
+          "field": "top_match_reason_not_contains:continuation_meta_artifact_demoted",
+          "expected": "not continuation_meta_artifact_demoted",
+          "actual": "partial_lexical_overlap, titleish_match, path_match, section_match, chunk_text_match, meta_eval_direct_artifact_boost, meta_eval_title_path_alignment, meta_eval_evidence_boost, meta_eval_expected_evidence_family_boost",
+          "pass": true
+        }
+      ],
+      "request_classification": {
+        "request_class": "meta_evaluation_recall",
+        "confidence": "high",
+        "reasons": [
+          "matched explicit meta/evaluation cues before continuation lane"
+        ],
+        "serve_class": "on_demand",
+        "budget": "small",
+        "primary_domains": [
+          "evidence_record"
+        ],
+        "fallback_domains": [
+          "memory_note",
+          "wiki_page",
+          "retrieval_document"
+        ],
+        "forbidden_default_domains": [
+          "continuation handoff substitution",
+          "transcript-only recall",
+          "memory-only answer with no cited artifact basis"
+        ],
+        "authority_priority_focus": "evidence_record > canonical_handoff > memory_note > wiki_page > retrieval_document",
+        "expected_citation": "explicit artifact path(s), evidence-bearing file refs, fail/pass summary sources",
+        "meta_subfamily": "hardening_slice"
+      },
+      "top_item": {
+        "workspace_path": "task-manager/artifacts/task-370-memory-core-v1-continuation-meta-alignment-hardening-slice-2026-05-07.md",
+        "authority": "evidence_record",
+        "match_reason": "partial_lexical_overlap, titleish_match, path_match, section_match, chunk_text_match, meta_eval_direct_artifact_boost, meta_eval_title_path_alignment, meta_eval_evidence_boost, meta_eval_expected_evidence_family_boost"
+      },
+      "top5_paths": [
+        "task-manager/artifacts/task-370-memory-core-v1-continuation-meta-alignment-hardening-slice-2026-05-07.md",
+        "task-manager/artifacts/task-368-memory-core-v1-meta-artifact-suppression-hardening-slice-2026-05-10.md",
+        "task-manager/artifacts/task-368-memory-core-v1-stage-5-5-meta-artifact-suppression-hardening-slice-2026-05-07.md",
+        "task-manager/artifacts/task-369-memory-core-v1-stage-5-6-continuation-freshness-hardening-slice-2026-05-07.md",
+        "task-manager/artifacts/task-366-memory-core-v1-stage-5-3-failure-modes-and-hardening-log-2026-05-07.md"
+      ],
+      "payload_output": "pkm-memory/outputs/meta-evaluation-routing-regression-2026-05-12/hardening-slice-explicit-meta.result.json"
+    }
+  ],
+  "summary": {
+    "total_cases": 3,
+    "passed_cases": 3,
+    "failed_cases": [],
+    "all_pass": true
+  }
+}

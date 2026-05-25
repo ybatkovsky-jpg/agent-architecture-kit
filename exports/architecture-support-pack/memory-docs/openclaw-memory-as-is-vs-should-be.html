@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OpenClaw Memory — As-Is vs Should-Be</title>
+  <style>
+    :root{
+      --bg:#09111f; --bg2:#0d1728; --panel:#101b31; --panel2:#14213c;
+      --text:#eef4ff; --muted:#a6b5d6; --line:#29406a;
+      --cyan:#63d7ff; --green:#78f0b0; --violet:#b08cff; --yellow:#ffd76e; --red:#ff8f8f;
+      --shadow:0 18px 45px rgba(0,0,0,.32); --radius:22px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%);padding:28px 18px 48px}
+    .wrap{max-width:1380px;margin:0 auto}
+    .hero{text-align:center;margin-bottom:20px}
+    .hero h1{margin:0 0 10px;font-size:40px;line-height:1.06;letter-spacing:-.03em}
+    .hero p{margin:0 auto;max-width:1000px;color:var(--muted);font-size:18px;line-height:1.55}
+    .panes{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+    .pane{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));border:1px solid rgba(255,255,255,.06);border-radius:30px;padding:22px;box-shadow:var(--shadow)}
+    .pane h2{margin:0 0 6px;font-size:31px;letter-spacing:-.02em}
+    .subtitle{color:var(--muted);font-size:15px;line-height:1.45;margin-bottom:16px}
+    .grid{display:grid;gap:14px}
+    .grid.sources{grid-template-columns:repeat(2,1fr)}
+    .card{border:1px solid var(--line);border-radius:var(--radius);padding:16px;background:linear-gradient(180deg,var(--panel) 0%,var(--panel2) 100%);box-shadow:var(--shadow)}
+    .tag{display:inline-block;padding:7px 10px;border-radius:999px;font-size:11px;text-transform:uppercase;letter-spacing:.09em;font-weight:800;margin-bottom:10px;border:1px solid transparent}
+    .live{background:rgba(99,215,255,.12);color:var(--cyan);border-color:rgba(99,215,255,.25)}
+    .partial{background:rgba(255,215,110,.12);color:var(--yellow);border-color:rgba(255,215,110,.25)}
+    .planned{background:rgba(255,143,143,.12);color:#ffb0b0;border-color:rgba(255,143,143,.25)}
+    .proc{background:rgba(176,140,255,.12);color:var(--violet);border-color:rgba(176,140,255,.25)}
+    .good{background:rgba(120,240,176,.12);color:var(--green);border-color:rgba(120,240,176,.25)}
+    h3{margin:0 0 8px;font-size:21px;line-height:1.2}
+    p{margin:0;color:var(--muted);font-size:16px;line-height:1.55}
+    ul{margin:8px 0 0;padding-left:20px;color:var(--muted);font-size:16px;line-height:1.55}
+    .arrow{display:flex;justify-content:center;align-items:center;color:var(--cyan);font-size:34px;padding:4px 0}
+    .flow{display:grid;gap:12px;margin-top:14px}
+    .summary{margin-top:16px}
+    .summary .card{padding:18px}
+    .summary strong{color:var(--text)}
+    .legend{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:12px 0 20px}
+    .pill{border:1px solid var(--line);border-radius:999px;padding:8px 12px;background:rgba(255,255,255,.03);font-size:13px;color:#d9e5ff}
+    @media (max-width:1100px){.panes{grid-template-columns:1fr}.grid.sources{grid-template-columns:1fr}}
+    @media (max-width:720px){.hero h1{font-size:30px}.hero p,p,ul{font-size:15px}.pane h2{font-size:26px}h3{font-size:19px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <h1>OpenClaw Memory: As-Is vs Should-Be</h1>
+      <p>Слева — только то, что подтверждено или очень вероятно как живой текущий memory contour. Справа — как memory lifecycle должен выглядеть по плану и по хорошей архитектуре.</p>
+      <div class="legend">
+        <div class="pill">live now = реально работает сейчас</div>
+        <div class="pill">partial = частично есть, но не доминирует</div>
+        <div class="pill">planned = должно быть / целевая модель</div>
+      </div>
+    </div>
+
+    <div class="panes">
+      <section class="pane">
+        <h2>As-Is</h2>
+        <div class="subtitle">Текущее рабочее состояние: retrieval-driven memory contour с PostgreSQL и lexical backbone в центре.</div>
+
+        <div class="grid sources">
+          <div class="card"><div class="tag live">Live now</div><h3>memory/ и MEMORY.md</h3><p>Подтверждённые memory sources: raw notes, curated memory, правила, preferences.</p></div>
+          <div class="card"><div class="tag live">Live now</div><h3>artifacts и handoffs</h3><p>Подтверждённые рабочие контуры для decision docs, specs, continuation state и resume context.</p></div>
+          <div class="card"><div class="tag partial">Partial</div><h3>typed mc_* / registry layer</h3><p>Структурированный слой уже есть, но пока ещё не стал главным serving plane.</p></div>
+          <div class="card"><div class="tag partial">Partial / unclear</div><h3>chats и tasks</h3><p>Концептуально важны, но не подтверждены как fully formalized first-class retrieval sources в текущем live контуре.</p></div>
+        </div>
+
+        <div class="flow">
+          <div class="card"><div class="tag proc">Runtime flow</div><h3>1. Request classification</h3><p>Запрос классифицируется: recall / handoff / architecture / continuation и т.д.</p></div>
+          <div class="arrow">↓</div>
+          <div class="card"><div class="tag proc">Runtime flow</div><h3>2. Source planning</h3><p>Определяется, какие memory roots и retrieval lanes трогать.</p></div>
+          <div class="arrow">↓</div>
+          <div class="card"><div class="tag proc">Runtime flow</div><h3>3. Lexical retrieval in Postgres</h3><p>Фактический мотор сейчас — full-text / trigram / heuristics / authority / freshness ranking.</p></div>
+          <div class="arrow">↓</div>
+          <div class="card"><div class="tag proc">Runtime flow</div><h3>4. Serving pack → answer</h3><p>Собираются evidence, fallback, relevant context и уже потом строится ответ.</p></div>
+        </div>
+
+        <div class="summary">
+          <div class="card"><div class="tag partial">Honest verdict</div><p><strong>Сейчас память работает не как единый чистый memory brain, а как гибридный retrieval contour.</strong> Лучше всего подтверждены memory files, artifacts, handoffs и Postgres-backed lexical retrieval. Typed layer есть, но ещё не доминирует. Chats/tasks пока нельзя рисовать как полностью равноправный live retrieval layer без доп. подтверждения.</p></div>
+        </div>
+      </section>
+
+      <section class="pane">
+        <h2>Should-Be</h2>
+        <div class="subtitle">Целевая модель: memory lifecycle с явной дистилляцией из сырья в curated и typed memory, плюс модульный retrieval.</div>
+
+        <div class="grid sources">
+          <div class="card"><div class="tag planned">Planned source</div><h3>Chats и sessions</h3><p>Сырой conversational stream как upstream memory source.</p></div>
+          <div class="card"><div class="tag planned">Planned source</div><h3>Tasks и state changes</h3><p>Operational truth про работу, статусы, решения и execution history.</p></div>
+          <div class="card"><div class="tag planned">Planned source</div><h3>Artifacts / handoffs / notes</h3><p>Промежуточные и уже сжатые knowledge forms.</p></div>
+          <div class="card"><div class="tag good">Target core</div><h3>Curated + typed memory</h3><p>Стабилизированная память: MEMORY, registries, typed entities, explicit policies.</p></div>
+        </div>
+
+        <div class="flow">
+          <div class="card"><div class="tag planned">Lifecycle</div><h3>1. Raw upstream sources</h3><p>Chats, tasks, comments, notes, artifacts, handoffs, external context.</p></div>
+          <div class="arrow">↓</div>
+          <div class="card"><div class="tag planned">Lifecycle</div><h3>2. Extraction / distillation</h3><p>Выделение решений, фактов, lessons, summaries, continuation state и memory-worthy facts.</p></div>
+          <div class="arrow">↓</div>
+          <div class="card"><div class="tag planned">Lifecycle</div><h3>3. Promotion into stable memory</h3><p>Попадание в curated memory, registries, typed entities, source-indexed corpus.</p></div>
+          <div class="arrow">↓</div>
+          <div class="card"><div class="tag good">Target retrieval</div><h3>4. Typed-first serving + lexical fallback</h3><p>Главный serving plane становится typed, а lexical retrieval остаётся сильной backing/fallback layer.</p></div>
+        </div>
+
+        <div class="summary">
+          <div class="card"><div class="tag good">Target verdict</div><p><strong>Идеальная модель — это не просто retrieval из файлов.</strong> Это memory lifecycle, где chats/tasks тоже являются источниками, но не в сыром виде на равных правах со всем подряд, а через нормальную extraction/distillation/promotion цепочку. После этого retrieval становится модульным, typed-first и более объяснимым.</p></div>
+        </div>
+      </section>
+    </div>
+  </div>
+</body>
+</html>

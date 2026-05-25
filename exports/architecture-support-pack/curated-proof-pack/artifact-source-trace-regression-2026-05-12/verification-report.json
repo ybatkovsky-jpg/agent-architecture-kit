@@ -1,0 +1,72 @@
+{
+  "fixture": "/home/openclaw/.openclaw/workspace/pkm-memory/fixtures/artifact-source-trace-regression-2026-05-12/cases.json",
+  "fixture_pack": "artifact-source-trace-regression",
+  "version": "2026-05-12",
+  "contract_version": "2026-05-07.lane-contracts-v1",
+  "contract_path": "pkm-memory/RETRIEVAL_POLICY_MATRIX_V1.md",
+  "cases": [
+    {
+      "id": "factual-task-id-artifact-lookup",
+      "query": "Which file contains task-363 handoff artifact path?",
+      "raw_output": "pkm-memory/outputs/artifact-source-trace-regression-2026-05-12/factual-task-id-artifact-lookup.raw.json",
+      "pass": true,
+      "checks": [
+        {
+          "field": "request_class",
+          "expected": "artifact_source_trace_request",
+          "actual": "artifact_source_trace_request",
+          "pass": true
+        },
+        {
+          "field": "top5_path_contains_any",
+          "expected": [
+            "verification-task-371-continuation-regression-pack/q2-predecessor-reopen.json",
+            "task-363-memory-core-v1-conflict-open-question-synthesis-handoff-2026-05-07.md"
+          ],
+          "actual": [
+            "task-manager/artifacts/task-363-memory-core-v1-conflict-open-question-synthesis-handoff-2026-05-07.md",
+            "task-manager/artifacts/openclaw-file-first-storage-layout-lifecycle-note-2026-04-28.md",
+            "task-manager/artifacts/task-346-memory-core-spec-v1-draft-2026-05-06.md",
+            "task-manager/artifacts/openclaw-architecture-implementation-plan-2026-04-28.md",
+            "task-manager/artifacts/task-250-end-to-end-durable-continuation-proof-2026-04-29.md"
+          ],
+          "pass": true
+        }
+      ],
+      "request_classification": {
+        "request_class": "artifact_source_trace_request",
+        "confidence": "high",
+        "reasons": [
+          "matched source-trace / provenance cues before continuation lane"
+        ],
+        "serve_class": "on_demand",
+        "budget": "medium",
+        "primary_domains": [
+          "evidence_record"
+        ],
+        "fallback_domains": [
+          "retrieval_document"
+        ],
+        "forbidden_default_domains": [
+          "memory-only answer with no source"
+        ],
+        "authority_priority_focus": "evidence_record > retrieval_document",
+        "expected_citation": "direct artifact/file refs"
+      },
+      "top5_paths": [
+        "task-manager/artifacts/task-363-memory-core-v1-conflict-open-question-synthesis-handoff-2026-05-07.md",
+        "task-manager/artifacts/openclaw-file-first-storage-layout-lifecycle-note-2026-04-28.md",
+        "task-manager/artifacts/task-346-memory-core-spec-v1-draft-2026-05-06.md",
+        "task-manager/artifacts/openclaw-architecture-implementation-plan-2026-04-28.md",
+        "task-manager/artifacts/task-250-end-to-end-durable-continuation-proof-2026-04-29.md"
+      ],
+      "payload_output": "pkm-memory/outputs/artifact-source-trace-regression-2026-05-12/factual-task-id-artifact-lookup.result.json"
+    }
+  ],
+  "summary": {
+    "total_cases": 1,
+    "passed_cases": 1,
+    "failed_cases": [],
+    "all_pass": true
+  }
+}

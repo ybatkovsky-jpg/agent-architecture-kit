@@ -1,0 +1,81 @@
+{
+  "fixture": "/home/openclaw/.openclaw/workspace/pkm-memory/fixtures/architecture-design-recall-regression-2026-05-12/cases.json",
+  "fixture_pack": "architecture-design-recall-regression",
+  "version": "2026-05-12",
+  "contract_version": "2026-05-07.lane-contracts-v1",
+  "contract_path": "pkm-memory/RETRIEVAL_POLICY_MATRIX_V1.md",
+  "cases": [
+    {
+      "id": "architecture-design-natural-language-recall",
+      "query": "Show architecture/design recall for Memory Core retrieval policy and baseline behavior.",
+      "raw_output": "pkm-memory/outputs/architecture-design-recall-regression-2026-05-12/architecture-design-natural-language-recall.raw.json",
+      "pass": false,
+      "checks": [
+        {
+          "field": "request_class",
+          "expected": "architecture_design_recall",
+          "actual": "architecture_design_recall",
+          "pass": true
+        },
+        {
+          "field": "top_path_contains_any",
+          "expected": [
+            "task-333-memory-stack-v2-layered-architecture-brief-2026-05-06.md",
+            "task-334-memory-core-v1-schema-and-serving-policy-2026-05-06.md"
+          ],
+          "actual": "memory/2026-05-10-memory-status.md",
+          "pass": false
+        },
+        {
+          "field": "top_authority",
+          "expected": "evidence_record",
+          "actual": "memory_note",
+          "pass": false
+        }
+      ],
+      "request_classification": {
+        "request_class": "architecture_design_recall",
+        "confidence": "medium",
+        "reasons": [
+          "matched architecture/design recall cues"
+        ],
+        "serve_class": "on_demand",
+        "budget": "small",
+        "primary_domains": [
+          "memory_note",
+          "wiki_page"
+        ],
+        "fallback_domains": [
+          "evidence_record",
+          "retrieval_document"
+        ],
+        "forbidden_default_domains": [
+          "raw transcripts by default",
+          "session capsules"
+        ],
+        "authority_priority_focus": "memory_note > wiki_page > evidence_record > retrieval_document",
+        "expected_citation": "note refs, wiki refs, backing artifact refs"
+      },
+      "top_item": {
+        "workspace_path": "memory/2026-05-10-memory-status.md",
+        "authority": "memory_note"
+      },
+      "top5_paths": [
+        "memory/2026-05-10-memory-status.md",
+        "memory/2026-05-06-layered-memory.md",
+        "memory/2026-05-07-continuation-fix.md",
+        "memory/2026-05-07-intra-meta.md",
+        "memory/2026-05-11-strategic-architecture.md"
+      ],
+      "payload_output": "pkm-memory/outputs/architecture-design-recall-regression-2026-05-12/architecture-design-natural-language-recall.result.json"
+    }
+  ],
+  "summary": {
+    "total_cases": 1,
+    "passed_cases": 0,
+    "failed_cases": [
+      "architecture-design-natural-language-recall"
+    ],
+    "all_pass": false
+  }
+}

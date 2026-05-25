@@ -1,0 +1,23 @@
+{
+  "task": 546,
+  "artifact": "/home/openclaw/.openclaw/workspace/pkm-memory/scripts/run_task546_lifecycle_slice_verification.py",
+  "payload_path": "pkm-memory/outputs/task-546-lifecycle-slice-verification-2026-05-21/lifecycle-slice-payload.json",
+  "sql_path": "pkm-memory/outputs/task-546-lifecycle-slice-verification-2026-05-21/lifecycle-slice-write.sql",
+  "checks": {
+    "promote_active_memory_note": "active|on_demand",
+    "archive_ballast_evidence": "archived|on_demand",
+    "preserve_evidence_only": "active|on_demand",
+    "hold_for_review_note": "draft|never_ambient|tentative",
+    "hot_serving_excludes_ballast": "0",
+    "hot_serving_excludes_hold": "0"
+  },
+  "verdict": {
+    "promote_path_ok": true,
+    "archive_demote_ok": true,
+    "preserve_evidence_only_ok": true,
+    "hold_for_review_ok": true,
+    "ballast_not_hot_served": true,
+    "hold_not_hot_served": true
+  },
+  "all_passed": true
+}

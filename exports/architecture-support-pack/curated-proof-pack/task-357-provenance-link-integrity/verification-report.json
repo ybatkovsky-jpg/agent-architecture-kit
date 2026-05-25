@@ -1,0 +1,44 @@
+{
+  "task": 357,
+  "verdict": "done",
+  "positive_runs": {
+    "task_metadata": {
+      "registry_object_count": 5,
+      "sql": "/home/openclaw/.openclaw/workspace/pkm-memory/outputs/task-357-provenance-link-integrity/task357-task-metadata.sql",
+      "expanded": "/home/openclaw/.openclaw/workspace/pkm-memory/outputs/task-357-provenance-link-integrity/task357-task-metadata-expanded.json"
+    },
+    "decisions_sessions": {
+      "registry_object_count": 2,
+      "sql": "/home/openclaw/.openclaw/workspace/pkm-memory/outputs/task-357-provenance-link-integrity/task357-decisions-sessions.sql",
+      "expanded": "/home/openclaw/.openclaw/workspace/pkm-memory/outputs/task-357-provenance-link-integrity/task357-decisions-sessions-expanded.json"
+    },
+    "typed_links": {
+      "registry_object_count": 2,
+      "sql": "/home/openclaw/.openclaw/workspace/pkm-memory/outputs/task-357-provenance-link-integrity/task357-typed-links.sql",
+      "expanded": "/home/openclaw/.openclaw/workspace/pkm-memory/outputs/task-357-provenance-link-integrity/task357-typed-links-expanded.json"
+    }
+  },
+  "negative_checks": [
+    {
+      "label": "negative-missing-retrieval-provenance",
+      "matched": "must include retrieval_document_evidence rows for provenance"
+    },
+    {
+      "label": "negative-memory-note-without-evidence",
+      "matched": "must include provenance evidence via object_evidence[] or source_of_truth_ref"
+    },
+    {
+      "label": "negative-duplicate-typed-link",
+      "matched": "Duplicate typed_link edge detected"
+    },
+    {
+      "label": "negative-session-without-provenance",
+      "matched": "must include provenance evidence via object_evidence[] or handoff_ref"
+    }
+  ],
+  "changed_scope": [
+    "registry-layer provenance contract enforcement",
+    "registry-layer link integrity enforcement",
+    "cross-writer verification anchors for task metadata / decisions+capsules / typed links"
+  ]
+}

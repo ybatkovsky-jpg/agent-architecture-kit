@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Как сейчас работает память OpenClaw</title>
+  <style>
+    :root{
+      --bg:#0b1220;
+      --panel:#101a2f;
+      --panel2:#14213c;
+      --text:#eef4ff;
+      --muted:#aab9d8;
+      --line:#29406a;
+      --cyan:#63d7ff;
+      --green:#78f0b0;
+      --violet:#b08cff;
+      --yellow:#ffd76e;
+      --shadow:0 18px 40px rgba(0,0,0,.28);
+      --radius:22px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background:linear-gradient(180deg,#09111f 0%, #0d1728 100%);
+      padding:28px 18px 42px;
+    }
+    .wrap{max-width:1100px;margin:0 auto}
+    .hero{margin:0 0 22px;text-align:center}
+    h1{margin:0 0 10px;font-size:38px;line-height:1.08;letter-spacing:-.03em}
+    .sub{max-width:900px;margin:0 auto;color:var(--muted);font-size:19px;line-height:1.5}
+    .section{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));border:1px solid rgba(255,255,255,.06);border-radius:28px;padding:22px;box-shadow:var(--shadow);margin-top:18px}
+    .section h2{margin:0 0 14px;font-size:28px;letter-spacing:-.02em}
+    .row{display:grid;gap:16px}
+    .sources{grid-template-columns:repeat(2,1fr)}
+    .steps{grid-template-columns:1fr}
+    .card{border:1px solid var(--line);border-radius:var(--radius);padding:18px;background:linear-gradient(180deg,var(--panel) 0%, var(--panel2) 100%);box-shadow:var(--shadow)}
+    .tag{display:inline-block;padding:7px 11px;border-radius:999px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px;border:1px solid transparent}
+    .source{background:rgba(99,215,255,.12);color:var(--cyan);border-color:rgba(99,215,255,.25)}
+    .step{background:rgba(176,140,255,.12);color:var(--violet);border-color:rgba(176,140,255,.25)}
+    .fact{background:rgba(120,240,176,.12);color:var(--green);border-color:rgba(120,240,176,.25)}
+    .warn{background:rgba(255,215,110,.12);color:var(--yellow);border-color:rgba(255,215,110,.25)}
+    h3{margin:0 0 10px;font-size:25px;line-height:1.2}
+    p{margin:0;color:var(--muted);font-size:19px;line-height:1.6}
+    ul{margin:8px 0 0;padding-left:24px;color:var(--muted);font-size:19px;line-height:1.6}
+    .arrow{display:flex;justify-content:center;align-items:center;color:var(--cyan);font-size:44px;line-height:1;padding:2px 0}
+    .summary{font-size:22px;line-height:1.65;color:var(--muted)}
+    .summary strong{color:var(--text)}
+    @media (max-width:720px){
+      h1{font-size:30px}
+      .sub,p,ul{font-size:17px}
+      h3{font-size:22px}
+      .summary{font-size:20px}
+      .sources{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <h1>Как сейчас работает память OpenClaw</h1>
+      <div class="sub">Упрощённая схема только про текущий runtime-контур: без target-state мешанины и без архитектурного шума.</div>
+    </div>
+
+    <section class="section">
+      <h2>1. Откуда вообще берётся память</h2>
+      <div class="row sources">
+        <div class="card"><div class="tag source">Source</div><h3>memory/ и MEMORY.md</h3><p>Заметки, долгосрочная память, правила, предпочтения, важные факты.</p></div>
+        <div class="card"><div class="tag source">Source</div><h3>artifacts и handoffs</h3><p>Спеки, аудиты, task-артефакты, continuation state и handoff-контекст.</p></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>2. Как проходит запрос в runtime</h2>
+      <div class="row steps">
+        <div class="card"><div class="tag step">Step 1</div><h3>Приходит запрос</h3><p>Пользователь спрашивает что-то, где может понадобиться память: факт, прошлое решение, контекст задачи, handoff или preference.</p></div>
+        <div class="arrow">↓</div>
+        <div class="card"><div class="tag step">Step 2</div><h3>Request classification</h3><p>Система определяет тип запроса: это recall, task-context, handoff, architecture-memory или что-то ещё.</p></div>
+        <div class="arrow">↓</div>
+        <div class="card"><div class="tag step">Step 3</div><h3>Source planning</h3><p>Решается, куда лезть за памятью: в notes, curated memory, artifacts, handoffs, PostgreSQL registry и связанные memory tables.</p></div>
+        <div class="arrow">↓</div>
+        <div class="card"><div class="tag step">Step 4</div><h3>Lexical retrieval в Postgres</h3><p>Основной рабочий мотор сейчас — lexical/full-text/trigram/heuristic retrieval, а не красивая единая typed-first memory engine.</p></div>
+        <div class="arrow">↓</div>
+        <div class="card"><div class="tag step">Step 5</div><h3>Ranking и authority resolution</h3><p>Найденные кандидаты ранжируются по релевантности, authority, freshness и типу источника. Здесь решается, чему доверять сильнее.</p></div>
+        <div class="arrow">↓</div>
+        <div class="card"><div class="tag step">Step 6</div><h3>Serving pack</h3><p>Из лучших кандидатов собирается контекст-пакет: факты, evidence, fallback, конфликтующие куски и материал для ответа.</p></div>
+        <div class="arrow">↓</div>
+        <div class="card"><div class="tag step">Step 7</div><h3>Ответ пользователю</h3><p>Модель отвечает уже не из пустоты, а опираясь на собранный memory-context.</p></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>3. Самая важная правда про текущую память</h2>
+      <div class="card"><div class="tag fact">Core fact</div><div class="summary"><strong>Сейчас память работает как гибридный retrieval-контур.</strong> Это не единый «магический memory brain». Фактический мотор сейчас — <strong>Postgres + lexical search + ranking heuristics + authority logic</strong>. Typed memory core уже существует, но пока ещё <strong>не доминирует как главный serving layer</strong>.</div></div>
+    </section>
+
+    <section class="section">
+      <h2>4. Где сейчас слабое место</h2>
+      <div class="card"><div class="tag warn">Problem</div><ul><li>typed layer пока слабее lexical backbone</li><li>retrieval orchestration выглядит слишком монолитно</li><li>trace/debug/observability ещё недостаточно прозрачны</li></ul></div>
+    </section>
+  </div>
+</body>
+</html>

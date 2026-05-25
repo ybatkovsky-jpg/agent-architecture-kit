@@ -1,0 +1,28 @@
+{
+  "status": "ok",
+  "baseline_sql": "pkm-memory/sql/040_memory_core_v1_baseline.sql",
+  "sample_payload": "pkm-memory/fixtures/memory_core_registry_payload.sample.json",
+  "checks": [
+    "OBJECT_TABLES matches expected supported runtime families",
+    "source_record table/column contract present in baseline SQL",
+    "evidence_record table/column contract present in baseline SQL",
+    "memory_note table/column contract present in baseline SQL",
+    "wiki_page table/column contract present in baseline SQL",
+    "retrieval_document table/column contract present in baseline SQL",
+    "session_capsule table/column contract present in baseline SQL",
+    "typed_link table/column contract present in baseline SQL",
+    "object_sources relation contract matches baseline SQL table/columns",
+    "object_evidence relation contract matches baseline SQL table/columns",
+    "memory_note_supersedes relation contract matches baseline SQL table/columns",
+    "memory_note_related_refs relation contract matches baseline SQL table/columns",
+    "wiki_backing_memory relation contract matches baseline SQL table/columns",
+    "wiki_backing_evidence relation contract matches baseline SQL table/columns",
+    "retrieval_document_evidence relation contract matches baseline SQL table/columns",
+    "retrieval_document_chunks relation contract matches baseline SQL table/columns",
+    "session_capsule_memory_refs relation contract matches baseline SQL table/columns",
+    "Sample payload generates transactional object upserts and relation replacement SQL",
+    "Unexpected record columns are rejected",
+    "Relation owner-column mismatches are rejected",
+    "Relation id-family mismatches are rejected"
+  ]
+}
