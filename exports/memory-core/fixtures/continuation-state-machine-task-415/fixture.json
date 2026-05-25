@@ -1,0 +1,308 @@
+{
+  "task_id": 415,
+  "title": "R1 continuation state machine fixture spec",
+  "contract_version": "2026-05-12.continuation-state-machine-fixture.v1",
+  "basis": {
+    "continuation_contract": "task-manager/artifacts/openclaw-frame-continuation-contract-v1-2026-05-12.md",
+    "artifact": "task-manager/artifacts/task-415-r1-continuation-state-machine-fixture-spec-2026-05-12.md"
+  },
+  "states": [
+    "PREPARED",
+    "ACK",
+    "RUNNING",
+    "DONE",
+    "BLOCKED"
+  ],
+  "allowed_transitions": [
+    ["PREPARED", "ACK"],
+    ["ACK", "RUNNING"],
+    ["RUNNING", "DONE"],
+    ["RUNNING", "BLOCKED"],
+    ["PREPARED", "BLOCKED"]
+  ],
+  "required_fields_by_state": {
+    "PREPARED": [
+      "handoff_id",
+      "parent_task_id",
+      "continuation_scope",
+      "execution_owner_target",
+      "decision_owner",
+      "resume_basis",
+      "expected_next_step",
+      "return_target",
+      "created_at",
+      "created_by"
+    ],
+    "ACK": [
+      "continuation_id",
+      "handoff_id",
+      "resume_trigger_id",
+      "status",
+      "execution_owner",
+      "decision_owner",
+      "scope",
+      "resume_basis_snapshot",
+      "started_at"
+    ],
+    "RUNNING": [
+      "continuation_id",
+      "handoff_id",
+      "resume_trigger_id",
+      "status",
+      "execution_owner",
+      "decision_owner",
+      "scope",
+      "resume_basis_snapshot",
+      "started_at"
+    ],
+    "DONE": [
+      "return_id",
+      "continuation_id",
+      "handoff_id",
+      "status",
+      "execution_owner",
+      "decision_owner",
+      "summary",
+      "next_action",
+      "returned_at",
+      "durable_result_anchor",
+      "result_kind"
+    ],
+    "BLOCKED": [
+      "return_id",
+      "handoff_id",
+      "status",
+      "execution_owner",
+      "decision_owner",
+      "summary",
+      "next_action",
+      "returned_at",
+      "blocked_reason",
+      "owner_for_decision",
+      "recovery_suggestion"
+    ]
+  },
+  "special_rules": {
+    "prepared_to_blocked": {
+      "description": "Direct PREPARED -> BLOCKED is allowed only when execution ownership was not accepted because resume basis is invalid, missing, or unauthorized.",
+      "continuation_id_required": false,
+      "must_explain_preexecution_invalidity": true
+    },
+    "blocked_after_ack_or_running": {
+      "description": "When ownership was accepted, BLOCKED must close the current bounded attempt and keep the same continuation_id."
+    },
+    "terminality": {
+      "description": "DONE and BLOCKED are terminal for the current attempt. Reopen requires a new attempt outside this fixture pack."
+    }
+  },
+  "cases": [
+    {
+      "id": "prepared-ack-running-done",
+      "expected_valid": true,
+      "path": ["PREPARED", "ACK", "RUNNING", "DONE"],
+      "steps": [
+        {
+          "state": "PREPARED",
+          "object_type": "handoff_package",
+          "payload": {
+            "handoff_id": "h-415-case-a",
+            "parent_task_id": 415,
+            "continuation_scope": "verify bounded continuation slice",
+            "execution_owner_target": "isolated-run",
+            "decision_owner": "main",
+            "resume_basis": "artifact-ready:fixture-spec-v1",
+            "expected_next_step": "acknowledge continuation ownership",
+            "return_target": "task:415",
+            "created_at": "2026-05-12T23:00:00Z",
+            "created_by": "main"
+          }
+        },
+        {
+          "state": "ACK",
+          "object_type": "continuation_unit",
+          "payload": {
+            "continuation_id": "c-415-case-a",
+            "handoff_id": "h-415-case-a",
+            "resume_trigger_id": "rt-415-case-a",
+            "status": "ACK",
+            "execution_owner": "isolated-run",
+            "decision_owner": "main",
+            "scope": "verify bounded continuation slice",
+            "resume_basis_snapshot": "artifact-ready:fixture-spec-v1",
+            "started_at": "2026-05-12T23:01:00Z"
+          }
+        },
+        {
+          "state": "RUNNING",
+          "object_type": "continuation_unit",
+          "payload": {
+            "continuation_id": "c-415-case-a",
+            "handoff_id": "h-415-case-a",
+            "resume_trigger_id": "rt-415-case-a",
+            "status": "RUNNING",
+            "execution_owner": "isolated-run",
+            "decision_owner": "main",
+            "scope": "verify bounded continuation slice",
+            "resume_basis_snapshot": "artifact-ready:fixture-spec-v1",
+            "started_at": "2026-05-12T23:01:00Z"
+          }
+        },
+        {
+          "state": "DONE",
+          "object_type": "return_package",
+          "payload": {
+            "return_id": "r-415-case-a",
+            "continuation_id": "c-415-case-a",
+            "handoff_id": "h-415-case-a",
+            "status": "DONE",
+            "execution_owner": "isolated-run",
+            "decision_owner": "main",
+            "summary": "bounded continuation slice completed",
+            "next_action": "use fixture in task 416 verifier",
+            "returned_at": "2026-05-12T23:05:00Z",
+            "durable_result_anchor": "task-manager/artifacts/task-415-r1-continuation-state-machine-fixture-spec-2026-05-12.md",
+            "result_kind": "spec_artifact"
+          }
+        }
+      ]
+    },
+    {
+      "id": "prepared-ack-running-blocked",
+      "expected_valid": true,
+      "path": ["PREPARED", "ACK", "RUNNING", "BLOCKED"],
+      "steps": [
+        {
+          "state": "PREPARED",
+          "object_type": "handoff_package",
+          "payload": {
+            "handoff_id": "h-415-case-b",
+            "parent_task_id": 415,
+            "continuation_scope": "verify bounded continuation slice",
+            "execution_owner_target": "isolated-run",
+            "decision_owner": "main",
+            "resume_basis": "artifact-ready:fixture-spec-v1",
+            "expected_next_step": "acknowledge continuation ownership",
+            "return_target": "task:415",
+            "created_at": "2026-05-12T23:10:00Z",
+            "created_by": "main"
+          }
+        },
+        {
+          "state": "ACK",
+          "object_type": "continuation_unit",
+          "payload": {
+            "continuation_id": "c-415-case-b",
+            "handoff_id": "h-415-case-b",
+            "resume_trigger_id": "rt-415-case-b",
+            "status": "ACK",
+            "execution_owner": "isolated-run",
+            "decision_owner": "main",
+            "scope": "verify bounded continuation slice",
+            "resume_basis_snapshot": "artifact-ready:fixture-spec-v1",
+            "started_at": "2026-05-12T23:11:00Z"
+          }
+        },
+        {
+          "state": "RUNNING",
+          "object_type": "continuation_unit",
+          "payload": {
+            "continuation_id": "c-415-case-b",
+            "handoff_id": "h-415-case-b",
+            "resume_trigger_id": "rt-415-case-b",
+            "status": "RUNNING",
+            "execution_owner": "isolated-run",
+            "decision_owner": "main",
+            "scope": "verify bounded continuation slice",
+            "resume_basis_snapshot": "artifact-ready:fixture-spec-v1",
+            "started_at": "2026-05-12T23:11:00Z"
+          }
+        },
+        {
+          "state": "BLOCKED",
+          "object_type": "return_package",
+          "payload": {
+            "return_id": "r-415-case-b",
+            "continuation_id": "c-415-case-b",
+            "handoff_id": "h-415-case-b",
+            "status": "BLOCKED",
+            "execution_owner": "isolated-run",
+            "decision_owner": "main",
+            "summary": "bounded attempt blocked after execution started",
+            "next_action": "escalate for missing prerequisite",
+            "returned_at": "2026-05-12T23:15:00Z",
+            "blocked_reason": "required prerequisite artifact missing during execution",
+            "owner_for_decision": "main",
+            "recovery_suggestion": "publish missing prerequisite and start a new continuation attempt"
+          }
+        }
+      ]
+    },
+    {
+      "id": "prepared-blocked",
+      "expected_valid": true,
+      "path": ["PREPARED", "BLOCKED"],
+      "steps": [
+        {
+          "state": "PREPARED",
+          "object_type": "handoff_package",
+          "payload": {
+            "handoff_id": "h-415-case-c",
+            "parent_task_id": 415,
+            "continuation_scope": "verify bounded continuation slice",
+            "execution_owner_target": "isolated-run",
+            "decision_owner": "main",
+            "resume_basis": "artifact-ready:fixture-spec-v1",
+            "expected_next_step": "acknowledge continuation ownership",
+            "return_target": "task:415",
+            "created_at": "2026-05-12T23:20:00Z",
+            "created_by": "main"
+          }
+        },
+        {
+          "state": "BLOCKED",
+          "object_type": "return_package",
+          "payload": {
+            "return_id": "r-415-case-c",
+            "handoff_id": "h-415-case-c",
+            "status": "BLOCKED",
+            "execution_owner": "isolated-run",
+            "decision_owner": "main",
+            "summary": "resume basis invalid before ownership acceptance",
+            "next_action": "repair resume basis before any continuation attempt",
+            "returned_at": "2026-05-12T23:21:00Z",
+            "blocked_reason": "resume basis could not be validated at pre-execution check",
+            "owner_for_decision": "main",
+            "recovery_suggestion": "replace invalid basis anchor and issue a new trigger"
+          }
+        }
+      ]
+    }
+  ],
+  "invalid_transition_examples": [
+    {
+      "id": "invalid-prepared-running",
+      "path": ["PREPARED", "RUNNING"],
+      "expected_failure": "missing_ack_transition"
+    },
+    {
+      "id": "invalid-ack-done",
+      "path": ["ACK", "DONE"],
+      "expected_failure": "missing_running_transition"
+    },
+    {
+      "id": "invalid-running-ack",
+      "path": ["RUNNING", "ACK"],
+      "expected_failure": "backward_transition_not_allowed"
+    },
+    {
+      "id": "invalid-done-running",
+      "path": ["DONE", "RUNNING"],
+      "expected_failure": "terminal_state_reopened_in_place"
+    },
+    {
+      "id": "invalid-blocked-running",
+      "path": ["BLOCKED", "RUNNING"],
+      "expected_failure": "blocked_attempt_must_restart_as_new_attempt"
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "fixture_pack": "task-121-known-good-retrieval",
+  "version": "2026-04-26",
+  "contract_version": "2026-04-26.phase1",
+  "notes": [
+    "Durable bounded regression pack for known retrieval queries across local and DB modes.",
+    "Expectations are intentionally narrow: assert top-1 only where it remains validated in the current bounded corpus; otherwise assert bounded top-3 presence checks.",
+    "Workspace paths are matched exactly as emitted by retrieve_memory.py.",
+    "This pack is intentionally scoped to four query classes: exact artifact, slug-heavy artifact, milestone intent, and generic milestone phrasing."
+  ],
+  "cases": [
+    {
+      "id": "exact-artifact-memory-rollout-plan",
+      "kind": "exact_artifact_query",
+      "query": "memory rollout plan",
+      "expectations": {
+        "local": {
+          "top1_path": "task-manager/artifacts/memory-rollout-plan-2026-04-26.md",
+          "top3_contains": [
+            "task-manager/artifacts/memory-rollout-plan-2026-04-26.md"
+          ]
+        },
+        "psql": {
+          "top1_path": "task-manager/artifacts/memory-rollout-plan-2026-04-26.md",
+          "top3_contains": [
+            "task-manager/artifacts/memory-rollout-plan-2026-04-26.md"
+          ]
+        }
+      }
+    },
+    {
+      "id": "slug-heavy-artifact-task-107",
+      "kind": "slug_heavy_artifact_query",
+      "query": "task-107-postgres-activation-and-first-live-ingest",
+      "expectations": {
+        "local": {
+          "top1_path": "task-manager/artifacts/task-107-postgres-activation-and-first-live-ingest-2026-04-26.md",
+          "top3_contains": [
+            "task-manager/artifacts/task-107-postgres-activation-and-first-live-ingest-2026-04-26.md"
+          ]
+        },
+        "psql": {
+          "top3_contains": [
+            "task-manager/artifacts/task-107-postgres-activation-and-first-live-ingest-2026-04-26.md",
+            "task-manager/artifacts/task-109-db-retrieval-precision-tuning-pass-2026-04-26.md"
+          ]
+        }
+      }
+    },
+    {
+      "id": "milestone-intent-postgres-activation",
+      "kind": "milestone_intent_query",
+      "query": "postgres activation milestone",
+      "expectations": {
+        "local": {
+          "top1_path": "task-manager/artifacts/task-107-postgres-activation-and-first-live-ingest-2026-04-26.md",
+          "top3_contains": [
+            "task-manager/artifacts/task-107-postgres-activation-and-first-live-ingest-2026-04-26.md"
+          ]
+        },
+        "psql": {
+          "top3_contains": [
+            "task-manager/artifacts/task-107-postgres-activation-and-first-live-ingest-2026-04-26.md",
+            "task-manager/artifacts/task-119-generic-milestone-phrasing-pass-2026-04-26.md"
+          ]
+        }
+      }
+    },
+    {
+      "id": "generic-milestone-activation",
+      "kind": "generic_milestone_phrasing_query",
+      "query": "activation milestone",
+      "expectations": {
+        "local": {
+          "top3_contains": [
+            "task-manager/artifacts/task-107-postgres-activation-and-first-live-ingest-2026-04-26.md"
+          ]
+        },
+        "psql": {
+          "top1_path": "task-manager/artifacts/task-107-postgres-activation-and-first-live-ingest-2026-04-26.md",
+          "top3_contains": [
+            "task-manager/artifacts/task-107-postgres-activation-and-first-live-ingest-2026-04-26.md",
+            "task-manager/artifacts/task-108-db-backed-retrieval-baseline-2026-04-26.md"
+          ]
+        }
+      }
+    }
+  ]
+}

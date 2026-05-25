@@ -1,0 +1,125 @@
+{
+  "fixture_pack": "task-359-request-classifier-baseline",
+  "version": "2026-05-07",
+  "contract_version": "2026-04-26.phase1",
+  "notes": [
+    "Minimal bounded classifier baseline covering all seven Stage 4 request classes.",
+    "Checks stay intentionally narrow: expected request_class plus stable serve/budget contract fields from REQUEST_CLASS_SPECS.",
+    "This pack verifies classifier routing intent, not retrieval ranking quality."
+  ],
+  "cases": [
+    {
+      "id": "current-task-execution",
+      "query": "continue current task",
+      "expected": {
+        "request_class": "current_task_execution",
+        "serve_class": "always_on_candidate+on_demand",
+        "budget": "small",
+        "primary_domains": ["task-manager state", "canonical handoff", "task-scoped memory notes"],
+        "fallback_domains": ["wiki_page", "evidence_record", "retrieval_document"]
+      }
+    },
+    {
+      "id": "resume-reopen-continuation",
+      "query": "continue from handoff for task 359",
+      "expected": {
+        "request_class": "resume_reopen_continuation",
+        "serve_class": "always_on_candidate+on_demand",
+        "budget": "small",
+        "primary_domains": ["canonical handoff", "fresh task state", "state summaries for same run"],
+        "fallback_domains": ["evidence_record", "wiki_page"]
+      }
+    },
+    {
+      "id": "architecture-design-recall",
+      "query": "show the architecture spec baseline for memory retrieval",
+      "expected": {
+        "request_class": "architecture_design_recall",
+        "serve_class": "on_demand",
+        "budget": "small",
+        "primary_domains": ["evidence_record", "memory_note", "wiki_page"],
+        "fallback_domains": ["retrieval_document"]
+      }
+    },
+    {
+      "id": "meta-evaluation-recall",
+      "query": "show evaluation summary and release recommendation for Memory Core Stage 5",
+      "expected": {
+        "request_class": "meta_evaluation_recall",
+        "meta_subfamily": "release_recommendation",
+        "serve_class": "on_demand",
+        "budget": "small",
+        "primary_domains": ["evidence_record"],
+        "fallback_domains": ["memory_note", "wiki_page", "retrieval_document"]
+      }
+    },
+    {
+      "id": "meta-evaluation-short-verdict",
+      "query": "memory core verdict",
+      "expected": {
+        "request_class": "meta_evaluation_recall",
+        "meta_subfamily": "release_recommendation",
+        "serve_class": "on_demand",
+        "budget": "small",
+        "primary_domains": ["evidence_record"],
+        "fallback_domains": ["memory_note", "wiki_page", "retrieval_document"]
+      }
+    },
+    {
+      "id": "meta-evaluation-hardening-slice",
+      "query": "hardening slice",
+      "expected": {
+        "request_class": "meta_evaluation_recall",
+        "meta_subfamily": "hardening_slice",
+        "serve_class": "on_demand",
+        "budget": "small",
+        "primary_domains": ["evidence_record"],
+        "fallback_domains": ["memory_note", "wiki_page", "retrieval_document"]
+      }
+    },
+    {
+      "id": "factual-lookup",
+      "query": "task-107-postgres-activation-and-first-live-ingest",
+      "expected": {
+        "request_class": "factual_lookup",
+        "serve_class": "on_demand",
+        "budget": "medium",
+        "primary_domains": ["evidence_record"],
+        "fallback_domains": ["retrieval_document", "wiki_page for orientation only"]
+      }
+    },
+    {
+      "id": "policy-decision-lookup",
+      "query": "why was this policy decision made",
+      "expected": {
+        "request_class": "policy_decision_lookup",
+        "serve_class": "on_demand",
+        "budget": "small",
+        "primary_domains": ["memory_note"],
+        "fallback_domains": ["wiki_page", "evidence_record"]
+      }
+    },
+    {
+      "id": "preference-operating-style-recall",
+      "query": "what is the operating style preference",
+      "expected": {
+        "request_class": "preference_operating_style_recall",
+        "serve_class": "always_on_candidate+on_demand",
+        "budget": "tiny",
+        "primary_domains": ["verified preference notes"],
+        "fallback_domains": ["evidence_record"]
+      }
+    },
+    {
+      "id": "artifact-source-trace-request",
+      "query": "which file contains the source citation path",
+      "expected": {
+        "request_class": "artifact_source_trace_request",
+        "serve_class": "on_demand",
+        "budget": "medium",
+        "primary_domains": ["evidence_record"],
+        "fallback_domains": ["retrieval_document"]
+      }
+    }
+  ]
+}

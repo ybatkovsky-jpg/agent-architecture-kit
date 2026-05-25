@@ -1,0 +1,22 @@
+{
+  "fixture_pack": "artifact-source-trace-regression",
+  "version": "2026-05-12",
+  "contract_version": "2026-05-07.lane-contracts-v1",
+  "contract_path": "pkm-memory/RETRIEVAL_POLICY_MATRIX_V1.md",
+  "notes": [
+    "Dedicated artifact/source-trace regression split out from the mixed task-371 contour."
+  ],
+  "cases": [
+    {
+      "id": "factual-task-id-artifact-lookup",
+      "query": "Which file contains task-363 handoff artifact path?",
+      "expected": {
+        "request_class": "artifact_source_trace_request",
+        "top5_path_contains_any": [
+          "verification-task-371-continuation-regression-pack/q2-predecessor-reopen.json",
+          "task-363-memory-core-v1-conflict-open-question-synthesis-handoff-2026-05-07.md"
+        ]
+      }
+    }
+  ]
+}

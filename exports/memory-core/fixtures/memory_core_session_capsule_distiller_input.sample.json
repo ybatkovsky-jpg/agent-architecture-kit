@@ -1,0 +1,39 @@
+{
+  "session": {
+    "id": "sess_task356_active_run",
+    "owner": "subagent",
+    "scope_ref": "task:356",
+    "goal": "Define and build the bounded Stage 3.4 session capsule distiller.",
+    "current_status": "active",
+    "handoff_ref": "task-manager/artifacts/task-355-memory-core-v1-decision-ingest-update-path-handoff-2026-05-06.md",
+    "created_at": "2026-05-06T12:30:00Z",
+    "updated_at": "2026-05-06T12:30:00Z",
+    "created_by": "task-356",
+    "scope": "task",
+    "status": "active",
+    "expires_at": "2026-05-07T12:30:00Z"
+  },
+  "open_questions": [
+    "Should capsule distillation remain write-only in Stage 3.4?"
+  ],
+  "active_entities": [
+    "task:356",
+    "pkm-memory",
+    "session-capsule-distiller"
+  ],
+  "next_steps": [
+    "Generate a validated capsule payload compatible with the existing decisions/session writer.",
+    "Verify that provenance is preserved through object_sources and object_evidence."
+  ],
+  "relevant_memory_refs": [
+    "mem_task351_decision_write_path",
+    "mem_sample_registry_note",
+    "wiki_memory_core_stage3"
+  ],
+  "evidence_refs": [
+    "ev_task_356"
+  ],
+  "source_refs": [
+    "src_task_manager_system"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "fixture_pack": "architecture-design-recall-regression",
+  "version": "2026-05-12",
+  "contract_version": "2026-05-07.lane-contracts-v1",
+  "contract_path": "pkm-memory/RETRIEVAL_POLICY_MATRIX_V1.md",
+  "notes": [
+    "Dedicated architecture/design recall regression split out from the mixed task-371 contour."
+  ],
+  "cases": [
+    {
+      "id": "architecture-design-natural-language-recall",
+      "query": "Show architecture/design recall for Memory Core retrieval policy and baseline behavior.",
+      "expected": {
+        "request_class": "architecture_design_recall",
+        "top_path_contains_any": [
+          "task-333-memory-stack-v2-layered-architecture-brief-2026-05-06.md",
+          "task-334-memory-core-v1-schema-and-serving-policy-2026-05-06.md"
+        ],
+        "top_authority": "evidence_record"
+      }
+    }
+  ]
+}

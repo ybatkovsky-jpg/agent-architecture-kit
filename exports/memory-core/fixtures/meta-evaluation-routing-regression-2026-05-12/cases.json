@@ -1,0 +1,53 @@
+{
+  "fixture_pack": "meta-evaluation-routing-regression",
+  "version": "2026-05-12",
+  "contract_version": "2026-05-07.lane-contracts-v1",
+  "contract_path": "pkm-memory/RETRIEVAL_POLICY_MATRIX_V1.md",
+  "companion_contract_paths": [
+    "pkm-memory/CONTINUATION_RETRIEVAL_CONTRACT_V1.md",
+    "pkm-memory/RETRIEVAL_LANE_CONTRACTS_V1.md"
+  ],
+  "notes": [
+    "Dedicated meta/evaluation routing regression split out from the mixed task-371 contour.",
+    "Checks that explicit meta intent stays on evidence/meta lanes and is not distorted by continuation heuristics."
+  ],
+  "cases": [
+    {
+      "id": "explicit-meta-evaluation-query",
+      "query": "Покажи evaluation artifacts Stage 5 и из каких файлов видно baseline fail/pass summary.",
+      "expected": {
+        "request_class": "meta_evaluation_recall",
+        "top_path_contains_any": [
+          "task-368-memory-core-v1-stage-5-5-meta-artifact-suppression-hardening-slice-2026-05-07.md",
+          "task-365-memory-core-v1-stage-5-2-end-to-end-scenario-evaluation-2026-05-07.md",
+          "task-367-memory-core-v1-stage-5-4-evaluation-summary-and-release-recommendation-2026-05-07.md"
+        ],
+        "top_authority": "evidence_record",
+        "top_match_reason_not_contains": ["meta_artifact_strong_suppression", "continuation_meta_artifact_demoted"]
+      }
+    },
+    {
+      "id": "evaluation-summary-explicit-meta",
+      "query": "Show evaluation summary and release recommendation for Memory Core Stage 5.",
+      "expected": {
+        "request_class": "meta_evaluation_recall",
+        "top_path_contains": "task-367-memory-core-v1-stage-5-4-evaluation-summary-and-release-recommendation-2026-05-07.md",
+        "top_authority": "evidence_record",
+        "top_match_reason_not_contains": ["meta_artifact_strong_suppression", "continuation_meta_artifact_demoted"]
+      }
+    },
+    {
+      "id": "hardening-slice-explicit-meta",
+      "query": "Show hardening slice for continuation/meta alignment.",
+      "expected": {
+        "request_class": "meta_evaluation_recall",
+        "top_path_contains_any": [
+          "task-369-memory-core-v1-stage-5-6-continuation-freshness-hardening-slice-2026-05-07.md",
+          "task-370-memory-core-v1-continuation-meta-alignment-hardening-slice-2026-05-07.md"
+        ],
+        "top_authority": "evidence_record",
+        "top_match_reason_not_contains": ["meta_artifact_strong_suppression", "continuation_meta_artifact_demoted"]
+      }
+    }
+  ]
+}

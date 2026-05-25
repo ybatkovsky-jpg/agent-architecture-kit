@@ -1,0 +1,28 @@
+{
+  "fixture_pack": "task-121-known-good-retrieval",
+  "version": "2026-04-26",
+  "output_dir": "pkm-memory/outputs/task-121-retrieval-regression-fixture-pack-2026-04-26",
+  "verification_report": "pkm-memory/outputs/task-121-retrieval-regression-fixture-pack-2026-04-26/verification-report.json",
+  "cases": [
+    {
+      "id": "exact-artifact-memory-rollout-plan",
+      "local_result": "pkm-memory/outputs/task-121-retrieval-regression-fixture-pack-2026-04-26/exact-artifact-memory-rollout-plan-local.result.json",
+      "psql_result": "pkm-memory/outputs/task-121-retrieval-regression-fixture-pack-2026-04-26/exact-artifact-memory-rollout-plan-psql.result.json"
+    },
+    {
+      "id": "slug-heavy-artifact-task-107",
+      "local_result": "pkm-memory/outputs/task-121-retrieval-regression-fixture-pack-2026-04-26/slug-heavy-artifact-task-107-local.result.json",
+      "psql_result": "pkm-memory/outputs/task-121-retrieval-regression-fixture-pack-2026-04-26/slug-heavy-artifact-task-107-psql.result.json"
+    },
+    {
+      "id": "milestone-intent-postgres-activation",
+      "local_result": "pkm-memory/outputs/task-121-retrieval-regression-fixture-pack-2026-04-26/milestone-intent-postgres-activation-local.result.json",
+      "psql_result": "pkm-memory/outputs/task-121-retrieval-regression-fixture-pack-2026-04-26/milestone-intent-postgres-activation-psql.result.json"
+    },
+    {
+      "id": "generic-milestone-activation",
+      "local_result": "pkm-memory/outputs/task-121-retrieval-regression-fixture-pack-2026-04-26/generic-milestone-activation-local.result.json",
+      "psql_result": "pkm-memory/outputs/task-121-retrieval-regression-fixture-pack-2026-04-26/generic-milestone-activation-psql.result.json"
+    }
+  ]
+}

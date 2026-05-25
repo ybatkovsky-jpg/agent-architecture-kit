@@ -1,0 +1,95 @@
+{
+  "decisions": [
+    {
+      "record": {
+        "id": "mem_task351_decision_write_path",
+        "kind": "memory_note",
+        "status": "active",
+        "scope": "task",
+        "authority_class": "canonical_reusable",
+        "serving_class": "on_demand",
+        "created_at": "2026-05-06T10:00:00Z",
+        "updated_at": "2026-05-06T10:00:00Z",
+        "created_by": "task-351",
+        "subtype": "decision",
+        "title": "Decisions persist through memory-note registry objects",
+        "statement": "Task #351 writes decision objects as mc_memory_notes rows with subtype=decision and keeps evidence/source mappings in adjacent relation tables.",
+        "rationale": "Stage 3 needs a durable decision path that can be updated or superseded without replaying transcript history.",
+        "why_it_matters": "This gives the next stage a real persistence seam for durable decisions without pulling in typed links or retrieval logic.",
+        "source_of_truth_ref": "ev_sample_registry_handoff",
+        "effective_scope": "task",
+        "confidence": "accepted",
+        "expires_at": null,
+        "superseded_by": null
+      },
+      "object_sources": [
+        {
+          "object_id": "mem_task351_decision_write_path",
+          "source_ref": "src_sample_registry_root",
+          "position": 0
+        }
+      ],
+      "object_evidence": [
+        {
+          "object_id": "mem_task351_decision_write_path",
+          "evidence_id": "ev_sample_registry_handoff",
+          "position": 0,
+          "relation_role": "supporting"
+        }
+      ],
+      "spec_assumptions": [
+        "ev_sample_registry_handoff",
+        "src_sample_registry_root"
+      ],
+      "supporting_object_refs": [
+        "doc_task_351_handoff",
+        "wiki_memory_core_stage3"
+      ],
+      "key_memory_refs": [
+        "mem_sample_registry_note"
+      ]
+    }
+  ],
+  "session_capsules": [
+    {
+      "record": {
+        "id": "sess_task351_active_run",
+        "kind": "session_capsule",
+        "status": "active",
+        "scope": "task",
+        "authority_class": "ephemeral_projection",
+        "serving_class": "never_ambient",
+        "created_at": "2026-05-06T10:00:00Z",
+        "updated_at": "2026-05-06T10:00:00Z",
+        "created_by": "task-351",
+        "owner": "subagent",
+        "scope_ref": "task:351",
+        "goal": "Persist a resumable continuity capsule for the current bounded implementation step.",
+        "current_status": "active",
+        "handoff_ref": "task-manager/artifacts/task-349-memory-core-v1-registry-write-surface-handoff-2026-05-06.md",
+        "expires_at": "2026-05-07T10:00:00Z",
+        "superseded_by": null
+      },
+      "object_sources": [
+        {
+          "object_id": "sess_task351_active_run",
+          "source_ref": "src_sample_registry_root",
+          "position": 0
+        }
+      ],
+      "object_evidence": [
+        {
+          "object_id": "sess_task351_active_run",
+          "evidence_id": "ev_sample_registry_handoff",
+          "position": 0,
+          "relation_role": "supporting"
+        }
+      ],
+      "relevant_memory_refs": [
+        "mem_task351_decision_write_path",
+        "mem_sample_registry_note",
+        "wiki_runtime_continuity"
+      ]
+    }
+  ]
+}

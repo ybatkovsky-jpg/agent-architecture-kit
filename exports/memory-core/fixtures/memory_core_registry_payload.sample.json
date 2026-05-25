@@ -1,0 +1,88 @@
+{
+  "objects": [
+    {
+      "family": "source_record",
+      "record": {
+        "id": "src_sample_registry_root",
+        "kind": "source_record",
+        "status": "active",
+        "scope": "project",
+        "authority_class": "source_of_truth",
+        "serving_class": "never_ambient",
+        "created_at": "2026-05-06T09:00:00Z",
+        "updated_at": "2026-05-06T09:00:00Z",
+        "source_type": "artifact_bundle",
+        "path": "task-manager/artifacts",
+        "owner_scope": "project",
+        "retrieval_scope": "project_only",
+        "enabled": true,
+        "created_by": "task-349"
+      }
+    },
+    {
+      "family": "evidence_record",
+      "record": {
+        "id": "ev_sample_registry_handoff",
+        "kind": "evidence_record",
+        "status": "active",
+        "scope": "task",
+        "authority_class": "source_of_truth",
+        "serving_class": "on_demand",
+        "created_at": "2026-05-06T09:00:00Z",
+        "updated_at": "2026-05-06T09:00:00Z",
+        "source_id": "src_sample_registry_root",
+        "artifact_ref": "task-manager/artifacts/example.md",
+        "evidence_type": "artifact",
+        "title": "Example artifact",
+        "provenance_path": "task-manager/artifacts/example.md",
+        "provenance_locator": "example.md#L1",
+        "captured_from": "sample-fixture",
+        "created_by": "task-349"
+      },
+      "object_sources": [
+        {
+          "object_id": "ev_sample_registry_handoff",
+          "source_ref": "src_sample_registry_root",
+          "position": 0
+        }
+      ]
+    },
+    {
+      "family": "memory_note",
+      "record": {
+        "id": "mem_sample_registry_note",
+        "kind": "memory_note",
+        "status": "active",
+        "scope": "task",
+        "authority_class": "canonical_reusable",
+        "serving_class": "on_demand",
+        "created_at": "2026-05-06T09:00:00Z",
+        "updated_at": "2026-05-06T09:00:00Z",
+        "created_by": "task-349",
+        "subtype": "decision",
+        "title": "Registry write surface exists",
+        "statement": "Memory Core objects can now be persisted through a registry-facing writer payload.",
+        "why_it_matters": "Later decisions/wiki/evidence flows have a real persistence foundation.",
+        "source_of_truth_ref": "ev_sample_registry_handoff",
+        "confidence": "accepted",
+        "expires_at": null,
+        "superseded_by": null
+      },
+      "object_sources": [
+        {
+          "object_id": "mem_sample_registry_note",
+          "source_ref": "src_sample_registry_root",
+          "position": 0
+        }
+      ],
+      "object_evidence": [
+        {
+          "object_id": "mem_sample_registry_note",
+          "evidence_id": "ev_sample_registry_handoff",
+          "position": 0,
+          "relation_role": "supporting"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,139 @@
+{
+  "task_id": 419,
+  "title": "A2 — recovery resolver prototype",
+  "contract_version": "2026-05-12.recovery-resolver-prototype.v1",
+  "depends_on": {
+    "task_418_precedence_report": "pkm-memory/outputs/task-418-canonical-recovery-precedence-2026-05-12/verification-report.json"
+  },
+  "cases": [
+    {
+      "id": "winner-canonical-task-state-over-projection",
+      "query_shape": "where is the task now",
+      "expected_winner": "anchor:task-363-handoff",
+      "expected_winner_layer": "canonical_task_state",
+      "candidates": [
+        {
+          "anchor_id": "anchor:task-363-handoff",
+          "layer": "canonical_task_state",
+          "source": "task-manager/artifacts/task-363-memory-core-v1-conflict-open-question-synthesis-handoff-2026-05-07.md",
+          "truth_rank": 100,
+          "freshness_rank": 100,
+          "execution_proof": true,
+          "summary_only": false,
+          "ephemeral": false
+        },
+        {
+          "anchor_id": "anchor:projection-active-session",
+          "layer": "ephemeral_projection",
+          "source": "projection://active-session/task-363",
+          "truth_rank": 20,
+          "freshness_rank": 95,
+          "execution_proof": false,
+          "summary_only": true,
+          "ephemeral": true
+        }
+      ]
+    },
+    {
+      "id": "winner-continuation-basis-over-transcript-residue",
+      "query_shape": "continue after latest handoff",
+      "expected_winner": "anchor:latest-handoff",
+      "expected_winner_layer": "continuation_basis",
+      "candidates": [
+        {
+          "anchor_id": "anchor:latest-handoff",
+          "layer": "continuation_basis",
+          "source": "task-manager/artifacts/task-363-memory-core-v1-conflict-open-question-synthesis-handoff-2026-05-07.md",
+          "truth_rank": 96,
+          "freshness_rank": 100,
+          "execution_proof": true,
+          "summary_only": false,
+          "ephemeral": false
+        },
+        {
+          "anchor_id": "anchor:older-chat-residue",
+          "layer": "transcript_residue",
+          "source": "transcript://residue/older-chat-turns",
+          "truth_rank": 30,
+          "freshness_rank": 70,
+          "execution_proof": false,
+          "summary_only": false,
+          "ephemeral": true
+        }
+      ]
+    },
+    {
+      "id": "winner-evidence-record-over-summary-claim",
+      "query_shape": "did verification pass",
+      "expected_winner": "anchor:verification-artifact",
+      "expected_winner_layer": "evidence_record",
+      "candidates": [
+        {
+          "anchor_id": "anchor:verification-artifact",
+          "layer": "evidence_record",
+          "source": "pkm-memory/outputs/task-371-continuation-regression-2026-05-07/verification-report.json",
+          "truth_rank": 94,
+          "freshness_rank": 92,
+          "execution_proof": true,
+          "summary_only": false,
+          "ephemeral": false
+        },
+        {
+          "anchor_id": "anchor:summary-claim",
+          "layer": "summary_claim",
+          "source": "memory://summary/claimed-pass",
+          "truth_rank": 35,
+          "freshness_rank": 97,
+          "execution_proof": false,
+          "summary_only": true,
+          "ephemeral": false
+        }
+      ]
+    },
+    {
+      "id": "winner-execution-evidence-over-memory-note",
+      "query_shape": "what is proof vs reusable context",
+      "expected_winner": "anchor:execution-proof",
+      "expected_winner_layer": "execution_evidence",
+      "candidates": [
+        {
+          "anchor_id": "anchor:memory-note",
+          "layer": "memory_note",
+          "source": "memory/2026-05-06-layered-memory.md",
+          "truth_rank": 70,
+          "freshness_rank": 98,
+          "execution_proof": false,
+          "summary_only": false,
+          "ephemeral": false
+        },
+        {
+          "anchor_id": "anchor:execution-proof",
+          "layer": "execution_evidence",
+          "source": "pkm-memory/outputs/task-379-task-id-dominance-done-next-2026-05-10/summary.json",
+          "truth_rank": 99,
+          "freshness_rank": 90,
+          "execution_proof": true,
+          "summary_only": false,
+          "ephemeral": false
+        }
+      ]
+    },
+    {
+      "id": "fail-unknown-layer-without-supported-precedence",
+      "query_shape": "prefer unsupported custom layer",
+      "expected_failure": "unsupported_layer",
+      "candidates": [
+        {
+          "anchor_id": "anchor:custom",
+          "layer": "custom_unknown_layer",
+          "source": "custom://unsupported",
+          "truth_rank": 100,
+          "freshness_rank": 100,
+          "execution_proof": false,
+          "summary_only": false,
+          "ephemeral": false
+        }
+      ]
+    }
+  ]
+}

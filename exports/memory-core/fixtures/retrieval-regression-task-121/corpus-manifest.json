@@ -1,0 +1,46 @@
+{
+  "fixture_pack": "task-121-known-good-retrieval",
+  "version": "2026-04-26",
+  "scope": "bounded",
+  "description": "Anchor corpus/artifact set used to validate known retrieval queries for memory rollout regression checks.",
+  "query_classes": [
+    "exact_artifact_query",
+    "slug_heavy_artifact_query",
+    "milestone_intent_query",
+    "generic_milestone_phrasing_query"
+  ],
+  "anchor_artifacts": [
+    {
+      "role": "primary_exact_artifact",
+      "workspace_path": "task-manager/artifacts/memory-rollout-plan-2026-04-26.md"
+    },
+    {
+      "role": "primary_slug_heavy_artifact",
+      "workspace_path": "task-manager/artifacts/task-107-postgres-activation-and-first-live-ingest-2026-04-26.md"
+    },
+    {
+      "role": "milestone_related_supporting_artifact",
+      "workspace_path": "task-manager/artifacts/task-108-db-backed-retrieval-baseline-2026-04-26.md"
+    },
+    {
+      "role": "milestone_related_supporting_artifact",
+      "workspace_path": "task-manager/artifacts/task-109-db-retrieval-precision-tuning-pass-2026-04-26.md"
+    },
+    {
+      "role": "slug_related_supporting_artifact",
+      "workspace_path": "task-manager/artifacts/task-110-db-retrieval-slug-microbatch-plan-2026-04-26.md"
+    },
+    {
+      "role": "generic_milestone_followup_artifact",
+      "workspace_path": "task-manager/artifacts/task-119-generic-milestone-phrasing-pass-2026-04-26.md"
+    }
+  ],
+  "known_competing_artifacts": [
+    "task-manager/artifacts/task-110-db-retrieval-slug-microbatch-report-2026-04-26.md",
+    "task-manager/artifacts/task-124-memory-evidence-pack-contract-hardening-2026-04-26.md"
+  ],
+  "notes": [
+    "The fixture pack is not a frozen whole-corpus snapshot; it is a bounded regression contract over known query shapes.",
+    "Supporting and competing artifacts are listed to explain why some DB expectations are top-3 presence checks rather than top-1 assertions."
+  ]
+}

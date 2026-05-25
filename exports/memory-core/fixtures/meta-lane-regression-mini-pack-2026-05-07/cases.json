@@ -1,0 +1,114 @@
+{
+  "fixture_pack": "meta-lane-regression-mini-pack",
+  "version": "2026-05-07",
+  "contract_version": "2026-05-07.meta-lane-mini-lock.v1",
+  "notes": [
+    "Compact regression lock for the extracted meta_evaluation_recall lane and its current anti-fallthrough boundary.",
+    "Checks stay intentionally narrow: request-class, meta_subfamily where applicable, and only one factual retrieval top-path control.",
+    "This is a bounded safety pack, not a broad retrieval-quality benchmark."
+  ],
+  "cases": [
+    {
+      "id": "evaluation-summary-explicit-meta",
+      "query": "Show evaluation summary for Memory Core Stage 5",
+      "expected": {
+        "request_class": "meta_evaluation_recall",
+        "meta_subfamily": "evaluation_summary",
+        "top_path_contains": "task-367-memory-core-v1-stage-5-4-evaluation-summary-and-release-recommendation-2026-05-07.md",
+        "top_authority": "evidence_record"
+      }
+    },
+    {
+      "id": "hardening-slice-explicit-meta",
+      "query": "Show hardening slice for continuation/meta alignment",
+      "expected": {
+        "request_class": "meta_evaluation_recall",
+        "meta_subfamily": "hardening_slice",
+        "top_path_contains_any": [
+          "task-369-memory-core-v1-stage-5-6-continuation-freshness-hardening-slice-2026-05-07.md",
+          "task-370-memory-core-v1-continuation-meta-alignment-hardening-slice-2026-05-07.md"
+        ],
+        "top_authority": "evidence_record"
+      }
+    },
+    {
+      "id": "release-recommendation-explicit-meta",
+      "query": "Memory Core release recommendation",
+      "expected": {
+        "request_class": "meta_evaluation_recall",
+        "meta_subfamily": "release_recommendation",
+        "top_path_contains": "task-367-memory-core-v1-stage-5-4-evaluation-summary-and-release-recommendation-2026-05-07.md",
+        "top_authority": "evidence_record"
+      }
+    },
+    {
+      "id": "short-meta-verdict-anti-fallthrough",
+      "query": "memory core verdict",
+      "expected": {
+        "request_class": "meta_evaluation_recall",
+        "meta_subfamily": "release_recommendation",
+        "top_path_contains": "task-367-memory-core-v1-stage-5-4-evaluation-summary-and-release-recommendation-2026-05-07.md",
+        "top_authority": "evidence_record"
+      }
+    },
+    {
+      "id": "short-meta-release-rec-alias",
+      "query": "release rec",
+      "expected": {
+        "request_class": "meta_evaluation_recall",
+        "meta_subfamily": "release_recommendation",
+        "top_path_contains": "task-367-memory-core-v1-stage-5-4-evaluation-summary-and-release-recommendation-2026-05-07.md",
+        "top_authority": "evidence_record"
+      }
+    },
+    {
+      "id": "short-meta-exec-verdict-alias",
+      "query": "exec verdict",
+      "expected": {
+        "request_class": "meta_evaluation_recall",
+        "meta_subfamily": "release_recommendation",
+        "top_path_contains": "task-367-memory-core-v1-stage-5-4-evaluation-summary-and-release-recommendation-2026-05-07.md",
+        "top_authority": "evidence_record"
+      }
+    },
+    {
+      "id": "short-meta-stage-5-summary-alias",
+      "query": "stage 5 summary",
+      "expected": {
+        "request_class": "meta_evaluation_recall",
+        "meta_subfamily": "evaluation_summary",
+        "top_path_contains": "task-367-memory-core-v1-stage-5-4-evaluation-summary-and-release-recommendation-2026-05-07.md",
+        "top_authority": "evidence_record"
+      }
+    },
+    {
+      "id": "short-meta-hardening-log-alias",
+      "query": "hardening log",
+      "expected": {
+        "request_class": "meta_evaluation_recall",
+        "meta_subfamily": "hardening_slice",
+        "top_path_contains": "task-366-memory-core-v1-stage-5-3-failure-modes-and-hardening-log-2026-05-07.md",
+        "top_authority": "evidence_record"
+      }
+    },
+    {
+      "id": "short-meta-go-no-go-alias",
+      "query": "go/no-go",
+      "expected": {
+        "request_class": "meta_evaluation_recall",
+        "meta_subfamily": "release_recommendation",
+        "top_path_contains": "task-367-memory-core-v1-stage-5-4-evaluation-summary-and-release-recommendation-2026-05-07.md",
+        "top_authority": "evidence_record"
+      }
+    },
+    {
+      "id": "negative-control-factual-task-id-stays-factual",
+      "query": "task-107-postgres-activation-and-first-live-ingest",
+      "expected": {
+        "request_class": "factual_lookup",
+        "top_path_contains": "task-107-postgres-activation-and-first-live-ingest-2026-04-26.md",
+        "top_authority": "evidence_record"
+      }
+    }
+  ]
+}

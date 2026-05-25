@@ -1,0 +1,73 @@
+{
+  "fixture_pack": "task-371-continuation-core-regression",
+  "version": "2026-05-12",
+  "contract_version": "2026-05-07.lane-contracts-v1",
+  "contract_path": "pkm-memory/CONTINUATION_RETRIEVAL_CONTRACT_V1.md",
+  "companion_contract_paths": [
+    "pkm-memory/RETRIEVAL_LANE_CONTRACTS_V1.md",
+    "pkm-memory/RETRIEVAL_POLICY_MATRIX_V1.md"
+  ],
+  "notes": [
+    "Focused continuation-core regression pack split out from the mixed task-371 contour.",
+    "Keeps anchored continuation invariants separate from meta/evaluation and architecture recall packs.",
+    "Boundary case remains explicitly documented instead of being silently mixed into unrelated routing checks."
+  ],
+  "cases": [
+    {
+      "id": "explicit-task-id-resume",
+      "query": "Resume Memory Core v1 after task-363 handoff and continue with the next bounded hardening slice.",
+      "expected": {
+        "request_class": "resume_reopen_continuation",
+        "top_path_contains": "task-363-memory-core-v1-conflict-open-question-synthesis-handoff-2026-05-07.md",
+        "top_authority": "canonical_handoff",
+        "top_match_reason_contains": ["continuation_task_id_exact_match"],
+        "top5_max_duplicate_per_path": 1
+      }
+    },
+    {
+      "id": "predecessor-chain-reopen",
+      "query": "Reopen Memory Core continuation around task-362 and task-363, continue from predecessor chain",
+      "expected": {
+        "request_class": "resume_reopen_continuation",
+        "top_path_contains": "task-363-memory-core-v1-conflict-open-question-synthesis-handoff-2026-05-07.md",
+        "top_authority": "canonical_handoff",
+        "top5_path_contains_any": [
+          "task-362-memory-core-v1-citation-envelope-handoff-2026-05-07.md",
+          "task-363-memory-core-v1-conflict-open-question-synthesis-handoff-2026-05-07.md"
+        ]
+      }
+    },
+    {
+      "id": "natural-language-continue-after-x",
+      "query": "Продолжи Memory Core evaluation с места после conflict/open-question synthesis и скажи, что делать следующим bounded шагом.",
+      "expected": {
+        "request_class": "resume_reopen_continuation",
+        "top_path_contains": "task-363-memory-core-v1-conflict-open-question-synthesis-handoff-2026-05-07.md",
+        "top_authority": "canonical_handoff",
+        "top5_max_duplicate_per_path": 1
+      }
+    },
+    {
+      "id": "latest-handoff-ambiguous-resume",
+      "query": "Continue Memory Core from the latest handoff",
+      "expected": {
+        "request_class": "resume_reopen_continuation",
+        "top_path_contains": "task-363-memory-core-v1-conflict-open-question-synthesis-handoff-2026-05-07.md",
+        "top_authority": "canonical_handoff"
+      }
+    },
+    {
+      "id": "ambiguous-continuation-without-task-id",
+      "query": "continue after conflict/open-question synthesis",
+      "expected": {
+        "request_class": "factual_lookup",
+        "top5_path_contains_any": [
+          "task-363-memory-core-v1-conflict-open-question-synthesis-handoff-2026-05-07.md",
+          "task-362-memory-core-v1-citation-envelope-handoff-2026-05-07.md",
+          "task-376-status-handoff-first-hardening-bounded-verdict-2026-05-10.md"
+        ],
+        "known_limitation": "Very short ambiguous phrasing without explicit resume cue or task-id remains a documented boundary; keep request_class=factual_lookup and treat handoff-adjacent continuation artifacts as bounded expectation shape until an explicit contract upgrade lands."
+      }
+    }
+  ]
+}

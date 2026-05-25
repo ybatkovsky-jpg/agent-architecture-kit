@@ -1,0 +1,90 @@
+{
+  "fixture_pack": "task-359-request-classifier-r2-hardening",
+  "version": "2026-05-10",
+  "contract_version": "2026-04-26.phase1",
+  "notes": [
+    "Bounded hardening pack for Russian intent coverage and rationale-vs-trace disambiguation.",
+    "Includes regression checks for continuation/status/preference/policy-rationale phrasing and a meta-artifact self-hit-safe trace phrasing.",
+    "Checks stay at task-359 scope: classifier contract only, not full downstream routing acceptance."
+  ],
+  "cases": [
+    {
+      "id": "ru-current-status-stage4",
+      "query": "Где сейчас Memory Core v1 по stage chain и что уже готово после Stage 4?",
+      "expected": {
+        "request_class": "current_task_execution",
+        "serve_class": "always_on_candidate+on_demand",
+        "budget": "small",
+        "primary_domains": ["task-manager state", "canonical handoff", "task-scoped memory notes"],
+        "fallback_domains": ["wiki_page", "evidence_record", "retrieval_document"]
+      }
+    },
+    {
+      "id": "ru-resume-bounded-step",
+      "query": "Продолжи Memory Core evaluation с места после conflict/open-question synthesis и скажи, что делать следующим bounded шагом.",
+      "expected": {
+        "request_class": "resume_reopen_continuation",
+        "serve_class": "always_on_candidate+on_demand",
+        "budget": "small",
+        "primary_domains": ["canonical handoff", "fresh task state", "state summaries for same run"],
+        "fallback_domains": ["evidence_record", "wiki_page"]
+      }
+    },
+    {
+      "id": "ru-preference-operating-style",
+      "query": "Как Юрию лучше отвечать по таким technical chain updates: коротко по делу или с длинным разбором?",
+      "expected": {
+        "request_class": "preference_operating_style_recall",
+        "serve_class": "always_on_candidate+on_demand",
+        "budget": "tiny",
+        "primary_domains": ["verified preference notes"],
+        "fallback_domains": ["evidence_record"]
+      }
+    },
+    {
+      "id": "ru-policy-rationale-source-of-truth",
+      "query": "Почему в Memory Core v1 решили держать retrieval_document как derived layer, а не как source of truth?",
+      "expected": {
+        "request_class": "policy_decision_lookup",
+        "serve_class": "on_demand",
+        "budget": "small",
+        "primary_domains": ["memory_note"],
+        "fallback_domains": ["wiki_page", "evidence_record"]
+      }
+    },
+    {
+      "id": "ru-policy-rationale-explicit",
+      "query": "Объясни rationale этого policy decision",
+      "expected": {
+        "request_class": "policy_decision_lookup",
+        "serve_class": "on_demand",
+        "budget": "small",
+        "primary_domains": ["memory_note"],
+        "fallback_domains": ["wiki_page", "evidence_record"]
+      }
+    },
+    {
+      "id": "ru-artifact-trace-stage4",
+      "query": "Покажи, из каких именно файлов видно, что для Stage 4 уже сделаны routing, authority ranking, citation envelope и conflict synthesis.",
+      "expected": {
+        "request_class": "artifact_source_trace_request",
+        "serve_class": "on_demand",
+        "budget": "medium",
+        "primary_domains": ["evidence_record"],
+        "fallback_domains": ["retrieval_document"]
+      }
+    },
+    {
+      "id": "meta-hardening-slice-short",
+      "query": "hardening slice",
+      "expected": {
+        "request_class": "meta_evaluation_recall",
+        "meta_subfamily": "hardening_slice",
+        "serve_class": "on_demand",
+        "budget": "small",
+        "primary_domains": ["evidence_record"],
+        "fallback_domains": ["memory_note", "wiki_page", "retrieval_document"]
+      }
+    }
+  ]
+}

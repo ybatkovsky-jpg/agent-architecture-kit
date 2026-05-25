@@ -1,0 +1,98 @@
+{
+  "fixture_pack": "task-128-query-fixture-corpus",
+  "version": "2026-04-27",
+  "contract_version": "phase1.postgres-baseline.v1",
+  "purpose": "Canonical small query corpus for memory-rollout tuning and regression checks, kept file-first and easy to diff.",
+  "baseline_position": {
+    "authoritative_backbone": "PostgreSQL + metadata filters + FTS + pg_trgm, with vectors later and conservatively",
+    "mempalace_role": "pilot-evaluation shell relative to the baseline, not source of truth"
+  },
+  "query_families": [
+    {
+      "id": "exact_artifact_memory_rollout_plan",
+      "family": "exact_artifact",
+      "query": "memory rollout plan",
+      "expected_intent": "retrieve the canonical rollout-plan artifact directly",
+      "target_artifacts": [
+        "task-manager/artifacts/memory-rollout-plan-2026-04-26.md"
+      ],
+      "bounded_expectation": "top1 or stable top3 presence for the rollout-plan artifact"
+    },
+    {
+      "id": "baseline_architecture_postgres_pkm",
+      "family": "baseline_architecture",
+      "query": "PostgreSQL PKM baseline",
+      "expected_intent": "find the baseline architecture split and supporting recommendation artifacts",
+      "target_artifacts": [
+        "task-manager/artifacts/task-99-postgres-pkm-baseline-layers-2026-04-25.md",
+        "task-manager/artifacts/task-94-private-memory-stack-comparative-scan-2026-04-25.md",
+        "task-manager/artifacts/task-86-pkm-rag-architecture-recommendation-2026-04-25.md"
+      ],
+      "bounded_expectation": "top results include task #99 and at least one supporting architecture artifact"
+    },
+    {
+      "id": "mempalace_pilot_eval",
+      "family": "comparative_evaluation",
+      "query": "MemPalace pilot evaluation",
+      "expected_intent": "retrieve the bounded MemPalace evaluation path relative to the baseline",
+      "target_artifacts": [
+        "task-manager/artifacts/task-98-mempalace-practical-pilot-criteria-2026-04-25.md",
+        "task-manager/artifacts/task-101-mempalace-local-hybrid-analysis-2026-04-25.md"
+      ],
+      "bounded_expectation": "top results include task #98 and baseline-relative pilot framing"
+    },
+    {
+      "id": "slug_heavy_task107",
+      "family": "slug_heavy_artifact",
+      "query": "task-107-postgres-activation-and-first-live-ingest",
+      "expected_intent": "resolve a slug-heavy artifact query without relying on semantic paraphrase",
+      "target_artifacts": [
+        "task-manager/artifacts/task-107-postgres-activation-and-first-live-ingest-2026-04-26.md"
+      ],
+      "bounded_expectation": "top1 or stable top3 presence for the exact slug artifact"
+    },
+    {
+      "id": "milestone_postgres_activation",
+      "family": "milestone_intent",
+      "query": "postgres activation milestone",
+      "expected_intent": "retrieve the activation milestone artifact and nearby retrieval-stabilization follow-ups",
+      "target_artifacts": [
+        "task-manager/artifacts/task-107-postgres-activation-and-first-live-ingest-2026-04-26.md",
+        "task-manager/artifacts/task-119-generic-milestone-phrasing-pass-2026-04-26.md"
+      ],
+      "bounded_expectation": "top results keep task #107 visible and milestone intent stable across local/DB modes"
+    },
+    {
+      "id": "generic_activation_milestone",
+      "family": "generic_milestone_phrasing",
+      "query": "activation milestone",
+      "expected_intent": "retrieve the main activation milestone despite generic phrasing",
+      "target_artifacts": [
+        "task-manager/artifacts/task-107-postgres-activation-and-first-live-ingest-2026-04-26.md",
+        "task-manager/artifacts/task-108-db-backed-retrieval-baseline-2026-04-26.md"
+      ],
+      "bounded_expectation": "task #107 remains top1 or within stable top3 depending on retrieval mode"
+    },
+    {
+      "id": "incremental_ingest_parity",
+      "family": "operational_verification",
+      "query": "incremental ingest parity",
+      "expected_intent": "find the verification chain for incremental ingest behavior and DB parity repair",
+      "target_artifacts": [
+        "task-manager/artifacts/task-122-memory-rollout-incremental-ingest-coverage-2026-04-26.md",
+        "task-manager/artifacts/task-130-state-db-parity-backfill-2026-04-26.md"
+      ],
+      "bounded_expectation": "results include both the parity gap discovery and the bounded repair verification"
+    },
+    {
+      "id": "next_phase_memory_backlog",
+      "family": "planning_transition",
+      "query": "next phase memory backlog",
+      "expected_intent": "retrieve the backlog-cut artifact that follows phase-1 stabilization",
+      "target_artifacts": [
+        "task-manager/artifacts/task-129-memory-next-phase-backlog-cut-2026-04-27.md"
+      ],
+      "bounded_expectation": "future tuning should find the backlog-cut artifact directly once present"
+    }
+  ]
+}

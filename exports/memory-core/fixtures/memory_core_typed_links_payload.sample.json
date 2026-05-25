@@ -1,0 +1,38 @@
+{
+  "typed_links": [
+    {
+      "record": {
+        "id": "link_task350_decision_evidence",
+        "kind": "typed_link",
+        "status": "active",
+        "scope": "task",
+        "authority_class": "derived_operational",
+        "serving_class": "never_ambient",
+        "created_at": "2026-05-06T10:30:00Z",
+        "updated_at": "2026-05-06T10:30:00Z",
+        "created_by": "task-350",
+        "link_type": "provenance",
+        "from_ref": "mem_task351_decision_write_path",
+        "to_ref": "ev_sample_registry_handoff",
+        "statement": "supported_by"
+      }
+    },
+    {
+      "record": {
+        "id": "link_task350_capsule_dependency",
+        "kind": "typed_link",
+        "status": "active",
+        "scope": "task",
+        "authority_class": "derived_operational",
+        "serving_class": "never_ambient",
+        "created_at": "2026-05-06T10:30:00Z",
+        "updated_at": "2026-05-06T10:30:00Z",
+        "created_by": "task-350",
+        "link_type": "dependency",
+        "from_ref": "sess_task351_resume_capsule",
+        "to_ref": "mem_task351_decision_write_path",
+        "statement": "depends_on"
+      }
+    }
+  ]
+}

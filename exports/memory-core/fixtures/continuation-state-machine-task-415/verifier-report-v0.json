@@ -1,0 +1,96 @@
+{
+  "verifier": {
+    "name": "continuation-state-machine-verifier-v0",
+    "version": "0.1.0",
+    "mode": "conservative-bounded",
+    "generated_at": "2026-05-12T23:33:20.132Z",
+    "fixture_path": "pkm-memory/fixtures/continuation-state-machine-task-415/fixture.json",
+    "output_path": "pkm-memory/fixtures/continuation-state-machine-task-415/verifier-report-v0.json"
+  },
+  "fixture_contract_version": "2026-05-12.continuation-state-machine-fixture.v1",
+  "summary": {
+    "valid_cases_total": 3,
+    "valid_cases_passed": 3,
+    "invalid_cases_total": 5,
+    "invalid_cases_passed": 5,
+    "all_passed": true
+  },
+  "limitations": [
+    "Verifier intentionally checks only explicit R1 fixture rules and listed invalid transition examples.",
+    "For direct PREPARED -> BLOCKED, semantic meaning of pre-execution invalidity is not deeply inferred; verifier conservatively checks required fields and transition shape.",
+    "No schema expansion beyond fixture.json is attempted."
+  ],
+  "valid_case_results": [
+    {
+      "id": "prepared-ack-running-done",
+      "expected_valid": true,
+      "verdict": "pass",
+      "ok": true,
+      "errors": [],
+      "observations": []
+    },
+    {
+      "id": "prepared-ack-running-blocked",
+      "expected_valid": true,
+      "verdict": "pass",
+      "ok": true,
+      "errors": [],
+      "observations": []
+    },
+    {
+      "id": "prepared-blocked",
+      "expected_valid": true,
+      "verdict": "pass",
+      "ok": true,
+      "errors": [],
+      "observations": []
+    }
+  ],
+  "invalid_case_results": [
+    {
+      "id": "invalid-prepared-running",
+      "expected_valid": false,
+      "expected_failure": "missing_ack_transition",
+      "verdict": "pass",
+      "ok": true,
+      "detected_failure": "missing_ack_transition",
+      "errors": []
+    },
+    {
+      "id": "invalid-ack-done",
+      "expected_valid": false,
+      "expected_failure": "missing_running_transition",
+      "verdict": "pass",
+      "ok": true,
+      "detected_failure": "missing_running_transition",
+      "errors": []
+    },
+    {
+      "id": "invalid-running-ack",
+      "expected_valid": false,
+      "expected_failure": "backward_transition_not_allowed",
+      "verdict": "pass",
+      "ok": true,
+      "detected_failure": "backward_transition_not_allowed",
+      "errors": []
+    },
+    {
+      "id": "invalid-done-running",
+      "expected_valid": false,
+      "expected_failure": "terminal_state_reopened_in_place",
+      "verdict": "pass",
+      "ok": true,
+      "detected_failure": "terminal_state_reopened_in_place",
+      "errors": []
+    },
+    {
+      "id": "invalid-blocked-running",
+      "expected_valid": false,
+      "expected_failure": "blocked_attempt_must_restart_as_new_attempt",
+      "verdict": "pass",
+      "ok": true,
+      "detected_failure": "blocked_attempt_must_restart_as_new_attempt",
+      "errors": []
+    }
+  ]
+}
