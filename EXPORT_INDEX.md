@@ -182,6 +182,12 @@ Main themes:
 Best entry points:
 - `openclaw-frame-architecture-baseline-v1-2026-05-01.md`
 - `openclaw-frame-continuation-contract-v1-2026-05-12.md`
+- `autonomy-continuation-contract-v1-2026-05-25.md`
+- `task-770-track-c-mature-async-transport-spec-2026-05-26.md`
+- `task-771-adaptive-autonomy-modes-spec-2026-05-26.md`
+- `task-772-memory-cognitive-substrate-spec-2026-05-26.md`
+- `task-773-unified-primitive-event-model-spec-2026-05-26.md`
+- `task-774-broader-live-e2e-scenario-pack-spec-2026-05-26.md`
 - `openclaw-execution-context-schema-implementation-facing-v1-2026-04-28.md`
 - `context-system-2-target-design-spec-2026-05-19.md`
 - `context-system-2-runtime-assembly-binding-plan-2026-05-19.md`

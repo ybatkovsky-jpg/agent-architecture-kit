@@ -1,5 +1,7 @@
 # Local Task Manager
 
+This export now also includes the autonomy routing seam (`autonomy_router.py`) and a replayable integrated proof harness (`replay_scenario_harness.py` plus `test_replay_scenario_harness.py`) alongside the previously exported state/watchdog contour.
+
 Простой локальный Task Manager для рабочего потока Клава:
 
 - задачи хранятся в `task-manager/tasks.db`

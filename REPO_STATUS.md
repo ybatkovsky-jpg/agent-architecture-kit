@@ -61,6 +61,7 @@ Exported under:
 
 Includes:
 - selected frame/context-system/execution-context artifacts
+- second-wave autonomy / Track C / memory-substrate / unified-event-model / replay-proof tm artifacts
 - memory runtime audit docs
 - target architecture docs
 - curated proof pack

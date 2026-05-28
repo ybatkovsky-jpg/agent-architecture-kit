@@ -4,6 +4,7 @@ Second-wave sanitized export added to the unified `agent-architecture-kit` repos
 
 Contents:
 - selected OpenClaw frame / execution-context / context-system architecture artifacts
+- second-wave autonomy / Track C / memory-substrate / unified-event-model / replay-proof tm artifacts
 - memory runtime audit and target architecture docs
 - architecture diagrams
 
