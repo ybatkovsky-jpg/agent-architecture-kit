@@ -52,7 +52,30 @@ def main() -> int:
     assert "resume_reason" in status
     assert "lineage" in status
 
-    stopped = json.loads(_run("autonomy-stop", str(task_id), "--note", "Stop autonomy for controls proof", "--next-action", "Return to manual handling").stdout)
+    rejected = _run(
+        "autonomy-stop",
+        str(task_id),
+        "--note",
+        "Stop autonomy for controls proof",
+        "--next-action",
+        "Return to manual handling",
+        check=False,
+    )
+    assert rejected.returncode != 0
+    assert "manual_fallback_forbidden=true" in (rejected.stderr or rejected.stdout)
+
+    stopped = json.loads(
+        _run(
+            "autonomy-stop",
+            str(task_id),
+            "--note",
+            "Stop autonomy for controls proof",
+            "--next-action",
+            "Return to manual handling",
+            "--allow-manual-fallback",
+            "yes",
+        ).stdout
+    )
     assert stopped["autonomy_state"]["autonomy_mode"] is False
     assert stopped["autonomy_state"]["mode"] == "manual"
     assert stopped["autonomy_state"]["watchdog"]["eligible_for_resume"] is False

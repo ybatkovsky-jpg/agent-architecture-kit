@@ -114,6 +114,8 @@ def main() -> int:
         }), encoding="utf-8")
         routed = json.loads(_run("autonomy-route", str(stale_continue_id), "--child-result-file", str(payload)).stdout)
         assert routed["routing"]["router_decision"] == "schedule_next_slice"
+        assert routed["auto_resume"] is not None
+        assert routed["auto_resume"]["resumed"] is True
     _age_task(stale_continue_id)
 
     closure_gap_id = _create_autonomous_task("tmp autonomy watchdog closure gap", "Decide explicit next slice")
@@ -293,7 +295,7 @@ def main() -> int:
     integrity_due_ids = {item["id"] for item in watchdog["integrity_surface_due"]}
 
     assert stale_resume_id in resumable_ids
-    assert stale_continue_id in resumable_ids
+    assert stale_continue_id not in resumable_ids
     assert promised_not_armed_id not in resumable_ids
     assert promised_not_armed_id in promised_ids
     assert waiting_id not in resumable_ids
@@ -312,10 +314,6 @@ def main() -> int:
     assert resume_entry["router_decision"] == "resume_later"
     assert resume_entry["resume_basis"] == "router_decision=resume_later"
     assert resume_entry["resume_command"] == f"python3 task-manager/task_manager.py autonomy-resume {stale_resume_id}"
-
-    continue_entry = next(item for item in watchdog["resumable_autonomy"] if item["id"] == stale_continue_id)
-    assert continue_entry["router_decision"] == "schedule_next_slice"
-    assert continue_entry["resume_basis"] == "frontier_remaining_parent_open"
 
     waiting_entry = next(item for item in watchdog["excluded_autonomy"] if item["id"] == waiting_id)
     assert waiting_entry["awaiting_user"] is True
@@ -354,7 +352,7 @@ def main() -> int:
 
     counter = {"value": 0}
 
-    def _fake_cron_run(cmd, cwd=None, capture_output=True, text=True):
+    def _fake_cron_run(cmd, cwd=None, capture_output=True, text=True, **kwargs):
         assert cmd[:4] == ["openclaw", "cron", "add", "--json"]
         job_name = cmd[cmd.index("--name") + 1]
         counter["value"] += 1
@@ -367,7 +365,7 @@ def main() -> int:
         executed = json.loads(buf.getvalue())
     resumed_ids = {item["id"] for item in executed["resumed_autonomy"]}
     assert stale_resume_id in resumed_ids
-    assert stale_continue_id in resumed_ids
+    assert stale_continue_id not in resumed_ids
     assert anti_silence_id not in resumed_ids
     assert missing_step_id not in resumed_ids
     assert integrity_due_id not in resumed_ids
@@ -415,6 +413,65 @@ def main() -> int:
     promised_state_after = load_autonomy_state(promised_not_armed_id)
     assert promised_state_after["execution"]["autonomy_requested"] is True
     assert promised_state_after["execution"]["autonomy_armed"] is False
+
+    terminal_parent_id = _create_autonomous_task("tmp autonomy terminal parent", "Finish parent honestly")
+    queued_child_id = _create_autonomous_task("tmp autonomy queued child", "Run queued follow-up slice")
+    terminal_state = load_autonomy_state(terminal_parent_id)
+    terminal_state["continuation"] = {
+        "router_decision": "surface_to_user",
+        "decision_reason": "Parent closure criteria are satisfied.",
+        "surface_reason": "done",
+        "next_action": "",
+        "awaiting_user": False,
+        "approval_needed": False,
+        "risk_alert": False,
+        "done_criteria_met": True,
+        "parent_goal_complete": True,
+        "parent_goal_open": False,
+        "frontier_known": False,
+        "frontier_remaining": False,
+        "frontier_exhausted": True,
+    }
+    terminal_state["watchdog"]["eligible_for_resume"] = False
+    terminal_state["watchdog"]["final_surface_required"] = True
+    terminal_state["last_child_result"] = {
+        "status": "done",
+        "summary": "Terminal parent finished",
+        "artifact_refs": ["task-manager/test_autonomy_watchdog.py"],
+        "verification_refs": ["python3 test_autonomy_watchdog.py"],
+        "outcome_class": "terminal_done",
+        "payload_class": "canonical_result",
+        "returned_at": "",
+    }
+    save_autonomy_state(terminal_parent_id, terminal_state)
+    _age_task(queued_child_id)
+
+    chain_counter = {"value": 0}
+
+    original_run = subprocess.run
+
+    def _fake_chain_cron(cmd, cwd=None, capture_output=True, text=True, **kwargs):
+        if cmd[:4] != ["openclaw", "cron", "add", "--json"]:
+            return original_run(cmd, cwd=cwd, capture_output=capture_output, text=text, **kwargs)
+        job_name = cmd[cmd.index("--name") + 1]
+        chain_counter["value"] += 1
+        return SimpleNamespace(returncode=0, stdout=json.dumps({"id": f"job-chain-{chain_counter['value']}", "name": job_name}), stderr="")
+
+    with patch.object(tm_mod.subprocess, "run", side_effect=_fake_chain_cron):
+        chained_payload = json.loads(_run("review", str(terminal_parent_id), "--note", "Closure-ready terminal review with evidence artifact task-manager/test_autonomy_watchdog.py and verification python3 test_autonomy_watchdog.py").stdout)
+
+    assert chained_payload["status"] == "review"
+    assert chained_payload.get("auto_accept") is not None
+    assert chained_payload["auto_accept"]["status"] == "done"
+    assert chained_payload.get("auto_chain") is not None
+    assert chained_payload["auto_chain"]["from_task_id"] == terminal_parent_id
+    assert chained_payload["auto_chain"]["trigger_status"] == "done"
+    assert chained_payload["auto_chain"]["to_task_id"] == queued_child_id
+
+    queued_state_after_chain = load_autonomy_state(queued_child_id)
+    assert queued_state_after_chain["active_child"]["kind"] == "openclaw_cron_agent_turn"
+    assert queued_state_after_chain["execution"]["autonomy_armed"] is True
+    assert queued_state_after_chain["execution"]["anchor_id"] == chained_payload["auto_chain"]["spawn"]["job_id"]
 
     print("ok")
     return 0

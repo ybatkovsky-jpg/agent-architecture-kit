@@ -66,10 +66,14 @@ def main() -> int:
     shown = json.loads(_run("autonomy-show", str(task_id)).stdout)
     assert shown["execution"]["autonomy_requested"] is True
     assert shown["execution"]["autonomy_armed"] is False
+    assert shown["execution_mode"] == "degraded_manual"
+    assert shown["continuation"]["router_decision"] == "surface_to_user"
+    assert shown["continuation"]["surface_reason"] == "autonomy_launch_failed"
 
     status = json.loads(_run("autonomy-status", str(task_id)).stdout)
     assert status["autonomous_status"] == "requested_not_armed"
     assert status["autonomy"]["execution_state"] == "requested_not_armed"
+    assert status["autonomy"]["execution_mode"] == "degraded_manual"
     assert status["autonomy_claim_honest"] is False
 
     shown_task = json.loads(_run("show", str(task_id)).stdout)

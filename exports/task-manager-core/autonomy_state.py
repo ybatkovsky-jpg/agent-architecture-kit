@@ -18,7 +18,7 @@ ALLOWED_ROUTER_DECISIONS = {
     "run_closure_pass",
     "none",
 }
-ALLOWED_SURFACE_REASONS = {"done", "blocked_external", "approval_needed", "risk_alert", ""}
+ALLOWED_SURFACE_REASONS = {"done", "blocked_external", "approval_needed", "risk_alert", "autonomy_launch_failed", ""}
 ALLOWED_COMPLETION_SCOPES = {"leaf", "child_chain", "parent", "user_goal", "unknown"}
 ALLOWED_EXECUTION_MODES = {
     "none",
@@ -27,6 +27,27 @@ ALLOWED_EXECUTION_MODES = {
     "openclaw_cron_agent_turn",
     "background_exec",
     "manual_hold",
+}
+ALLOWED_CANONICAL_EXECUTION_MODES = {
+    "normal_execution",
+    "research_uncertain",
+    "blocked_external",
+    "approval_needed",
+    "degraded_manual",
+    "delegated_long_run",
+    "closure_validation",
+    "manual",
+}
+
+ALLOWED_CANONICAL_MODE_TRANSITIONS = {
+    "manual": {"manual", "normal_execution", "research_uncertain", "blocked_external", "approval_needed", "degraded_manual", "delegated_long_run", "closure_validation"},
+    "normal_execution": {"normal_execution", "research_uncertain", "blocked_external", "approval_needed", "degraded_manual", "delegated_long_run", "closure_validation", "manual"},
+    "research_uncertain": {"research_uncertain", "normal_execution", "blocked_external", "approval_needed", "degraded_manual", "delegated_long_run", "closure_validation", "manual"},
+    "blocked_external": {"blocked_external", "normal_execution", "research_uncertain", "approval_needed", "degraded_manual", "closure_validation", "manual"},
+    "approval_needed": {"approval_needed", "normal_execution", "research_uncertain", "blocked_external", "degraded_manual", "closure_validation", "manual"},
+    "degraded_manual": {"degraded_manual", "normal_execution", "research_uncertain", "blocked_external", "approval_needed", "delegated_long_run", "closure_validation", "manual"},
+    "delegated_long_run": {"delegated_long_run", "normal_execution", "research_uncertain", "blocked_external", "approval_needed", "degraded_manual", "closure_validation", "manual"},
+    "closure_validation": {"closure_validation", "normal_execution", "research_uncertain", "blocked_external", "approval_needed", "degraded_manual", "delegated_long_run", "manual"},
 }
 ALLOWED_SURFACE_SUPPRESSION_REASONS = {
     "",
@@ -54,6 +75,7 @@ def default_autonomy_state(*, task_id: int = 0) -> dict[str, Any]:
         "mode": "manual",
         "delivery_gate": "internal_only_until_terminal",
         "parent_status_at_entry": "",
+        "execution_mode": "manual",
         "active_child": {
             "kind": "none",
             "id": "",
@@ -217,6 +239,66 @@ def next_slice_missing(state: dict[str, Any] | None) -> bool:
     return not str(loop.get("next_slice_scope") or "").strip()
 
 
+def derive_canonical_execution_mode(state: dict[str, Any] | None) -> str:
+    normalized = state if isinstance(state, dict) else {}
+    autonomy_mode = bool(normalized.get("autonomy_mode"))
+    continuation = normalized.get("continuation") if isinstance(normalized.get("continuation"), dict) else {}
+    watchdog = normalized.get("watchdog") if isinstance(normalized.get("watchdog"), dict) else {}
+    closure_loop = normalized.get("closure_loop") if isinstance(normalized.get("closure_loop"), dict) else {}
+    execution = normalized.get("execution") if isinstance(normalized.get("execution"), dict) else {}
+
+    if not autonomy_mode:
+        return "manual"
+    if bool(execution.get("autonomy_requested")) and not bool(execution.get("autonomy_armed")):
+        return "degraded_manual"
+    if bool(continuation.get("approval_needed")) or str(continuation.get("surface_reason") or "").strip() == "approval_needed":
+        return "approval_needed"
+    if bool(continuation.get("parent_goal_blocked")) or str(continuation.get("surface_reason") or "").strip() == "blocked_external":
+        return "blocked_external"
+    if bool((watchdog.get("forced_reroute_reason") or "").strip() == "semantic_red_regression") or str(watchdog.get("current_mode") or "").strip() == "research":
+        return "research_uncertain"
+    if str(closure_loop.get("execution_stage") or "").strip() in {"verifying", "closing"} or bool(closure_loop.get("slice_done")):
+        return "closure_validation"
+    if str((execution.get("execution_mode") or "").strip()) in {"spawned_session", "openclaw_cron_agent_turn", "background_exec"}:
+        return "delegated_long_run"
+    return "normal_execution"
+
+
+def enforce_canonical_execution_mode_transition(
+    previous_mode: str,
+    proposed_mode: str,
+    state: dict[str, Any] | None,
+) -> tuple[str, str]:
+    normalized = state if isinstance(state, dict) else {}
+    prior = str(previous_mode or "").strip()
+    proposed = str(proposed_mode or "").strip() or "manual"
+    if prior not in ALLOWED_CANONICAL_EXECUTION_MODES or proposed not in ALLOWED_CANONICAL_EXECUTION_MODES:
+        return proposed, ""
+
+    closure_loop = normalized.get("closure_loop") if isinstance(normalized.get("closure_loop"), dict) else {}
+    execution_stage = str(closure_loop.get("execution_stage") or "").strip()
+    closure_required = bool(closure_loop.get("closure_required"))
+    slice_done = bool(closure_loop.get("slice_done"))
+    next_slice_required = bool(closure_loop.get("next_slice_required"))
+    last_terminality_result = str(closure_loop.get("last_terminality_result") or "unknown").strip() or "unknown"
+
+    if prior == "closure_validation" and proposed in {"normal_execution", "delegated_long_run"}:
+        closure_still_active = (
+            closure_required
+            and execution_stage in {"implementing", "verifying", "closing"}
+            and not next_slice_required
+            and last_terminality_result != "non_terminal"
+        )
+        if closure_still_active:
+            return "closure_validation", f"illegal_execution_mode_regression:closure_validation_to_{proposed}"
+
+    allowed_targets = ALLOWED_CANONICAL_MODE_TRANSITIONS.get(prior, set())
+    if proposed in allowed_targets:
+        return proposed, ""
+    return prior, f"illegal_execution_mode_transition:{prior}_to_{proposed}"
+
+
+
 def normalize_autonomy_state(payload: dict[str, Any] | None, *, task_id: int = 0) -> dict[str, Any]:
     base = default_autonomy_state(task_id=task_id)
     if isinstance(payload, dict):
@@ -326,7 +408,7 @@ def normalize_autonomy_state(payload: dict[str, Any] | None, *, task_id: int = 0
         frontier_exhausted = True
 
     has_resumable_frontier_signal = bool(normalized_frontier_next_action or normalized_next_action)
-    has_terminal_surface = router_decision == "surface_to_user" and surface_reason in {"done", "blocked_external", "approval_needed", "risk_alert"}
+    has_terminal_surface = router_decision == "surface_to_user" and surface_reason in {"done", "blocked_external", "approval_needed", "risk_alert", "autonomy_launch_failed"}
     if (
         base["autonomy_mode"]
         and has_resumable_frontier_signal
@@ -371,6 +453,25 @@ def normalize_autonomy_state(payload: dict[str, Any] | None, *, task_id: int = 0
                 normalized_decision_reason
                 or "Autonomous closure remains incomplete: local success cannot surface as done while parent/user-goal frontier is still open."
             )
+
+    execution = base.get("execution") if isinstance(base.get("execution"), dict) else {}
+    requested_not_armed = bool(execution.get("autonomy_requested")) and not bool(execution.get("autonomy_armed"))
+    if base["autonomy_mode"] and requested_not_armed:
+        router_decision = "surface_to_user"
+        surface_reason = "autonomy_launch_failed"
+        has_terminal_surface = True
+        normalized_surface_suppressed = False
+        normalized_surface_suppressed_reason = ""
+        normalized_would_have_surfaced_as = ""
+        risk_alert = True
+        normalized_parent_goal_open = False
+        frontier_known = False
+        frontier_remaining = False
+        frontier_exhausted = False
+        normalized_decision_reason = (
+            normalized_decision_reason
+            or "Autonomy was requested but no armed execution lane was confirmed; this state must surface explicitly instead of remaining internal-only."
+        )
 
     base["continuation"] = {
         "router_decision": router_decision,
@@ -434,6 +535,8 @@ def normalize_autonomy_state(payload: dict[str, Any] | None, *, task_id: int = 0
         "nudge_count": max(0, nudge_count),
         "final_surface_required": _normalize_bool(watchdog.get("final_surface_required")),
     }
+    if base["autonomy_mode"] and requested_not_armed:
+        base["watchdog"]["final_surface_required"] = True
 
     integrity = base.get("integrity") if isinstance(base.get("integrity"), dict) else {}
     try:
@@ -467,6 +570,12 @@ def normalize_autonomy_state(payload: dict[str, Any] | None, *, task_id: int = 0
     next_slice_required = _normalize_bool(closure_loop.get("next_slice_required"))
     if base["autonomy_mode"] and execution_stage != "terminal":
         closure_required = True
+    if base["autonomy_mode"] and requested_not_armed:
+        execution_stage = "blocked"
+        closure_required = True
+        next_slice_required = False
+        followup_split_needed = False
+        last_terminality_result = "waiting_user"
     if slice_done and execution_stage not in {"terminal", "blocked"} and last_terminality_result == "non_terminal":
         next_slice_required = True
     if execution_stage == "terminal":
@@ -485,6 +594,58 @@ def normalize_autonomy_state(payload: dict[str, Any] | None, *, task_id: int = 0
         "last_terminality_check": str(closure_loop.get("last_terminality_check") or "").strip(),
         "last_terminality_result": last_terminality_result,
     }
+    previous_canonical_mode = str(base.get("execution_mode") or "manual").strip() or "manual"
+    derived_canonical_mode = derive_canonical_execution_mode(base)
+    canonical_execution_mode, transition_violation = enforce_canonical_execution_mode_transition(
+        previous_canonical_mode,
+        derived_canonical_mode,
+        base,
+    )
+    if canonical_execution_mode == "degraded_manual" and base["autonomy_mode"]:
+        base["continuation"]["router_decision"] = "surface_to_user"
+        base["continuation"]["surface_reason"] = "autonomy_launch_failed"
+        base["continuation"]["risk_alert"] = True
+        base["watchdog"]["final_surface_required"] = True
+        base["closure_loop"]["execution_stage"] = "blocked"
+        base["closure_loop"]["last_terminality_result"] = "waiting_user"
+    elif canonical_execution_mode == "approval_needed" and base["autonomy_mode"]:
+        base["continuation"]["router_decision"] = "surface_to_user"
+        base["continuation"]["surface_reason"] = "approval_needed"
+        base["continuation"]["approval_needed"] = True
+        base["continuation"]["awaiting_user"] = True
+        base["continuation"]["parent_goal_open"] = False
+        base["continuation"]["frontier_remaining"] = False
+        base["watchdog"]["final_surface_required"] = True
+        base["closure_loop"]["execution_stage"] = "blocked"
+        base["closure_loop"]["last_terminality_result"] = "waiting_user"
+    elif canonical_execution_mode == "blocked_external" and base["autonomy_mode"]:
+        base["continuation"]["router_decision"] = "surface_to_user"
+        base["continuation"]["surface_reason"] = "blocked_external"
+        base["continuation"]["awaiting_user"] = True
+        base["continuation"]["parent_goal_blocked"] = True
+        base["continuation"]["parent_goal_open"] = False
+        base["continuation"]["frontier_remaining"] = False
+        base["watchdog"]["final_surface_required"] = True
+        base["closure_loop"]["execution_stage"] = "blocked"
+        base["closure_loop"]["last_terminality_result"] = "blocked"
+    elif canonical_execution_mode == "delegated_long_run" and base["autonomy_mode"] and base["continuation"]["router_decision"] != "surface_to_user":
+        if not base["continuation"].get("parent_goal_complete") and not base["continuation"].get("parent_goal_blocked"):
+            base["continuation"]["parent_goal_open"] = True
+            base["continuation"]["frontier_known"] = True
+            base["continuation"]["frontier_remaining"] = True
+            base["continuation"]["frontier_exhausted"] = False
+    if transition_violation and base["autonomy_mode"]:
+        base["continuation"]["router_decision"] = "surface_to_user"
+        base["continuation"]["surface_reason"] = "risk_alert"
+        base["continuation"]["risk_alert"] = True
+        base["watchdog"]["final_surface_required"] = True
+        if not base["watchdog"].get("forced_reroute_reason"):
+            base["watchdog"]["forced_reroute_reason"] = transition_violation
+        if base["closure_loop"]["execution_stage"] not in {"blocked", "terminal"}:
+            base["closure_loop"]["execution_stage"] = "blocked"
+        if base["closure_loop"]["last_terminality_result"] == "unknown":
+            base["closure_loop"]["last_terminality_result"] = "blocked"
+    base["execution_mode"] = canonical_execution_mode
     base["updated_at"] = str(base.get("updated_at") or "").strip()
     return base
 
@@ -517,5 +678,5 @@ def autonomy_surface_allowed(state: dict[str, Any] | None) -> bool:
     continuation = normalized.get("continuation") or {}
     return (
         continuation.get("router_decision") == "surface_to_user"
-        and str(continuation.get("surface_reason") or "") in {"done", "blocked_external", "approval_needed", "risk_alert"}
+        and str(continuation.get("surface_reason") or "") in {"done", "blocked_external", "approval_needed", "risk_alert", "autonomy_launch_failed"}
     )

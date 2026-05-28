@@ -247,6 +247,32 @@ def main() -> int:
     assert parent_open_leaf_done["suppressed_payload_class"] == "canonical_result"
     assert parent_open_leaf_done["suppressed_next_frontier"] == "Advance parent integration frontier"
 
+    bounded_parent_open = route_autonomous_child_completion(
+        BASE_TASK,
+        {
+            "status": "bounded_progress",
+            "outcome_class": "bounded_slice_complete_parent_open",
+            "payload_class": "implementation_checkpoint",
+            "summary": "Implemented one bounded slice; parent contour remains open",
+            "next_action": "Advance local bounded frontier",
+            "frontier_next_action": "Consume async-run-record.v1.json during reload/recovery",
+            "parent_goal_open": True,
+            "frontier_known": True,
+            "frontier_remaining": True,
+        },
+        _coach(send_to_user=True),
+        state,
+    )
+    assert bounded_parent_open["router_decision"] == "schedule_next_slice"
+    assert bounded_parent_open["surface_reason"] == ""
+    assert bounded_parent_open["next_action"] == "Consume async-run-record.v1.json during reload/recovery"
+    assert bounded_parent_open["surface_suppressed"] is True
+    assert bounded_parent_open["surface_suppressed_reason"] == "bounded_slice_parent_open_frontier_known"
+    assert bounded_parent_open["suppressed_child_status"] == "bounded_progress"
+    assert bounded_parent_open["suppressed_outcome_class"] == "bounded_slice_complete_parent_open"
+    assert bounded_parent_open["suppressed_payload_class"] == "implementation_checkpoint"
+    assert bounded_parent_open["suppressed_next_frontier"] == "Consume async-run-record.v1.json during reload/recovery"
+
     closure_pass = route_autonomous_child_completion(
         BASE_TASK,
         {

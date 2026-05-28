@@ -29,7 +29,24 @@ def main() -> int:
     auto_created = json.loads(_run("add", "tmp autonomous mode visibility", "--details", "visibility proof", "--next-action", "Continue bounded slice").stdout)
     auto_id = int(auto_created["task_id"])
     _run("start", str(auto_id), "--note", "Starting visibility proof with evidence artifact task-manager/test_autonomy_mode_visibility.py and verification python3 task-manager/test_autonomy_mode_visibility.py", "--next-action", "Continue bounded slice")
-    init_payload = json.loads(_run("autonomy-init", str(auto_id), "--note", "Enter autonomous_until_done mode", "--next-action", "Continue bounded slice").stdout)
+    init_payload = json.loads(
+        _run(
+            "autonomy-init",
+            str(auto_id),
+            "--note",
+            "Enter autonomous_until_done mode",
+            "--next-action",
+            "Continue bounded slice",
+            "--arm",
+            "yes",
+            "--execution-mode",
+            "current_run",
+            "--anchor-kind",
+            "current_run",
+            "--anchor-id",
+            f"visibility-{auto_id}",
+        ).stdout
+    )
     assert init_payload["autonomy_state"]["mode"] == "autonomous_until_done"
     assert init_payload["autonomy_state"]["autonomy_mode"] is True
 

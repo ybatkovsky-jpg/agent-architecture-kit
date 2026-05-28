@@ -119,7 +119,27 @@ def test_spec_rollout_gate_still_fails_without_any_implementation_lineage() -> N
     assert "implementation_tasks" in gate["missing"], gate
 
 
+def test_closure_gate_hardening_task_is_not_misclassified_as_pure_spec() -> None:
+    _reset_db()
+    con = sqlite3.connect(tm.DB_PATH)
+    con.execute(SCHEMA)
+    _seed_task(
+        con,
+        task_id=759,
+        title="Closure gate hardening: require fresh executable verification before done for system-critical tasks",
+        details="Add an enforceable contour requiring explicit fresh verification evidence before terminal closure.",
+        status=tm.STATUS_IN_PROGRESS,
+    )
+    con.commit()
+    con.close()
+
+    task, _events = tm.load_task_with_events(759)
+    gate = tm.spec_rollout_gate_status(task, tm.STATUS_REVIEW)
+    assert gate is None, gate
+
+
 if __name__ == "__main__":
     test_spec_rollout_gate_accepts_shared_parent_sibling_implementation_tasks()
     test_spec_rollout_gate_still_fails_without_any_implementation_lineage()
+    test_closure_gate_hardening_task_is_not_misclassified_as_pure_spec()
     print("ok")

@@ -44,12 +44,47 @@ def main() -> int:
     assert init_payload["autonomy_state"]["watchdog"]["step_due_at"]
     assert init_payload["autonomy_state"]["watchdog"]["if_fail_route"] == "forced_status_ping"
     assert init_payload["autonomy_state"]["watchdog"]["nudge_count"] == 0
-    assert init_payload["autonomy_state"]["watchdog"]["final_surface_required"] is False
+    assert init_payload["autonomy_state"]["watchdog"]["final_surface_required"] is True
+    assert init_payload["autonomy_state"]["continuation"]["surface_reason"] == "autonomy_launch_failed"
+    assert init_payload["autonomy_state"]["continuation"]["router_decision"] == "surface_to_user"
     state = load_autonomy_state(task_id)
     assert state["autonomy_mode"] is True
     assert state["watchdog"]["current_mode"] == "implementation"
     assert state["watchdog"]["step_goal"] == "Do the bounded thing"
     assert state["watchdog"]["if_fail_route"] == "forced_status_ping"
+
+    armed_created = json.loads(_run("add", "tmp autonomy gate armed proof", "--details", "armed gate proof", "--next-action", "Do the bounded thing").stdout)
+    armed_task_id = int(armed_created["task_id"])
+    _run(
+        "start",
+        str(armed_task_id),
+        "--note",
+        "Starting armed proof slice with evidence artifact task-manager/test_autonomy_state_and_gate.py and verification command python3 task-manager/test_autonomy_state_and_gate.py",
+        "--next-action",
+        "Do the bounded thing",
+    )
+
+    armed_payload = json.loads(
+        _run(
+            "autonomy-init",
+            str(armed_task_id),
+            "--note",
+            "Autonomous execution entered with armed lane",
+            "--next-action",
+            "Do the bounded thing",
+            "--arm",
+            "yes",
+            "--execution-mode",
+            "current_run",
+            "--anchor-kind",
+            "current_run",
+            "--anchor-id",
+            "gate-proof-lane",
+        ).stdout
+    )
+    assert armed_payload["autonomy_state"]["watchdog"]["final_surface_required"] is False
+    assert armed_payload["autonomy_state"]["continuation"]["surface_reason"] == ""
+    assert armed_payload["autonomy_state"]["continuation"]["router_decision"] != "surface_to_user"
 
     with tempfile.TemporaryDirectory() as tmp:
         child = Path(tmp) / "child.json"
@@ -63,10 +98,16 @@ def main() -> int:
             "artifact_refs": ["task-manager/test_autonomy_router.py"],
             "verification_refs": ["python3 task-manager/test_autonomy_router.py"],
         }), encoding="utf-8")
-        routed = json.loads(_run("autonomy-route", str(task_id), "--child-result-file", str(child)).stdout)
+        routed = json.loads(_run("autonomy-route", str(armed_task_id), "--child-result-file", str(child)).stdout)
         assert routed["routing"]["router_decision"] in {"continue_now", "schedule_next_slice"}
+        auto_resume = routed["auto_resume"]
+        assert auto_resume is not None
+        assert auto_resume["resumed"] is True
+        assert auto_resume["resume_basis"] == "immediate_followup_slice"
+        assert auto_resume["spawn"]["job_id"]
+        assert auto_resume["autonomy_state"]["active_child"]["kind"] == "openclaw_cron_agent_turn"
 
-    shown_progress = json.loads(_run("autonomy-show", str(task_id)).stdout)
+    shown_progress = json.loads(_run("autonomy-show", str(armed_task_id)).stdout)
     assert shown_progress["integrity"]["surface_required"] is True
     assert shown_progress["integrity"]["stale_in_progress_reason"] == "significant_progress_not_surfaced"
 
@@ -85,26 +126,26 @@ def main() -> int:
             "status_ping": True,
             "artifact_refs": ["task-manager/test_autonomy_state_and_gate.py"],
         }), encoding="utf-8")
-        routed = json.loads(_run("autonomy-route", str(task_id), "--child-result-file", str(child)).stdout)
+        routed = json.loads(_run("autonomy-route", str(armed_task_id), "--child-result-file", str(child)).stdout)
         assert routed["routing"]["router_decision"] in {"continue_now", "schedule_next_slice"}
         assert routed["routing"]["surface_suppressed"] is True
         assert routed["routing"]["surface_suppressed_reason"] == "status_ping_non_terminal"
         assert routed["routing"]["would_have_surfaced_as"] == "status_reply"
 
-    shown_non_terminal = json.loads(_run("autonomy-show", str(task_id)).stdout)
+    shown_non_terminal = json.loads(_run("autonomy-show", str(armed_task_id)).stdout)
     assert shown_non_terminal["continuation"]["router_decision"] in {"continue_now", "schedule_next_slice"}
     assert shown_non_terminal["continuation"]["surface_suppressed_reason"] == "status_ping_non_terminal"
 
-    status_snapshot = json.loads(_run("autonomy-status", str(task_id)).stdout)
+    status_snapshot = json.loads(_run("autonomy-status", str(armed_task_id)).stdout)
     assert status_snapshot["forced_status_ping"] is not None
     assert status_snapshot["forced_status_ping"]["reason"] == "significant_progress_not_surfaced"
 
-    blocked = _run("review", str(task_id), "--note", "Attempted premature review with evidence artifact task-manager/test_autonomy_router.py and verification python3 task-manager/test_autonomy_router.py", "--next-action", "Continue internally", check=False)
+    blocked = _run("review", str(armed_task_id), "--note", "Attempted premature review with evidence artifact task-manager/test_autonomy_router.py and verification python3 task-manager/test_autonomy_router.py", "--next-action", "Continue internally", check=False)
     assert blocked.returncode != 0
     gate_output = (blocked.stderr or "") + (blocked.stdout or "")
     assert "Autonomy delivery gate blocked user-facing transition" in gate_output
 
-    waiting = _run("wait", str(task_id), "--blocked-reason", "Convenient checkpoint only", "--note", "Attempted fake waiting_user transition", "--next-action", "Continue internally", check=False)
+    waiting = _run("wait", str(armed_task_id), "--blocked-reason", "Convenient checkpoint only", "--note", "Attempted fake waiting_user transition", "--next-action", "Continue internally", check=False)
     assert waiting.returncode != 0
     waiting_output = (waiting.stderr or "") + (waiting.stdout or "")
     assert "Autonomy delivery gate blocked user-facing transition" in waiting_output
@@ -122,17 +163,43 @@ def main() -> int:
             "frontier_remaining": False,
             "artifact_refs": ["task-manager/test_autonomy_state_and_gate.py"],
         }), encoding="utf-8")
-        done_route = json.loads(_run("autonomy-route", str(task_id), "--child-result-file", str(child)).stdout)
+        done_route = json.loads(_run("autonomy-route", str(armed_task_id), "--child-result-file", str(child)).stdout)
         assert done_route["routing"]["router_decision"] == "surface_to_user"
         assert done_route["routing"]["surface_reason"] == "done"
 
-    shown = json.loads(_run("autonomy-show", str(task_id)).stdout)
+    shown = json.loads(_run("autonomy-show", str(armed_task_id)).stdout)
     assert shown["continuation"]["router_decision"] == "surface_to_user"
     assert shown["continuation"]["surface_reason"] == "done"
     assert shown["continuation"]["last_completion_scope"] == "parent"
     assert shown["watchdog"]["final_surface_required"] is True
 
-    done_status = json.loads(_run("autonomy-status", str(task_id)).stdout)
+    shown_task = json.loads(_run("show", str(armed_task_id), "--state-card", "--format", "json").stdout)
+    assert shown_task["identity"]["task_id"] == armed_task_id
+    assert shown_task["health"]["autonomy_mode"] is True
+    assert shown_task["proof"]["closure_readiness"] == "not-closure-ready"
+    assert shown_task["proof"]["latest_event_envelope"]["family"] in {"work_event", "proof_event", "incident_event", "recovery_event"}
+    assert shown_task["proof"]["latest_event_envelope"]["surface_policy"]
+    assert shown_task["operator_action"]["recommended_action"]
+
+    list_snapshot = json.loads(_run("list", "--format", "json", "--limit", "20").stdout)
+    listed = next(item for item in list_snapshot if int(item["id"]) == armed_task_id)
+    assert listed["summary_row"]["task_id"] == armed_task_id
+    assert listed["summary_row"]["health_posture"] == "healthy"
+    assert listed["summary_row"]["closure_readiness"] == "not-closure-ready"
+    assert listed["summary_row"]["latest_event_envelope"]["family"] in {"work_event", "proof_event", "incident_event", "recovery_event"}
+    assert listed["summary_row"]["recommended_action"] == shown_task["operator_action"]["recommended_action"]
+
+    list_text = _run("list", "--limit", "20").stdout
+    assert f"#{armed_task_id} [in_progress]" in list_text
+    assert "summary: health=healthy continuity=delegated closure=not-closure-ready" in list_text
+    assert f"action: {shown_task['operator_action']['recommended_action']}" in list_text
+
+    state_card_list_text = _run("list", "--state-card", "--limit", "20").stdout
+    assert f"Task #{armed_task_id} — tmp autonomy gate armed proof" in state_card_list_text
+    assert "event_family:" in state_card_list_text
+    assert "[operator_action]" in state_card_list_text
+
+    done_status = json.loads(_run("autonomy-status", str(armed_task_id)).stdout)
     assert done_status["forced_status_ping"] is not None
     assert done_status["forced_status_ping"]["reason"] == "final_result_not_surfaced"
     assert any("terminal result appears ready internally" in item for item in done_status["forced_status_ping"]["what_is_red"])
@@ -148,23 +215,38 @@ def main() -> int:
             "approval_needed": True,
             "artifact_refs": ["task-manager/test_autonomy_state_and_gate.py"],
         }), encoding="utf-8")
-        wait_route = json.loads(_run("autonomy-route", str(task_id), "--child-result-file", str(child)).stdout)
+        wait_route = json.loads(_run("autonomy-route", str(armed_task_id), "--child-result-file", str(child)).stdout)
         assert wait_route["routing"]["router_decision"] == "surface_to_user"
         assert wait_route["routing"]["surface_reason"] == "approval_needed"
         assert wait_route["routing"]["awaiting_user"] is True
 
-    allowed_wait = _run("wait", str(task_id), "--blocked-reason", "Need exact user approval for external deploy", "--note", "Allowed waiting_user after approval-needed autonomy route", "--next-action", "Wait for user approval")
+    allowed_wait = _run("wait", str(armed_task_id), "--blocked-reason", "Need exact user approval for external deploy", "--note", "Allowed waiting_user after approval-needed autonomy route", "--next-action", "Wait for user approval")
     allowed_payload = json.loads(allowed_wait.stdout)
     assert allowed_payload["status"] == "waiting_user"
     assert allowed_payload["judge_feedback"]["autonomy_state"]["surface_reason"] == "approval_needed"
 
-    external_surface_status = json.loads(_run("autonomy-status", str(task_id)).stdout)
+    external_surface_status = json.loads(_run("autonomy-status", str(armed_task_id)).stdout)
     assert external_surface_status["forced_status_ping"] is None
 
     envelope_task = json.loads(_run("add", "tmp autonomy envelope proof", "--details", "autonomy envelope proof", "--next-action", "Implement bounded slice").stdout)
     envelope_task_id = int(envelope_task["task_id"])
     _run("start", str(envelope_task_id), "--note", "Starting envelope proof", "--next-action", "Implement bounded slice")
-    _run("autonomy-init", str(envelope_task_id), "--note", "Autonomous execution entered", "--next-action", "Implement bounded slice")
+    _run(
+        "autonomy-init",
+        str(envelope_task_id),
+        "--note",
+        "Autonomous execution entered",
+        "--next-action",
+        "Implement bounded slice",
+        "--arm",
+        "yes",
+        "--execution-mode",
+        "current_run",
+        "--anchor-kind",
+        "current_run",
+        "--anchor-id",
+        "envelope-proof-lane",
+    )
 
     with tempfile.TemporaryDirectory() as tmp:
         child = Path(tmp) / "done-envelope.txt"
@@ -237,7 +319,22 @@ def main() -> int:
     legacy_task = json.loads(_run("add", "tmp legacy autonomy state normalization", "--details", "legacy continuation state should still resume", "--next-action", "Resume bounded pass").stdout)
     legacy_task_id = int(legacy_task["task_id"])
     _run("start", str(legacy_task_id), "--note", "Start legacy normalization task", "--next-action", "Resume bounded pass")
-    _run("autonomy-init", str(legacy_task_id), "--note", "Enter autonomous mode", "--next-action", "Resume bounded pass")
+    _run(
+        "autonomy-init",
+        str(legacy_task_id),
+        "--note",
+        "Enter autonomous mode",
+        "--next-action",
+        "Resume bounded pass",
+        "--arm",
+        "yes",
+        "--execution-mode",
+        "current_run",
+        "--anchor-kind",
+        "current_run",
+        "--anchor-id",
+        "legacy-proof-lane",
+    )
     legacy_state_path = TEST_ROOT / "runtime" / "autonomy" / f"task-{legacy_task_id}.json"
     legacy_state = json.loads(legacy_state_path.read_text(encoding="utf-8"))
     legacy_state["continuation"].update({
@@ -342,7 +439,22 @@ def main() -> int:
     closure_incomplete_task = json.loads(_run("add", "tmp closure incomplete normalization", "--details", "done surface must collapse if frontier still open", "--next-action", "Finish remaining child closure").stdout)
     closure_incomplete_task_id = int(closure_incomplete_task["task_id"])
     _run("start", str(closure_incomplete_task_id), "--note", "Start closure incomplete task", "--next-action", "Finish remaining child closure")
-    _run("autonomy-init", str(closure_incomplete_task_id), "--note", "Enter autonomous mode", "--next-action", "Finish remaining child closure")
+    _run(
+        "autonomy-init",
+        str(closure_incomplete_task_id),
+        "--note",
+        "Enter autonomous mode",
+        "--next-action",
+        "Finish remaining child closure",
+        "--arm",
+        "yes",
+        "--execution-mode",
+        "current_run",
+        "--anchor-kind",
+        "current_run",
+        "--anchor-id",
+        "closure-proof-lane",
+    )
     closure_state_path = TEST_ROOT / "runtime" / "autonomy" / f"task-{closure_incomplete_task_id}.json"
     closure_state = json.loads(closure_state_path.read_text(encoding="utf-8"))
     closure_state["continuation"].update({
@@ -488,6 +600,41 @@ Acceptance criteria:
     assert validator_fix_validation["passed"] is True
     assert "resolvable_anchor" not in validator_fix_validation["missing"]
     assert all(anchor not in validator_fix_validation["signals"]["all_anchors"] for anchor in ["acceptance/details/notes", "notes/details", "path/file"])
+
+    critical_review_task = {
+        "title": "Closure gate hardening: require fresh executable verification before done for system-critical tasks",
+        "details": "Prevent autonomy-hardening and production-readiness tasks from reaching review/done without fresh executable verification in the transition note.",
+        "status": "in_progress",
+        "next_action": "Move to review",
+        "context_json": json.dumps({"links": [], "summary": "", "definition_of_done": []}),
+    }
+    critical_missing_fresh = validate_status_transition(
+        critical_review_task,
+        [],
+        "review",
+        note=(
+            "Review-ready: closure gate contour is drafted. "
+            "Evidence: task-manager/blind_judge_validator.py contains the first-pass critical-task gate. "
+            "Verification: verified conceptually and checked the validator path."
+        ),
+        next_action="Move to done after review gate",
+    )
+    assert critical_missing_fresh["passed"] is False
+    assert "fresh_executable_verification" in critical_missing_fresh["missing"]
+
+    critical_with_fresh = validate_status_transition(
+        critical_review_task,
+        [],
+        "review",
+        note=(
+            "Review-ready: closure gate contour is implemented. "
+            "Evidence: task-manager/blind_judge_validator.py contains the first-pass critical-task gate and task-manager/test_autonomy_state_and_gate.py covers it. "
+            "Verification: ran python3 task-manager/test_autonomy_state_and_gate.py and it passed green."
+        ),
+        next_action="Move to done after review gate",
+    )
+    assert critical_with_fresh["passed"] is True
+    assert critical_with_fresh["signals"]["fresh_executable_verification_present"] is True
 
     print("ok")
     return 0
